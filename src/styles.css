@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 0px;
+}
+
+body
+{
+  background:linear-gradient(#990000,#4D4D4D);
+  background-attachment:fixed;
+}
