@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +10,26 @@ export class AppComponent {
   title = 'SILUB';
   login = '';
 
-  constructor(private route: Router) {
+  constructor() {
     this.login = sessionStorage.getItem('login');
   }
 
   cerrarSesion() {
-    sessionStorage.clear();
-    location.reload();
+    swal(
+      {
+        title: '¿Desea cerrar sesión?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+          sessionStorage.clear();
+          location.reload();
+        }
+      }
+    );
   }
 }
