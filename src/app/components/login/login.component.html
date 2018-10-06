@@ -1,0 +1,29 @@
+<div class="container">
+  <div id="bloque-login" class="bloque-login">
+    <div class="login-iagen">
+      <img src="assets/imagenes/logo.png" alt="logo del silub" t>
+    </div>
+    <div class="login-formulario ">
+      <form ngNativeValidate (submit)="login()">
+        <div class="login-usuario-row">
+          <label for="Usuario">
+            <img class="img-correo" src="assets/imagenes/email.png" alt="Correo electronico" height="30">
+          </label>
+          <input name="correo" [(ngModel)]="usuario.usuario" id="usuario" type="text" placeholder="Correo electronico"
+                 required>
+        </div>
+        <div id="login-key-row" class="login-contrasena-row">
+          <label for="contrasena">
+            <img class="img-key" src="assets/imagenes/key.png" alt="Contraseña" height="30">
+          </label>
+          <input name="pass" [(ngModel)]="usuario.clave" id="contrasena" type="password" placeholder="Contraseña"
+                 required>
+        </div>
+        <div class="login-conexion-login">
+          <button type="submit" class="login-boton-row">Ingresar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--{{usuario | json}}-->
