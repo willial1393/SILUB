@@ -15,6 +15,7 @@ import {EquiposComponent} from './components/equipos/equipos.component';
 import {ClienteService} from './services/cliente.service';
 import {EquipoService} from './services/equipo.service';
 import {LoginService} from './services/login.service';
+import { BodegasComponent } from './components/bodegas/bodegas.component';
 
 const appRutes: Routes = [
   {path: '', component: LoginComponent},
@@ -22,7 +23,8 @@ const appRutes: Routes = [
   {path: 'usuarios', component: UsuariosComponent},
   {path: 'home', component: HomeComponent},
   {path: 'clientes', component: ClientesComponent},
-  {path: 'equipos', component: EquiposComponent}
+  {path: 'equipos', component: EquiposComponent},
+  {path: 'bodegas', component: BodegasComponent}
 ];
 
 @NgModule({
@@ -32,7 +34,8 @@ const appRutes: Routes = [
     UsuariosComponent,
     HomeComponent,
     ClientesComponent,
-    EquiposComponent
+    EquiposComponent,
+    BodegasComponent
   ],
   imports: [
     BrowserModule,
