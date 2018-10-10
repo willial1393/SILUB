@@ -33,7 +33,7 @@ $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
         ->withHeader('Content-type', 'application/json')
-        ->withHeader('Access-Control-Allow-Origin', '*')        
+        ->withHeader('Access-Control-Allow-Origin', '*')
         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
         ->withHeader('Allow', 'GET, POST, PUT, DELETE')
         ->withHeader('Access-Control-Request-Method', 'GET, POST, PUT, DELETE')

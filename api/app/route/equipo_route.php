@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\EquiposModel;
 
 $app->group('/equipos/', function () {
@@ -37,6 +38,18 @@ $app->group('/equipos/', function () {
             );
     });
 
+    $this->post('delete', function ($req, $res) {
+        $um = new EquiposModel();
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
 
     $this->put('', function ($req, $res) {
         $um = new EquiposModel();

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,14 +13,13 @@ class TipoEquipoModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
+        try {
             $result = array();
 
             $stm = $this->db->prepare("SELECT * FROM $this->table");
@@ -37,8 +37,7 @@ class TipoEquipoModel
 
     public function get($value)
     {
-        try
-        {
+        try {
             $result = array();
 
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_nombre_equipo = ?");
@@ -57,18 +56,14 @@ class TipoEquipoModel
     public function insert($data)
     {
 
-        $id_nombre_equipo     = $data['id_nombre_equipo'];
-        $nombre     = $data['nombre'];
-        $total          = $data['total'];
-        $tipo           = $data['tipo'];
+        $total = $data['total'];
+        $tipo = $data['tipo'];
 
-        $query = "INSERT INTO $this->table (id_nombre_equipo, nombre, total, tipo) VALUES (:id_nombre_equipo, :nombre, :total, :tipo)";
+        $query = "INSERT INTO $this->table SET tipo = :tipo, total = :total";
 
         try {
 
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam("id_nombre_equipo", $id_nombre_equipo);
-            $stmt->bindParam("nombre", $nombre);
             $stmt->bindParam("total", $total);
             $stmt->bindParam("tipo", $tipo);
             $stmt->execute();
@@ -83,10 +78,10 @@ class TipoEquipoModel
 
     public function update($data)
     {
-        $id_nombre_equipo     = $data['id_nombre_equipo'];
-        $nombre     = $data['nombre'];
-        $total          = $data['total'];
-        $tipo           = $data['tipo'];
+        $id_nombre_equipo = $data['id_nombre_equipo'];
+        $nombre = $data['nombre'];
+        $total = $data['total'];
+        $tipo = $data['tipo'];
 
         $query = "UPDATE $this->table SET id_nombre_equipo = :id_nombre_equipo, nombre = :nombre, total = :total, tipo = :tipo WHERE id_nombre_equipo = :id_nombre_equipo";
 

@@ -1,90 +1,123 @@
 <div class="container">
-  <section id="" class="main row mr-123 contenedor">
-    <div class="contenedor-equipos row m-0 p-3">
-      <div class="equipos-tabla col-md-8 p-0 ml-">
-        <div class="cont-tabla border border-secondary rounded mr-4">
-          <div class="equipo-tabla-encabezado ">
-            <div class="equipo-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-              <p class="pl-1">Gestion de equipos.</p>
-              <div class="ml-3 ">
-                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
-                  <img class="tabla-encabezado-contenedor-imprimir mr-1" src="assets/imagenes/imprimir.png" alt="Icon imprimir" width="25">
-                  Imprimir</button>
-              </div>
+    <section id="" class="main row mr-123 contenedor">
+        <div class="contenedor-equipos row m-0 p-3">
+            <div class="equipos-tabla col-md-8 p-0 ml-">
+                <div class="cont-tabla border border-secondary rounded mr-4">
+                    <div class="equipo-tabla-encabezado ">
+                        <div class="equipo-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Gestion de equipos.</p>
+                            <div class="ml-3 ">
+                                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                                    <img class="tabla-encabezado-contenedor-imprimir mr-1"
+                                         src="../../../assets/imagenes/imprimir.png" alt="Icon imprimir" width="25">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
+                                <img src="../../../assets/imagenes/search.png" alt="buscar equipo." width="23"
+                                     class="cnt-tabla-search-img ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="equipo-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis,
+                            tempora odit deserunt iste, vel. Architecto, aliquam, itaque.
+                        </p>
+                    </div>
+                    <div class="equipo-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Serial</th>
+                                <th scope="col">Nombre de equipo</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let equipo of equipos">
+                                <div *ngIf="equipo.serial===null; else elseBlock"><input class="boton-accion" type=image
+                                                                                         src="../../../assets/imagenes/more.png"
+                                                                                         width="25"
+                                                                                         height="25"
+                                                                                         (click)="setSerialEquipo(equipo)">
+                                </div>
+                                <ng-template #elseBlock>
+                                    <td (click)="setSerialEquipo(equipo)">{{equipo.serial}}</td>
+                                </ng-template>
+                                <td>{{equipo.tipo}}</td>
+                                <td>{{equipo.estado}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25"
+                                           height="25"
+                                           (click)="verEquipo(equipo)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25"
+                                           height="25"
+                                           (click)="editarEquipo(equipo)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25"
+                                           height="25"
+                                           (click)="eliminarEquipo(equipo)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png"
+                                           width="25"
+                                           height="25"
+                                           (click)="sancionarEquipo(equipo)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="cont-tabla-search border border-secondary d-flex align-items-center">
-              <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
-              <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                <img src="assets/imagenes/search.png" alt="buscar equipo." width="23" class="cnt-tabla-search-img ">
-              </div>
+            <div class="equipo border border-secondary col-md-4 rounded pb-3">
+                <form ngNativeValidate (submit)="guardar()" action="" class="form-equipo container-form">
+                    <div class="equipos-gestor">
+                        <div class="equipo-gestor-codigo form-group">
+                            <label for="equipo-fecha">Fecha de registro <span
+                                    class="equipo-obligatorio">*</span></label>
+                            <input name="fecha_registro" [(ngModel)]="equipo.fecha_registro" id="equipo-fecha"
+                                   type="text" class="form-control de" readonly="readonly">
+                        </div>
+                        <div class="equipo-gestor-correo form-group">
+                            <label for="equipo-estado">Estado<span class="equipo-obligatorio">*</span></label>
+                            <input name="estado" [(ngModel)]="equipo.estado" id="equipo-estado" type="text"
+                                   class="form-control" readonly="readonly">
+                        </div>
+                        <div class="equipo-gestor-correo form-group">
+                            <label for="equipo-estado">Nombre<span class="equipo-obligatorio">*</span></label>
+                            <select name="tipo" [(ngModel)]="equipo.tipo" id="rol" class="form-control">
+                                <option value="0">- Seleccionar -</option>
+                                <option *ngFor="let tipo of tipo_equipos" value="{{tipo.tipo}}">
+                                    {{tipo.tipo}}
+                                </option>
+                            </select>
+                            <input class="boton-accion" type=image src="../../../assets/imagenes/more.png" width="25"
+                                   height="25"
+                                   (click)="nuevoTipoEquipo()">
+                        </div>
+                        <div class="equipo-gestor-nombre form-group">
+                            <label>Descripción<span class="equipo-obligatorio">*</span></label>
+                            <textarea name="descripcion" [(ngModel)]="equipo.descripcion" class="form-control" rows="5"
+                                      id="textarea" required></textarea>
+                        </div>
+                        <div class="equipo-gestor-equipo form-group">
+                            <label for="equipo-cantidad">Cantidad<span class="equipo-obligatorio">*</span></label>
+                            <input name="cantidad" [(ngModel)]="equipo.cantidad" id="equipo-cantidad"
+                                   class="form-control" type="number" min="0" max="1000" step="1" required>
+                        </div>
+                        <div class="equipo-boton">
+                            <button type="submit" class="btn btn-dark btn-guardar">Guardar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="equipo-tabla-des m-2" >
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum dicta perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora odit deserunt iste, vel. Architecto, aliquam, itaque.
-            </p>
-          </div>
-          <div class="equipo-tabla-t">
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th scope="col">Serial</th>
-                <th scope="col">Nombre de equipo</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Acciones</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let equipo of equipos">
-                <td>{{equipo.serial}}</td>
-                <td>{{equipo.tipo}}</td>
-                <td>{{equipo.estado}}</td>
-                <td>
-                  <input class="boton-accion" type=image src="assets/imagenes/eye.png" width="25" height="25"
-                         (click)="verEquipo()">
-                  <input class="boton-accion" type=image src="assets/imagenes/edit.png" width="25" height="25"
-                         (click)="editarEquipo(equipo)">
-                  <input class="boton-accion" type=image src="assets/imagenes/trash.png" width="25" height="25"
-                         (click)="eliminarEquipo(equipo)">
-                  <input class="boton-accion" type=image src="assets/imagenes/lock.png" width="25" height="25"
-                         (click)="sancionarEquipo(equipo)">
-                </td>
-
-              </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
-      <div class="equipo border border-secondary col-md-4 rounded pb-3">
-        <form action="" class="form-equipo container-form">
-          <div class="equipos-gestor">
-            <div class="equipo-gestor-codigo form-group">
-              <label for="equipo-fecha">Fecha de registro <span class="equipo-obligatorio">*</span></label>
-              <input name="fecha_registro" [(ngModel)]="equipo.fecha_registro" id="equipo-fecha" type="text" class="form-control de"  readonly="readonly">
-            </div>
-            <div class="equipo-gestor-correo form-group">
-              <label for="equipo-estado">Estado<span class="equipo-obligatorio">*</span></label>
-              <input name="estado" [(ngModel)]="equipo.estado" id="equipo-estado" type="text" class="form-control" readonly="readonly" >
-            </div>
-            <div class="equipo-gestor-correo form-group">
-              <label for="equipo-nombre">Nombre<span class="equipo-obligatorio">*</span></label>
-              <input name="nombre" [(ngModel)]="equipo.nombre" id="equipo-nombre" type="text" class="form-control" >
-            </div>
-            <div class="equipo-gestor-nombre form-group">
-              <label >Descripción<span class="equipo-obligatorio">*</span></label>
-              <textarea name="descripcion" [(ngModel)]="equipo.descripcion" class="form-control" rows="5" id="textarea"></textarea>
-            </div>
-            <div class="equipo-gestor-equipo form-group">
-              <label for="equipo-cantidad">Cantidad<span class="equipo-obligatorio">*</span></label>
-              <input name="cantidad" [(ngModel)]="equipo.cantidad" id="equipo-cantidad" class="form-control" type="number" min="0" max="1000" step="2" value="0">
-            </div>
-            <div class="equipo-boton">
-              <button type="submit" class="btn btn-dark btn-guardar ">Guardar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
+    </section>
 </div>

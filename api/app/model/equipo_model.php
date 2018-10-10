@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -11,17 +12,16 @@ class EquiposModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
+        try {
             $result = array();
 
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo");
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.estado != 'ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -36,11 +36,10 @@ class EquiposModel
 
     public function get($value)
     {
-        try
-        {
+        try {
             $result = array();
 
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ?");
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? AND e.estado != 'ELIMINADO'");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -55,10 +54,8 @@ class EquiposModel
 
     public function insert($data)
     {
-
         $descripcion = $data['descripcion'];
-        $tipo        = $data['tipo'];
-
+        $tipo = $data['tipo'];
         $query = "call insert_equipo(:descripcion, :tipo)";
 
         try {
@@ -76,16 +73,37 @@ class EquiposModel
         return $this->response;
     }
 
+    public function delete($data)
+    {
+        $id_equipo = $data['id_equipo'];
+        $id_tipo_equipo = $data['id_tipo_equipo'];
+        $query = "call delete_equipo(:id_equipo, :id_tipo_equipo)";
+
+        try {
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam("id_equipo", $id_equipo);
+            $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
+            $stmt->execute();
+
+            $this->response->setResponse(true, 'Successfully Insertion');
+            $this->response->result = "";
+        } catch (Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
+    }
+
     public function update($data)
     {
-        $id_equipo      = $data['id_equipo'];
+        $id_equipo = $data['id_equipo'];
         $id_tipo_equipo = $data['id_tipo_equipo'];
-        $id_estante     = $data['id_estante'];
-        $descripcion    = $data['descripcion'];
-        $serial         = $data['serial'];
-        $estado         = $data['estado'];
+        $id_estante = $data['id_estante'];
+        $descripcion = $data['descripcion'];
+        $serial = $data['serial'];
+        $estado = $data['estado'];
 
-        $query = "CALL update_equipo(:id_equip:, :id_tipo_equipo, :id_estante, :serial, :descripcion, :estado)";
+        $query = "CALL update_equipo(:id_equipo, :id_tipo_equipo, :id_estante, :serial, :descripcion, :estado)";
 
         try {
 
