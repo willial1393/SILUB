@@ -11,7 +11,7 @@ import {LaboratorioService} from '../../services/laboratorio.service';
 export class LaboratoriosComponent implements OnInit {
 
     laboratorios: any;
-    laboratorio: any = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+    laboratorio: any = {id_laboratorio: '', descripcion: '', nombre: '', estado: 'ACTIVO'};
     isEdit: any = false;
 
     constructor(private route: Router,

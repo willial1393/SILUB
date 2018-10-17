@@ -189,6 +189,7 @@ export class EquiposComponent implements OnInit {
             }
         }).then((result) => {
             if (result.value) {
+                equipo.estado = 'ACTIVO';
                 this.equipoService.putEquipo(equipo).subscribe(res => {
                     if (res['response']) {
                         swal(
