@@ -41,11 +41,12 @@
                             </thead>
                             <tbody>
                             <tr *ngFor="let equipo of equipos">
-                                <div *ngIf="equipo.serial===null; else elseBlock"><input class="boton-accion" type=image
-                                                                                         src="../../../assets/imagenes/more.png"
-                                                                                         width="25"
-                                                                                         height="25"
-                                                                                         (click)="setSerialEquipo(equipo)">
+                                <div *ngIf="equipo.serial===null; else elseBlock">
+                                    <td><input class="boton-accion" type=image
+                                               src="../../../assets/imagenes/more.png"
+                                               width="25"
+                                               height="25"
+                                               (click)="setSerialEquipo(equipo)"></td>
                                 </div>
                                 <ng-template #elseBlock>
                                     <td (click)="setSerialEquipo(equipo)">{{equipo.serial}}</td>

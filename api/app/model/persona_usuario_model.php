@@ -38,8 +38,6 @@ class PersonaUsuarioModel
     {
         try
         {
-            $result = array();
-
             $stm = $this->db->prepare("SELECT u.id_usuario,p.*,u.nombre_usuario,u.clave,u.tipo FROM persona as p, usuario as u WHERE p.codigo = ? AND p.estado != 'ELIMINADO'");
             $stm->execute(array($value));
 

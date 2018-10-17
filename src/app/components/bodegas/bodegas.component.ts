@@ -11,7 +11,7 @@ import {BodegaService} from '../../services/bodega.service';
 export class BodegasComponent implements OnInit {
 
     bodegas: any;
-    bodega: any = {descripcion: '', estado: 'ACTIVO'};
+    bodega: any = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
     estante: any = {armario: '', nombre: '', estado: 'ACTIVO'};
     estantes: any;
     isEditBodega: any = false;

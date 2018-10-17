@@ -20,8 +20,6 @@ class UsuariosModel
     {
         try
         {
-            $result = array();
-
             $stm = $this->db->prepare("SELECT * FROM $this->table");
             $stm->execute();
 

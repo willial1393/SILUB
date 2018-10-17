@@ -20,9 +20,7 @@ class BodegaModel
     {
         try
         {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE estado!='ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -39,9 +37,7 @@ class BodegaModel
     {
         try
         {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ?");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ? AND estado!='ELIMINADO'");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -59,14 +55,16 @@ class BodegaModel
 
         $id_bodega     = $data['id_bodega'];
         $descripcion     = $data['descripcion'];
+        $estado = $data['estado'];
 
-        $query = "INSERT INTO $this->table (id_bodega, descripcion) VALUES (:id_bodega, :descripcion)";
+        $query = "INSERT INTO $this->table (id_bodega, descripcion,estado) VALUES (:id_bodega, :descripcion, :estado)";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_bodega", $id_bodega);
             $stmt->bindParam("descripcion", $descripcion);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -81,14 +79,16 @@ class BodegaModel
     {
         $id_bodega     = $data['id_bodega'];
         $descripcion     = $data['descripcion'];
+        $estado = $data['estado'];
 
-        $query = "UPDATE $this->table SET id_bodega = :id_bodega, descripcion = :descripcion";
+        $query = "UPDATE $this->table SET id_bodega = :id_bodega, descripcion = :descripcion, estado = :estado";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_bodega", $id_bodega);
             $stmt->bindParam("descripcion", $descripcion);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");
