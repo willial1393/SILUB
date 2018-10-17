@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,16 +13,13 @@ class EstantesModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
-            $result = array();
-
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table");
             $stm->execute();
 
@@ -37,8 +35,7 @@ class EstantesModel
 
     public function get($value)
     {
-        try
-        {
+        try {
             $result = array();
 
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_estante = ?");
@@ -58,7 +55,7 @@ class EstantesModel
     {
 
         $id_estante = $data['id_estante'];
-        $id_bodega  = $data['id_bodega'];
+        $id_bodega = $data['id_bodega'];
         $armario = $data['armario'];
         $estante = $data['estante'];
         $descripcion = $data['descripcion'];
@@ -92,7 +89,7 @@ class EstantesModel
         $estante = $data['estante'];
         $descripcion = $data['descripcion'];
 
-        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, aramrio = :aramrio, estante = :estante, descripcion = :descripcion WHERE id_estante = :id_estante";
+        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, armario = :armario, estante = :estante, descripcion = :descripcion WHERE id_estante = :id_estante";
 
         try {
 

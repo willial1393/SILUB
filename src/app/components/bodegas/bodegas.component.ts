@@ -12,7 +12,7 @@ export class BodegasComponent implements OnInit {
 
     bodegas: any;
     bodega: any = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
-    estante: any = {armario: '', nombre: '', estado: 'ACTIVO', descripcion: '', estante: ''};
+    estante: any = {id_estante: '', id_bodega: '', armario: '', estante: '', descripcion: ''};
     estantes: any;
     isEditBodega: any = false;
     isEditEstante: any = false;
@@ -35,6 +35,10 @@ export class BodegasComponent implements OnInit {
         this.bodegaService.getEstante().subscribe(res => {
             this.estantes = res['result'];
         });
+        this.bodega = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
+        this.estante = {id_estante: '', id_bodega: '', armario: '', estante: '', descripcion: ''};
+        this.isEditBodega = false;
+        this.isEditEstante = false;
     }
 
     verEstante(codigo) {
@@ -42,20 +46,19 @@ export class BodegasComponent implements OnInit {
             this.estante = res['result'];
             swal({
                 title: '',
-                html: 'Armario: ' + this.bodega.armario +
-                    '<br>Estante: ' + this.bodega.estante +
-                    '<br>Descripcion: ' + this.bodega.descripcion,
+                html: 'Armario: ' + this.estante.armario +
+                    '<br>Estante: ' + this.estante.estante +
+                    '<br>Descripcion: ' + this.estante.descripcion,
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.estante = {armario: '', nombre: '', estado: 'ACTIVO'};
+            this.updateTable();
         });
     }
 
     editarEstante(estante) {
         this.isEditEstante = true;
         this.estante = estante;
-        this.updateTable();
     }
 
     eliminarEstante(estante) {
@@ -80,7 +83,6 @@ export class BodegasComponent implements OnInit {
                             '',
                             'success'
                         );
-                        this.estante = {armario: '', nombre: '', estado: 'ACTIVO'};
                         this.updateTable();
                     });
                 }
@@ -97,7 +99,6 @@ export class BodegasComponent implements OnInit {
                     'Información del estante modificada',
                     'success'
                 );
-                this.estante = {armario: '', nombre: '', estado: 'ACTIVO'};
                 this.isEditEstante = false;
                 this.updateTable();
             });
@@ -106,18 +107,17 @@ export class BodegasComponent implements OnInit {
                 if (res['response'] === true) {
                     swal(
                         'OK',
-                        'estante registrado correctamente',
+                        'bodega registrado correctamente',
                         'success'
                     );
-                    this.estante = {armario: '', nombre: '', estado: 'ACTIVO'};
-                    this.updateTable();
                 } else {
                     swal(
                         'OK',
-                        'laboratorio registrado correctamente',
+                        'Ups...algo salio mal',
                         'error'
                     );
                 }
+                this.updateTable();
             });
         }
     }
@@ -131,14 +131,13 @@ export class BodegasComponent implements OnInit {
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.estante = {descripcion: '', estado: 'ACTIVO'};
+            this.updateTable();
         });
     }
 
     editarBodega(bodega) {
         this.isEditBodega = true;
-        this.estante = bodega;
-        this.updateTable();
+        this.bodega = bodega;
     }
 
     eliminarBodega(bodega) {
@@ -154,16 +153,14 @@ export class BodegasComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    this.bodega = bodega;
-                    this.bodega.estado = 'ELIMINADO';
-                    this.bodegaService.putBodega(this.bodega).subscribe(res => {
+                    bodega.estado = 'ELIMINADO';
+                    this.bodegaService.putBodega(bodega).subscribe(res => {
                         this.bodega = res['result'];
                         swal(
                             'Eliminado!',
                             '',
                             'success'
                         );
-                        this.bodega = {descripcion: '', estado: 'ACTIVO'};
                         this.updateTable();
                     });
                 }
@@ -180,7 +177,6 @@ export class BodegasComponent implements OnInit {
                     'Información del bodega modificada',
                     'success'
                 );
-                this.bodega = {descripcion: '', estado: 'ACTIVO'};
                 this.isEditBodega = false;
                 this.updateTable();
             });
@@ -192,8 +188,6 @@ export class BodegasComponent implements OnInit {
                         'estante registrado correctamente',
                         'success'
                     );
-                    this.bodega = {descripcion: '', estado: 'ACTIVO'};
-                    this.updateTable();
                 } else {
                     swal(
                         'OK',
@@ -201,6 +195,7 @@ export class BodegasComponent implements OnInit {
                         'error'
                     );
                 }
+                this.updateTable();
             });
         }
     }

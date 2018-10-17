@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,14 +13,13 @@ class BodegaModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE estado!='ELIMINADO'");
             $stm->execute();
 
@@ -35,8 +35,7 @@ class BodegaModel
 
     public function get($value)
     {
-        try
-        {
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ? AND estado!='ELIMINADO'");
             $stm->execute(array($value));
 
@@ -53,8 +52,8 @@ class BodegaModel
     public function insert($data)
     {
 
-        $id_bodega     = $data['id_bodega'];
-        $descripcion     = $data['descripcion'];
+        $id_bodega = $data['id_bodega'];
+        $descripcion = $data['descripcion'];
         $estado = $data['estado'];
 
         $query = "INSERT INTO $this->table (id_bodega, descripcion,estado) VALUES (:id_bodega, :descripcion, :estado)";
@@ -77,11 +76,11 @@ class BodegaModel
 
     public function update($data)
     {
-        $id_bodega     = $data['id_bodega'];
-        $descripcion     = $data['descripcion'];
+        $id_bodega = $data['id_bodega'];
+        $descripcion = $data['descripcion'];
         $estado = $data['estado'];
 
-        $query = "UPDATE $this->table SET id_bodega = :id_bodega, descripcion = :descripcion, estado = :estado";
+        $query = "UPDATE $this->table SET id_bodega = :id_bodega, descripcion = :descripcion, estado = :estado WHERE id_bodega = :id_bodega";
 
         try {
 
