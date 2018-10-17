@@ -69,7 +69,7 @@ class LaboratoriosModel
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
-            $this->response->result = "";
+            $this->response->result = true;
         } catch (Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }

@@ -59,16 +59,20 @@ class EstantesModel
 
         $id_estante = $data['id_estante'];
         $id_bodega  = $data['id_bodega'];
-        $etiqueta   = $data['etiqueta'];
+        $armario = $data['armario'];
+        $estante = $data['estante'];
+        $descripcion = $data['descripcion'];
 
-        $query = "INSERT INTO $this->table (id_estante, id_bodega, etiqueta) VALUES (:id_estante, :id_bodega, :etiqueta)";
+        $query = "INSERT INTO $this->table (id_estante, id_bodega, armario, estante, descripcion) VALUES (:id_estante, :id_bodega, :armario, :estante, :descripcion)";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_estante", $id_estante);
             $stmt->bindParam("id_bodega", $id_bodega);
-            $stmt->bindParam("etiqueta", $etiqueta);
+            $stmt->bindParam("armario", $armario);
+            $stmt->bindParam("estante", $estante);
+            $stmt->bindParam("descripcion", $descripcion);
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -81,18 +85,23 @@ class EstantesModel
 
     public function update($data)
     {
-        $id_estante     = $data['id_estante'];
-        $id_bodega     = $data['id_bodega'];
-        $etiqueta = $data['etiqueta'];
 
-        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, etiqueta = :etiqueta WHERE id_estante = :id_estante";
+        $id_estante = $data['id_estante'];
+        $id_bodega = $data['id_bodega'];
+        $armario = $data['armario'];
+        $estante = $data['estante'];
+        $descripcion = $data['descripcion'];
+
+        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, aramrio = :aramrio, estante = :estante, descripcion = :descripcion WHERE id_estante = :id_estante";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_estante", $id_estante);
             $stmt->bindParam("id_bodega", $id_bodega);
-            $stmt->bindParam("etiqueta", $etiqueta);
+            $stmt->bindParam("armario", $armario);
+            $stmt->bindParam("estante", $estante);
+            $stmt->bindParam("descripcion", $descripcion);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");

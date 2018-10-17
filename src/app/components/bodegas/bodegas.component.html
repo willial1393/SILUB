@@ -41,10 +41,12 @@
               <tbody>
               <tr>
                 <td *ngFor="let bodega of bodegas">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png" width="25" height="25">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25"
+                         (click)="verBodega(bodega)">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25"
+                         (click)="verBodega(bodega)">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25" height="25"
+                         (click)="verBodega(bodega)">
                 </td>
               </tr>
               </tbody>
@@ -80,7 +82,7 @@
         <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
           <div class="usuario-tabla-encabezado ">
             <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-              <p class="pl-1">Gestion de Usuarios.</p>
+              <p class="pl-1">Gestion de Estantes</p>
             </div>
             <div class="cont-tabla-search border-n d-flex align-items-center m-0 p-0 pr-1">
               <label>Bodega:</label>
@@ -111,10 +113,11 @@
                 <th scope="row">1</th>
                 <td>1-1</td>
                 <td>
-                  <input class="boton-accion" type=image src="assets/imagenes/eye.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="assets/imagenes/edit.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="assets/imagenes/trash.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="assets/imagenes/lock.png" width="25" height="25">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25"
+                         height="25">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png" width="25" height="25">
                 </td>
               </tr>
               </tbody>

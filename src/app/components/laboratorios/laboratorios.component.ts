@@ -95,14 +95,21 @@ export class LaboratoriosComponent implements OnInit {
             });
         } else {
             this.laboratorioService.postLaboratorio(this.laboratorio).subscribe(res => {
-                this.laboratorio = res['result'];
-                swal(
-                    'OK',
-                    'laboratorio registrado correctamente',
-                    'success'
-                );
-                this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
-                this.updateTable();
+                if (res['response'] === true) {
+                    swal(
+                        'OK',
+                        'laboratorio registrado correctamente',
+                        'success'
+                    );
+                    this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+                    this.updateTable();
+                } else {
+                    swal(
+                        'OK',
+                        'laboratorio registrado correctamente',
+                        'error'
+                    );
+                }
             });
         }
     }
