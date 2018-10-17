@@ -12,7 +12,7 @@ export class BodegasComponent implements OnInit {
 
     bodegas: any;
     bodega: any = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
-    estante: any = {armario: '', nombre: '', estado: 'ACTIVO'};
+    estante: any = {armario: '', nombre: '', estado: 'ACTIVO', descripcion: '', estante: ''};
     estantes: any;
     isEditBodega: any = false;
     isEditEstante: any = false;
