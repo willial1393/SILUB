@@ -1,3 +1,85 @@
-<p>
-  laboratorios works!
-</p>
+<div class="container">
+  <section id="" class="main row mr-123 contenedor">
+    <div class="contenedor-usuarios row m-0 p-3">
+      <div class="usuarios-tabla col-md-8 p-0 ml-">
+        <div class="cont-tabla border border-secondary rounded mr-4">
+          <div class="usuario-tabla-encabezado ">
+            <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+              <p class="pl-1">Gestion de Labroatorios</p>
+              <div class="ml-3 ">
+                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                  <img class="tabla-encabezado-contenedor-imprimir mr-1" src="../../../assets/imagenes/imprimir.png"
+                       alt="Icon imprimir"
+                       width="25">
+                  Imprimir
+                </button>
+              </div>
+            </div>
+            <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+              <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+              <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
+                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                     class="cnt-tabla-search-img ">
+              </div>
+            </div>
+          </div>
+          <div class="usuario-tabla-des m-2">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum dicta
+              perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora odit deserunt
+              iste, vel. Architecto, aliquam, itaque.
+            </p>
+          </div>
+          <div class="usuario-tabla-t">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let laboratorio of laboratorios">
+                <td>{{laboratorio.nombre}}</td>
+                <td>{{laboratorio.descripcion}}</td>
+                <td>
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25"
+                         (click)="verLaboratorio(laboratorio.id_laboratorio)">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25"
+                         (click)="editarLaboratorio(laboratorio)">
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25" height="25"
+                         (click)="eliminarLaboratorio(laboratorio)">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="usuario border border-secondary col-md-4 rounded pb-3">
+        <form action="" class="form-usuario container-form">
+          <div class="usuarios-gestor">
+            <div class="usuario-gestor-codigo form-group">
+              <label for="usuario-codigo">Nombre
+                <span class="usuario-obligatorio">*</span>
+              </label>
+              <input name="nombre" [(ngModel)]="laboratorio.nombre" id="usuario-codigo" type="text"
+                     class="form-codigo form-control">
+            </div>
+            <div class="usuario-gestor-correo form-group">
+              <label for="usuario-nombre">Descripción
+                <span class="usuario-obligatorio">*</span>
+              </label>
+              <input name="descripcion" [(ngModel)]="laboratorio.descripcion" id="usuario-nombre" type="text"
+                     class="form-control">
+            </div>
+            <div class="usuario-boton">
+              <button type="submit" class="btn btn-dark btn-guardar " (click)="guardar()">Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
