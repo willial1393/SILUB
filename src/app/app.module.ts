@@ -16,6 +16,7 @@ import {ClienteService} from './services/cliente.service';
 import {EquipoService} from './services/equipo.service';
 import {LoginService} from './services/login.service';
 import { BodegasComponent } from './components/bodegas/bodegas.component';
+import { LaboratoriosComponent } from './components/laboratorios/laboratorios.component';
 
 const appRutes: Routes = [
   {path: '', component: LoginComponent},
@@ -24,6 +25,7 @@ const appRutes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'clientes', component: ClientesComponent},
   {path: 'equipos', component: EquiposComponent},
+    {path: 'laboratorios', component: LaboratoriosComponent},
   {path: 'bodegas', component: BodegasComponent}
 ];
 
@@ -35,7 +37,8 @@ const appRutes: Routes = [
     HomeComponent,
     ClientesComponent,
     EquiposComponent,
-    BodegasComponent
+    BodegasComponent,
+    LaboratoriosComponent
   ],
   imports: [
     BrowserModule,

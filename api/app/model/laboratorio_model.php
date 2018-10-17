@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,17 +13,14 @@ class LaboratoriosModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+        try {
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE estado != 'ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -37,11 +35,8 @@ class LaboratoriosModel
 
     public function get($value)
     {
-        try
-        {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_laboratorio = ?");
+        try {
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_laboratorio = ? AND estado != 'ELIMINADO'");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -58,10 +53,11 @@ class LaboratoriosModel
     {
 
         $id_laboratorio = $data['id_laboratorio'];
-        $descripcion    = $data['descripcion'];
-        $nombre         = $data['nombre'];
+        $descripcion = $data['descripcion'];
+        $nombre = $data['nombre'];
+        $estado = $data['estado'];
 
-        $query = "INSERT INTO $this->table (id_laboratorio, descripcion, nombre) VALUES (:id_laboratorio, :descripcion, :nombre)";
+        $query = "INSERT INTO $this->table (id_laboratorio, descripcion, nombre, estado) VALUES (:id_laboratorio, :descripcion, :nombre, :estado)";
 
         try {
 
@@ -69,6 +65,7 @@ class LaboratoriosModel
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("nombre", $nombre);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -82,10 +79,11 @@ class LaboratoriosModel
     public function update($data)
     {
         $id_laboratorio = $data['id_laboratorio'];
-        $descripcion    = $data['descripcion'];
-        $nombre         = $data['nombre'];
+        $descripcion = $data['descripcion'];
+        $nombre = $data['nombre'];
+        $estado = $data['estado'];
 
-        $query = "UPDATE $this->table SET id_laboratorio = :id_laboratorio, descripcion = :descripcion, nombre = :nombre WHERE id_laboratorio = :id_laboratorio";
+        $query = "UPDATE $this->table SET id_laboratorio = :id_laboratorio, descripcion = :descripcion, nombre = :nombre, estado = :estado WHERE id_laboratorio = :id_laboratorio";
 
         try {
 
@@ -93,6 +91,7 @@ class LaboratoriosModel
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("nombre", $nombre);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");
