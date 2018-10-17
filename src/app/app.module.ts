@@ -15,43 +15,43 @@ import {EquiposComponent} from './components/equipos/equipos.component';
 import {ClienteService} from './services/cliente.service';
 import {EquipoService} from './services/equipo.service';
 import {LoginService} from './services/login.service';
-import { BodegasComponent } from './components/bodegas/bodegas.component';
-import { LaboratoriosComponent } from './components/laboratorios/laboratorios.component';
+import {BodegasComponent} from './components/bodegas/bodegas.component';
+import {LaboratoriosComponent} from './components/laboratorios/laboratorios.component';
 
 const appRutes: Routes = [
-  {path: '', component: LoginComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'usuarios', component: UsuariosComponent},
-  {path: 'home', component: HomeComponent},
-  {path: 'clientes', component: ClientesComponent},
-  {path: 'equipos', component: EquiposComponent},
+    {path: '', component: LoginComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'usuarios', component: UsuariosComponent},
+    {path: 'home', component: HomeComponent},
+    {path: 'clientes', component: ClientesComponent},
+    {path: 'equipos', component: EquiposComponent},
     {path: 'laboratorios', component: LaboratoriosComponent},
-  {path: 'bodegas', component: BodegasComponent}
+    {path: 'bodegas', component: BodegasComponent}
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    UsuariosComponent,
-    HomeComponent,
-    ClientesComponent,
-    EquiposComponent,
-    BodegasComponent,
-    LaboratoriosComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    RouterModule.forRoot(appRutes),
-    HttpClientModule
-  ],
-  providers: [AppGlobals,
-    UsuarioService,
-    ClienteService,
-    EquipoService,
-    LoginService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        LoginComponent,
+        UsuariosComponent,
+        HomeComponent,
+        ClientesComponent,
+        EquiposComponent,
+        BodegasComponent,
+        LaboratoriosComponent
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        RouterModule.forRoot(appRutes),
+        HttpClientModule
+    ],
+    providers: [AppGlobals,
+        UsuarioService,
+        ClienteService,
+        EquipoService,
+        LoginService],
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }
