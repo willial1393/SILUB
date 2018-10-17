@@ -1,163 +1,183 @@
 <div class="container">
-  <section id="" class="main row contenedor">
-    <div class="contenedor-usuarios row m-0 p-3">
-      <div class="usuarios-tabla col-md-8 p-0">
-        <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
-          <div class="usuario-tabla-encabezado ">
-            <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-              <p class="pl-1">Gestion de bodegas</p>
-              <div class="ml-3 ">
-                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
-                  <img class="tabla-encabezado-contenedor-imprimir mr-1" src="../../../assets/imagenes/imprimir.png"
-                       alt="Icon imprimir"
-                       width="25">
-                  Imprimir
-                </button>
-              </div>
+    <section id="" class="main row contenedor">
+        <div class="contenedor-usuarios row m-0 p-3">
+            <div class="usuarios-tabla col-md-8 p-0">
+                <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
+                    <div class="usuario-tabla-encabezado ">
+                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Gestion de bodegas</p>
+                            <div class="ml-3 ">
+                                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                                    <img class="tabla-encabezado-contenedor-imprimir mr-1"
+                                         src="../../../assets/imagenes/imprimir.png"
+                                         alt="Icon imprimir"
+                                         width="25">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
+                                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                                     class="cnt-tabla-search-img ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="usuario-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta
+                            perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora
+                            odit deserunt
+                            iste, vel. Architecto, aliquam, itaque.
+                        </p>
+                    </div>
+                    <div class="usuario-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let bodega of bodegas">
+                                <td>{{bodega.id_bodega}}</td>
+                                <td>{{bodega.descripcion}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25" height="25"
+                                           (click)="verBodega(bodega.id_bodega)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25" height="25"
+                                           (click)="editarBodega(bodega)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarBodega(bodega)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="cont-tabla-search border border-secondary d-flex align-items-center">
-              <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
-              <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
-                     class="cnt-tabla-search-img ">
-              </div>
+            <div class="usuario border border-secondary col-md-4 rounded pb-3">
+                <form action="" class="form-usuario container-form">
+                    <div class="usuarios-bodega">
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Nombre de Bodega
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control">
+                        </div>
+                        <div class="usuario-boton">
+                            <button type="submit" class="btn btn-dark btn-guardar" (click)="guardarBodega()">Guardar
+                                Bodega
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="usuario-tabla-des m-2">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum dicta
-              perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora odit deserunt
-              iste, vel. Architecto, aliquam, itaque.
-            </p>
-          </div>
-          <div class="usuario-tabla-t">
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Descripción</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td *ngFor="let bodega of bodegas">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25"
-                         (click)="verBodega(bodega)">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25"
-                         (click)="verBodega(bodega)">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25" height="25"
-                         (click)="verBodega(bodega)">
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
-      <div class="usuario border border-secondary col-md-4 rounded pb-3">
-        <form action="" class="form-usuario container-form">
-          <div class="usuarios-bodega">
-            <div class="usuario-gestor-bodega form-group">
-              <label for="usuario-bodega">Nombre de Bodega
-                <span class="usuario-obligatorio">*</span>
-              </label>
-              <input name="id_bodega" [(ngModel)]="bodega.id_bodega" type="text" class="form-control">
-            </div>
-            <div class="usuario-gestor-descripcion form-group">
-              <label>Descripción bodega
-                <span class="usuario-obligatorio">*</span>
-              </label>
-              <textarea name="descripcion" [(ngModel)]="bodega.descripcion" class="form-control" rows="5"></textarea>
-            </div>
-            <div class="usuario-boton">
-              <button type="submit" class="btn btn-dark btn-guardar ">Guardar Bodega</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
 
-    <div class="row m-0 p-3 w-100">
-      <div class="usuarios-tabla col-md-8 p-0">
-        <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
-          <div class="usuario-tabla-encabezado ">
-            <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-              <p class="pl-1">Gestion de Estantes</p>
+        <div class="row m-0 p-3 w-100">
+            <div class="usuarios-tabla col-md-8 p-0">
+                <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
+                    <div class="usuario-tabla-encabezado ">
+                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Gestion de Estantes</p>
+                        </div>
+                        <div class="cont-tabla-search border-n d-flex align-items-center m-0 p-0 pr-1">
+                            <label>Bodega:</label>
+                            <select name="bodegas" class="ml-2 btn border-primary ">
+                                <option *ngFor="let bodega of bodegas" value="{{bodega.id_bodega}}">
+                                    {{bodega.descripcion}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="usuario-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta
+                            perspiciatis obcaecati minus ut ratione.
+                        </p>
+                        <br>
+                    </div>
+                    <div class="usuario-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Armario</th>
+                                <th scope="col">Estante</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let estante of estantes">
+                                <td>{{estante.armario}}</td>
+                                <td>{{estante.estante}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25" height="25"
+                                           (click)="verEstante(estante.id_estante)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25" height="25"
+                                           (click)="editarEstante(estante)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarEstante(estante)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="cont-tabla-search border-n d-flex align-items-center m-0 p-0 pr-1">
-              <label>Bodega:</label>
-              <select name="bodegas" class="ml-2 btn border-primary ">
-                <option value="0">- Seleccionar -</option>
-                <option *ngFor="let bodega of bodegas" value="{{bodega.id_bodega}}">{{bodega.descripcion}}</option>
-              </select>
+            <div class="usuario border border-secondary col-md-4 rounded pb-3">
+                <form action="" class="form-usuario container-form">
+                    <div class="usuarios-gestor">
+                        <div class="usuario-gestor-estante form-group">
+                            <label for="usuario-bodega">Bodega
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <select name="bodega_estado" id="select-bodega" class="form-control btn border-primary ">
+                                <option *ngFor="let bodega of bodegas" value="{{bodega.id_bodega}}">
+                                    {{bodega.descripcion}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="usuario-gestor-estante form-group">
+                            <label>Armario
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="armario" [(ngModel)]="estante.aramrio" type="text"
+                                   class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-estante form-group">
+                            <label>Estante
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="estante" [(ngModel)]="estante.estante" id="usuario-bodega" type="text"
+                                   class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-nombre form-group">
+                            <label>Descripción estante
+                            </label>
+                            <textarea name="descripcion" [(ngModel)]="estante.descripcion" class="form-control" rows="5"
+                                      id="textarea"></textarea>
+                        </div>
+                        <div class="usuario-boton">
+                            <button type="submit" class="btn btn-dark btn-guardar" (click)="guardarEstante()">Guardar
+                                estante
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="usuario-tabla-des m-2">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum dicta
-              perspiciatis obcaecati minus ut ratione.
-            </p>
-            <br>
-          </div>
-          <div class="usuario-tabla-t">
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th scope="col">Armario</th>
-                <th scope="col">Estante</th>
-                <th scope="col">Acciones</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>1-1</td>
-                <td>
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25"
-                         height="25">
-                  <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png" width="25" height="25">
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
-      <div class="usuario border border-secondary col-md-4 rounded pb-3">
-        <form action="" class="form-usuario container-form">
-          <div class="usuarios-gestor">
-            <div class="usuario-gestor-estante form-group">
-              <label for="usuario-bodega">Bodega
-                <span class="usuario-obligatorio">*</span>
-              </label>
-              <select name="bodega_estado" id="select-bodega" class="form-control btn border-primary ">
-                <option value="0">- Seleccionar -</option>
-                <option *ngFor="let bodega of bodegas" value="{{bodega.id_bodega}}">{{bodega.descripcion}}</option>
-              </select>
-            </div>
-            <div class="usuario-gestor-estante form-group">
-              <label>Estante
-                <span class="usuario-obligatorio">*</span>
-              </label>
-              <input name="id_estante" [(ngModel)]="estante.id_estante" id="usuario-bodega" type="text"
-                     class="form-control">
-            </div>
-            <div class="usuario-gestor-nombre form-group">
-              <label>Descripción estante
-                <span class="usuario-obligatorio">*</span>
-              </label>
-              <textarea name="etiqueta" [(ngModel)]="estante.etiqueta" class="form-control" rows="5"
-                        id="textarea"></textarea>
-            </div>
-            <div class="usuario-boton">
-              <button type="submit" class="btn btn-dark btn-guardar ">Guardar estante</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
+    </section>
 </div>
 
