@@ -16,6 +16,7 @@ export class BodegasComponent implements OnInit {
     estantes: any;
     isEditBodega: any = false;
     isEditEstante: any = false;
+    bodegaSelect: any = 0;
 
     constructor(private route: Router,
                 private bodegaService: BodegaService) {
@@ -29,12 +30,15 @@ export class BodegasComponent implements OnInit {
     }
 
     updateTable() {
+        console.log(this.bodegaSelect);
         this.bodegaService.getBodega().subscribe(res => {
             this.bodegas = res['result'];
         });
-        this.bodegaService.getEstante().subscribe(res => {
-            this.estantes = res['result'];
-        });
+        if (this.bodegaSelect !== 0) {
+            this.bodegaService.getEstanteCodigo(this.bodegaSelect).subscribe(res => {
+                this.estantes = res['result'];
+            });
+        }
         this.bodega = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
         this.estante = {id_estante: '', id_bodega: '', armario: '', estante: '', descripcion: ''};
         this.isEditBodega = false;
@@ -107,7 +111,7 @@ export class BodegasComponent implements OnInit {
                 if (res['response'] === true) {
                     swal(
                         'OK',
-                        'bodega registrado correctamente',
+                        'Estante registrado correctamente',
                         'success'
                     );
                 } else {

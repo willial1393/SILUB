@@ -36,13 +36,11 @@ class EstantesModel
     public function get($value)
     {
         try {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_estante = ?");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ?");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
-            $this->response->result = $stm->fetch();
+            $this->response->result = $stm->fetchAll();
 
             return $this->response;
         } catch (Exception $e) {
