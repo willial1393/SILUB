@@ -1,75 +1,52 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
-import {EquipoService} from '../../services/equipo.service';
+import {PrestamoService} from '../../services/prestamo.service';
 
 @Component({
-    selector: 'app-equipos',
-    templateUrl: './equipos.component.html',
-    styleUrls: ['./equipos.component.css']
+    selector: 'app-prestamos',
+    templateUrl: './prestamos.component.html',
+    styleUrls: ['./prestamos.component.css']
 })
-export class EquiposComponent implements OnInit {
+export class PrestamosComponent implements OnInit {
 
     date: Date = new Date();
     equipos: any;
     equipo: any;
-    tipo_equipos: any;
-    tipo_equipo: any;
+    prestamos: any;
+    prestamo: any;
     isEdit: any = false;
 
     constructor(private route: Router,
-                private equipoService: EquipoService) {
+                private prestamoService: PrestamoService) {
         this.updateTable();
     }
 
-    getTipoEquipos() {
-        this.equipoService.getTipoEquipos().subscribe(res => {
-            this.tipo_equipos = res['result'];
-        });
-    }
-
-    nuevoTipoEquipo() {
-        swal({
-            title: 'Nuevo nombre de equipo',
-            input: 'text',
-            showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-            preConfirm: (res) => {
-                this.tipo_equipo = {tipo: res.toString().toUpperCase(), total: '0'};
-            }
-        }).then((result) => {
-            if (result.value) {
-                this.equipoService.postTipoEquipo(this.tipo_equipo).subscribe(res => {
-                    if (res['response']) {
-                        this.getTipoEquipos();
-                        swal(
-                            'OK',
-                            '',
-                            'success'
-                        );
-                    } else {
-                        this.getTipoEquipos();
-                        swal(
-                            'Ups... Algo salio mal',
-                            '',
-                            'error'
-                        );
-                    }
-                });
-            }
-        });
-    }
-
     updateTable() {
-        this.equipoService.getEquipos().subscribe(res => {
+        this.prestamoService.getEquipos().subscribe(res => {
             this.equipos = res['result'];
         });
+        this.prestamoService.getPrestamos().subscribe(res => {
+            this.prestamos = res['result'];
+        });
         this.equipo = {
-            fecha_registro: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
-            estado: 'INACTIVO', cantidad: '1', tipo: '0'
+            id_equipo: '',
+            id_tipo_equipo: '',
+            id_estante: '',
+            serial: '',
+            descripcion: '',
+            fecha_registro: '',
+            estado: ''
         };
-        this.getTipoEquipos();
+        this.prestamo = {
+            id_prestamo: '',
+            id_equipo: '',
+            id_solicitud_adecuacion: '',
+            id_cliente: '',
+            fecha_solicitud: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
+            fecha_devolucion: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
+            estado: ''
+        };
     }
 
     ngOnInit() {
@@ -79,14 +56,14 @@ export class EquiposComponent implements OnInit {
     }
 
     verEquipo(equipo) {
-        this.equipoService.getEsquipoCodigo(equipo.id_equipo).subscribe(res => {
+        this.prestamoService.getEsquipoCodigo(equipo.id_equipo).subscribe(res => {
             this.equipo = res['result'];
             swal({
                 title: this.equipo.serial === null ? '' : 'Serial: ' + this.equipo.serial,
                 html: 'Nombre: ' + this.equipo.tipo
-                + '<br>Fecha de registro: ' + this.equipo.fecha_registro
-                + '<br>Estado: ' + this.equipo.estado
-                + '<br>Descripción: ' + this.equipo.descripcion,
+                    + '<br>Fecha de registro: ' + this.equipo.fecha_registro
+                    + '<br>Estado: ' + this.equipo.estado
+                    + '<br>Descripción: ' + this.equipo.descripcion,
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
@@ -112,24 +89,13 @@ export class EquiposComponent implements OnInit {
                 confirmButtonText: 'Aceptar',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
-                if (result.value) {
-                    this.equipoService.deleteEquipo(equipo).subscribe(res => {
-                        this.equipo = res['result'];
-                        swal(
-                            'Eliminado!',
-                            '',
-                            'success'
-                        );
-                        this.updateTable();
-                    });
-                }
             }
         );
     }
 
     guardar() {
         if (this.isEdit) {
-            this.equipoService.putEquipo(this.equipo).subscribe(res => {
+            this.prestamoService.putEquipo(this.equipo).subscribe(res => {
                 this.equipo = res['result'];
                 swal(
                     'OK',
@@ -142,7 +108,7 @@ export class EquiposComponent implements OnInit {
         } else {
             let aux = true;
             for (let i = 0; i < this.equipo.cantidad; i++) {
-                this.equipoService.postEquipo(this.equipo).subscribe(res => {
+                this.prestamoService.postEquipo(this.equipo).subscribe(res => {
                     this.equipo = res['result'];
                     if (res['response'] !== true) {
                         swal(
@@ -182,7 +148,7 @@ export class EquiposComponent implements OnInit {
         }).then((result) => {
             if (result.value) {
                 equipo.estado = 'ACTIVO';
-                this.equipoService.putEquipo(equipo).subscribe(res => {
+                this.prestamoService.putEquipo(equipo).subscribe(res => {
                     if (res['response']) {
                         swal(
                             'OK',
@@ -192,7 +158,6 @@ export class EquiposComponent implements OnInit {
                             this.updateTable();
                         });
                     } else {
-                        this.getTipoEquipos();
                         swal(
                             'Ups... Algo salio mal',
                             '',
@@ -203,4 +168,5 @@ export class EquiposComponent implements OnInit {
             }
         });
     }
+
 }

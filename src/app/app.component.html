@@ -1,4 +1,5 @@
 <nav *ngIf="login!==null" class="navbar navbar-default navbar-expand-lg navbar-dark bg-dark ">
+    <a class="navbar-brand" routerLink="/home">SILUB</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,7 +9,7 @@
             <li class="nav-item dropdown">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
                    id="dropdown1">
-                   Sistema
+                    Sistema
                 </a>
                 <ul aria-labelledby="dropdown1" class="dropdown-menu">
                     <li class="dropdown-item" routerLink="/usuarios">
@@ -75,6 +76,9 @@
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
+            <a class="navbar-brand" routerLink="/ayuda">
+                <img src="../assets/imagenes/help.png" width="30" height="30" alt="">
+            </a>
             <a style="color: gray ">Bienvenido {{login}} &nbsp;&nbsp;</a>
             <button class="btn my-2 my-sm-0" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
         </form>

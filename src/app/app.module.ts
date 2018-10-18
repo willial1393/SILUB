@@ -17,6 +17,7 @@ import {EquipoService} from './services/equipo.service';
 import {LoginService} from './services/login.service';
 import {BodegasComponent} from './components/bodegas/bodegas.component';
 import {LaboratoriosComponent} from './components/laboratorios/laboratorios.component';
+import {PrestamosComponent} from './components/prestamos/prestamos.component';
 
 const appRutes: Routes = [
     {path: '', component: LoginComponent},
@@ -26,6 +27,7 @@ const appRutes: Routes = [
     {path: 'clientes', component: ClientesComponent},
     {path: 'equipos', component: EquiposComponent},
     {path: 'laboratorios', component: LaboratoriosComponent},
+    {path: 'prestamos', component: PrestamosComponent},
     {path: 'bodegas', component: BodegasComponent}
 ];
 
@@ -38,7 +40,8 @@ const appRutes: Routes = [
         ClientesComponent,
         EquiposComponent,
         BodegasComponent,
-        LaboratoriosComponent
+        LaboratoriosComponent,
+        PrestamosComponent
     ],
     imports: [
         BrowserModule,
