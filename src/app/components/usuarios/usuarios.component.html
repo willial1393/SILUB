@@ -1,98 +1,109 @@
 <div class="container">
-  <section id="" class="main row mr-123 contenedor">
-    <div class="contenedor-usuarios row m-0 p-3">
-      <div class="usuarios-tabla col-md-8 p-0 ml-">
-        <div class="cont-tabla border border-secondary rounded mr-4">
-          <div class="usuario-tabla-encabezado ml-2">
-            <p class="encabezado">Gestion de Usuarios</p>
-          </div>
-          <div class="usuario-tabla-des m-2">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum dicta
-              perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora odit deserunt
-              iste, vel. Architecto, aliquam, itaque.
-            </p>
-          </div>
-          <div class="usuario-tabla-t">
-            <table class="table table-striped">
-              <thead>
-              <tr>
-                <th scope="col">Codigo</th>
-                <th scope="col">Nombre</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Acciones</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let usuario of usuarios">
-                <td>{{usuario.codigo}}</td>
-                <td>{{usuario.nombre_persona}}</td>
-                <td>{{usuario.estado_persona}}</td>
-                <td>{{usuario.tipo}}</td>
-                <td>
-                  <input class="boton-accion" type=image src="assets/imagenes/eye.png" width="25" height="25"
-                         (click)="verUsuario(usuario.codigo)">
-                  <input class="boton-accion" type=image src="assets/imagenes/edit.png" width="25" height="25"
-                         (click)="editarUsuario(usuario)">
-                  <input class="boton-accion" type=image src="assets/imagenes/trash.png" width="25" height="25"
-                         (click)="eliminarUsuario(usuario)">
-                  <input class="boton-accion" type=image src="assets/imagenes/lock.png" width="25" height="25"
-                         (click)="sancionarUsuario(usuario)">
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
+    <section id="" class="main row mr-123 contenedor">
+        <div class="contenedor-usuarios row m-0 p-3">
+            <div class="usuarios-tabla col-md-8 p-0 ml-">
+                <div class="cont-tabla border border-secondary rounded mr-4">
+                    <div class="usuario-tabla-encabezado ml-2">
+                        <p class="encabezado">Gestion de Usuarios</p>
+                    </div>
+                    <div class="usuario-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta
+                            perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora
+                            odit deserunt
+                            iste, vel. Architecto, aliquam, itaque.
+                        </p>
+                    </div>
+                    <div class="usuario-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Codigo</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let usuario of usuarios">
+                                <td>{{usuario.codigo}}</td>
+                                <td>{{usuario.nombre_persona}}</td>
+                                <td>{{usuario.estado_persona}}</td>
+                                <td>{{usuario.tipo}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25" height="25"
+                                           (click)="verUsuario(usuario.codigo)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25" height="25"
+                                           (click)="editarUsuario(usuario)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarUsuario(usuario)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png"
+                                           width="25" height="25"
+                                           (click)="sancionarUsuario(usuario)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="usuario border border-secondary col-md-4 rounded">
+                <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
+                    <div class="usuarios-gestor">
+                        <div class="usuario-gestor-codigo form-group">
+                            <label for="usuario-codigo1">Codigo <span class="usuario-obligatorio">*</span></label>
+                            <input name="codigo" [(ngModel)]="usuario.codigo" id="usuario-codigo1" type="text"
+                                   class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-nombre form-group">
+                            <label for="usuario-nombre">Nombre <span class="usuario-obligatorio">*</span></label>
+                            <input name="nombre_persona" [(ngModel)]="usuario.nombre_persona" id="usuario-nombre"
+                                   type="text" class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-correo form-group">
+                            <label for="usuario-correo">Correo electronico<span
+                                    class="usuario-obligatorio">*</span></label>
+                            <input name="correo_electronico" [(ngModel)]="usuario.correo_electronico"
+                                   id="usuario-correo" type="text" class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-rol form-group">
+                            <label for="rol">Rol<span class="usuario-obligatorio">*</span></label>
+                            <select name="tipo" [(ngModel)]="usuario.tipo" id="rol" class="form-control">
+                                <option value="AUXILIAR">Auxiliar de laboratorio</option>
+                                <option value="LABORATORIO">Jefe de laboratorio</option>
+                                <option value="DEPARTAMENTO">Jefe de departamento</option>
+                            </select>
+                        </div>
+                        <div class="usuario-gestor-estado_persona form-group">
+                            <label for="usuario-estado_persona">estado_persona<span class="usuario-obligatorio">*</span></label>
+                            <select name="estado_persona" [(ngModel)]="usuario.estado_persona"
+                                    id="usuario-estado_persona"
+                                    class="form-control">
+                                <option value="ACTIVO">Activo</option>
+                                <option value="INACTIVO">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="usuario-gestor-usuario form-group">
+                            <label for="usuario-codigo">Usuario<span class="usuario-obligatorio">*</span></label>
+                            <input name="nombre_usuario" [(ngModel)]="usuario.nombre_usuario" id="usuario-codigo"
+                                   type="text" class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-contraseña form-group">
+                            <label for="usuario-codigo2">Contraseña<span class="usuario-obligatorio">*</span></label>
+                            <input name="clave" [(ngModel)]="usuario.clave" id="usuario-codigo2" type="password"
+                                   class="form-control" required>
+                        </div>
+                        <div class="usuario-boton">
+                            <button type="submit" class="btn btn-primary btn-dark bg-dark">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-      </div>
-      <div class="usuario border border-secondary col-md-4 rounded">
-        <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
-          <div class="usuarios-gestor">
-            <div class="usuario-gestor-codigo form-group">
-              <label for="usuario-codigo1">Codigo <span class="usuario-obligatorio">*</span></label>
-              <input name="codigo" [(ngModel)]="usuario.codigo" id="usuario-codigo1" type="text" class="form-control" required>
-            </div>
-            <div class="usuario-gestor-nombre form-group">
-              <label for="usuario-nombre">Nombre <span class="usuario-obligatorio">*</span></label>
-              <input name="nombre" [(ngModel)]="usuario.nombre" id="usuario-nombre" type="text" class="form-control" required>
-            </div>
-            <div class="usuario-gestor-correo form-group">
-              <label for="usuario-correo">Correo electronico<span class="usuario-obligatorio">*</span></label>
-              <input name="correo_electronico" [(ngModel)]="usuario.correo_electronico" id="usuario-correo" type="text" class="form-control" required>
-            </div>
-            <div class="usuario-gestor-rol form-group">
-              <label for="rol">Rol<span class="usuario-obligatorio">*</span></label>
-              <select name="tipo" [(ngModel)]="usuario.tipo" id="rol" class="form-control">
-                <option value="SELECCIONAR">- Seleccionar -</option>
-                <option value="AUXILIAR">Auxiliar de laboratorio</option>
-                <option value="LABORATORIO">Jefe de laboratorio</option>
-                <option value="DEPARTAMENTO">Jefe de departamento</option>
-              </select>
-            </div>
-            <div class="usuario-gestor-estado_persona form-group">
-              <label for="usuario-estado_persona">estado_persona<span class="usuario-obligatorio">*</span></label>
-              <select name="estado_persona" [(ngModel)]="usuario.estado_persona" id="usuario-estado_persona"
-                      class="form-control">
-                <option value="SELECCIONAR">- Seleccionar -</option>
-                <option value="ACTIVO">Activo</option>
-                <option value="INACTIVO">Inactivo</option>
-              </select>
-            </div>
-            <div class="usuario-gestor-usuario form-group">
-              <label for="usuario-codigo">Usuario<span class="usuario-obligatorio">*</span></label>
-              <input name="nombre_usuario" [(ngModel)]="usuario.nombre_usuario" id="usuario-codigo" type="text" class="form-control" required>
-            </div>
-            <div class="usuario-gestor-contraseña form-group">
-              <label for="usuario-codigo2">Contraseña<span class="usuario-obligatorio">*</span></label>
-              <input name="clave" [(ngModel)]="usuario.clave" id="usuario-codigo2" type="password" class="form-control" required>
-            </div>
-            <div class="usuario-boton">
-              <button type="submit" class="btn btn-primary btn-dark bg-dark">Guardar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section>
+    </section>
 </div>

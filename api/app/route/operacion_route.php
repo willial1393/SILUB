@@ -1,7 +1,8 @@
 <?php
+
 use App\Model\MantenimientosModel;
 
-$app->group('/mantenimientos/', function () {
+$app->group('/operaciones/', function () {
 
     $this->get('', function ($req, $res, $args) {
         $um = new MantenimientosModel();

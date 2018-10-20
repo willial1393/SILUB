@@ -18,6 +18,10 @@ import {LoginService} from './services/login.service';
 import {BodegasComponent} from './components/bodegas/bodegas.component';
 import {LaboratoriosComponent} from './components/laboratorios/laboratorios.component';
 import {PrestamosComponent} from './components/prestamos/prestamos.component';
+import {SolicitudesComponent} from './components/solicitudes/solicitudes.component';
+import {SancionesComponent} from './components/sanciones/sanciones.component';
+import {KardexComponent} from './components/kardex/kardex.component';
+import {OperacionesComponent} from './components/operaciones/operaciones.component';
 
 const appRutes: Routes = [
     {path: '', component: LoginComponent},
@@ -28,6 +32,10 @@ const appRutes: Routes = [
     {path: 'equipos', component: EquiposComponent},
     {path: 'laboratorios', component: LaboratoriosComponent},
     {path: 'prestamos', component: PrestamosComponent},
+    {path: 'sanciones', component: SancionesComponent},
+    {path: 'solicitudes', component: SolicitudesComponent},
+    {path: 'kardex', component: KardexComponent},
+    {path: 'operaciones', component: OperacionesComponent},
     {path: 'bodegas', component: BodegasComponent}
 ];
 
@@ -41,7 +49,11 @@ const appRutes: Routes = [
         EquiposComponent,
         BodegasComponent,
         LaboratoriosComponent,
-        PrestamosComponent
+        PrestamosComponent,
+        SolicitudesComponent,
+        SancionesComponent,
+        KardexComponent,
+        OperacionesComponent
     ],
     imports: [
         BrowserModule,

@@ -1,0 +1,210 @@
+<div class="container">
+    <section id="" class="main row contenedor">
+        <div class="contenedor-usuarios row m-0 p-3">
+            <div class="usuarios-tabla col-md-8 p-0">
+                <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
+                    <div class="usuario-tabla-encabezado ">
+                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Solicitudes de adecuación</p>
+                            <div class="ml-3 ">
+                                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                                    <img class="tabla-encabezado-contenedor-imprimir mr-1"
+                                         src="../../../assets/imagenes/imprimir.png"
+                                         alt="Icon imprimir"
+                                         width="25">
+                                    Imprimir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
+                                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                                     class="cnt-tabla-search-img ">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="usuario-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta
+                            perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora
+                            odit deserunt
+                            iste, vel. Architecto, aliquam, itaque.
+                        </p>
+                    </div>
+                    <div class="usuario-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Laboratorio</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let bodega of bodegas">
+                                <td>{{bodega.id_bodega}}</td>
+                                <td>{{bodega.descripcion}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25" height="25"
+                                           (click)="verBodega(bodega.id_bodega)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25" height="25"
+                                           (click)="editarBodega(bodega)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarBodega(bodega)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="usuario border border-secondary col-md-4 rounded pb-3">
+                <form action="" class="form-usuario container-form">
+                    <div class="usuarios-bodega">
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Fecha solicitud
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control"
+                                   readonly>
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Código cliente
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control">
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Nombre cliente
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control"
+                                   readonly>
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Laboratorio
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <select class="form-control" id="exampleFormControlSelect1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Hora ingreso
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control">
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Hora salida
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="descripcion" [(ngModel)]="bodega.descripcion" type="text" class="form-control">
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label for="usuario-bodega">Puestos de trabajo
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="cantidad" [(ngModel)]="equipo.cantidad" id="equipo-cantidad"
+                                   class="form-control" type="number" min="0" max="1000" step="1" required>
+                        </div>
+                        <div class="usuario-boton">
+                            <button type="submit" class="btn btn-dark btn-guardar" (click)="guardarBodega()">Realizar
+                                solicitud
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row m-0 p-3 w-100">
+            <div class="usuarios-tabla col-md-8 p-0">
+                <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
+                    <div class="usuario-tabla-encabezado ">
+                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Equipos solicitados</p>
+                        </div>
+                    </div>
+                    <div class="usuario-tabla-des m-2">
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
+                            dicta
+                            perspiciatis obcaecati minus ut ratione.
+                        </p>
+                        <br>
+                    </div>
+                    <div class="usuario-tabla-t">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Serial</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let estante of estantes">
+                                <td>{{estante.armario}}</td>
+                                <td>{{estante.estante}}</td>
+                                <td>
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                           width="25" height="25"
+                                           (click)="verEstante(estante.id_estante)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                           width="25" height="25"
+                                           (click)="editarEstante(estante)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarEstante(estante)">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="usuario border border-secondary col-md-4 rounded pb-3">
+                <form action="" class="form-usuario container-form">
+                    <div class="usuarios-gestor">
+                        <div class="usuario-gestor-estante form-group">
+                            <label>Serial equipo
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="armario" [(ngModel)]="estante.armario" type="text"
+                                   class="form-control" required>
+                        </div>
+                        <div class="usuario-gestor-estante form-group">
+                            <label>Nombre equipo
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="estante" [(ngModel)]="estante.estante" id="usuario-bodega" type="text"
+                                   class="form-control" readonly>
+                        </div>
+                        <div class="usuario-gestor-nombre form-group">
+                            <label>Descripción equipo
+                            </label>
+                            <textarea name="descripcion" [(ngModel)]="estante.descripcion" class="form-control" rows="5"
+                                      id="textarea" readonly></textarea>
+                        </div>
+                        <div class="usuario-boton">
+                            <button type="submit" class="btn btn-dark btn-guardar" (click)="guardarEstante()"> Agregar
+                                equipo
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+

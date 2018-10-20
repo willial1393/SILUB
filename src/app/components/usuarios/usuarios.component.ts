@@ -11,15 +11,7 @@ import {UsuarioService} from '../../services/usuario.service';
 export class UsuariosComponent implements OnInit {
 
     usuarios: any;
-    usuario: any = {
-        correo_electronico: '',
-        nombre: '',
-        estado_persona: 'SELECCIONAR',
-        nombre_usuario: '',
-        clave: '',
-        tipo: 'SELECCIONAR',
-        codigo: ''
-    };
+    usuario: any;
     isEdit: any = false;
 
     constructor(private route: Router,
@@ -31,6 +23,18 @@ export class UsuariosComponent implements OnInit {
         this.usuarioService.getUsuarios().subscribe(res => {
             this.usuarios = res['result'];
         });
+        this.usuario = {
+            id_usuario: '',
+            id_persona: '',
+            correo_electronico: '',
+            nombre_persona: '',
+            estado_persona: '',
+            nombre_usuario: '',
+            codigo: '',
+            clave: '',
+            tipo: ''
+        };
+        this.isEdit = false;
     }
 
     ngOnInit() {
@@ -52,14 +56,13 @@ export class UsuariosComponent implements OnInit {
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+            this.updateTable();
         });
     }
 
     editarUsuario(usuario) {
         this.isEdit = true;
         this.usuario = usuario;
-        this.updateTable();
     }
 
     eliminarUsuario(usuario) {
@@ -84,7 +87,6 @@ export class UsuariosComponent implements OnInit {
                             '',
                             'success'
                         );
-                        this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
                         this.updateTable();
                     });
                 }
@@ -110,8 +112,6 @@ export class UsuariosComponent implements OnInit {
                     'Información del usuario modificada',
                     'success'
                 );
-                this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
-                this.isEdit = false;
                 this.updateTable();
             });
         } else {
@@ -122,7 +122,6 @@ export class UsuariosComponent implements OnInit {
                     'Usuario registrado correctamente',
                     'success'
                 );
-                this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
                 this.updateTable();
             });
         }

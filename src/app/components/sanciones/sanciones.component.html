@@ -5,7 +5,7 @@
                 <div class="cont-tabla border border-secondary rounded mr-4">
                     <div class="usuario-tabla-encabezado ">
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-                            <p class="pl-1">Gestion de Clientes</p>
+                            <p class="pl-1">Sanciones</p>
                             <div class="ml-3 ">
                                 <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
@@ -39,8 +39,9 @@
                             <tr>
                                 <th scope="col">Codigo</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Estado</th>
                                 <th scope="col">Tipo</th>
+                                <th scope="col">Fecha inicio</th>
+                                <th scope="col">Fecha fin</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
@@ -74,48 +75,19 @@
                 <form ngNativeValidate action="" class="form-usuario container-form" (submit)="guardar()">
                     <div class="usuarios-gestor">
                         <div class="usuario-gestor-codigo form-group">
-                            <label for="usuario-codigo">Codigo
+                            <label for="usuario-codigo">Fecha inicio
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
                                    class="form-codigo form-control" required>
                         </div>
                         <div class="usuario-gestor-correo form-group">
-                            <label for="usuario-nombre">nombre
+                            <label for="usuario-nombre">Fecha fin
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona" id="usuario-nombre"
                                    type="text"
                                    class="form-control" required>
-                        </div>
-                        <div class="usuario-gestor-nombre form-group">
-                            <label for="usuario-correo">Correo electronico
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <input name="correo" [(ngModel)]="cliente.correo_electronico" id="usuario-correo"
-                                   type="text"
-                                   class="form-control" required>
-                        </div>
-                        <div class="usuario-gestor-correo form-group">
-                            <label for="usuario-tipo">Tipo
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <select name="tipo" [(ngModel)]="cliente.tipo" id="usuario-tipo" class="form-control"
-                                    required>
-                                <option value="ESTUDIANTE">Estudiante</option>
-                                <option value="DOCENTE">Docente</option>
-                            </select>
-                        </div>
-                        <div class="usuario-gestor-rol form-group">
-                            <label for="usuario-estado_persona">estado_persona
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <select name="estado_persona" [(ngModel)]="cliente.estado_persona"
-                                    id="usuario-estado_persona"
-                                    class="form-control" required>
-                                <option value="ACTIVO">Activo</option>
-                                <option value="INACTIVO">Inactivo</option>
-                            </select>
                         </div>
                         <div class="usuario-boton">
                             <button type="submit" class="btn btn-dark btn-guardar ">Guardar</button>
