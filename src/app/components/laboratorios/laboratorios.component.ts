@@ -11,7 +11,7 @@ import {LaboratorioService} from '../../services/laboratorio.service';
 export class LaboratoriosComponent implements OnInit {
 
     laboratorios: any;
-    laboratorio: any = {id_laboratorio: '', descripcion: '', nombre: '', estado: 'ACTIVO'};
+    laboratorio: any = {id_laboratorio: '', descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
     isEdit: any = false;
 
     constructor(private route: Router,
@@ -40,7 +40,7 @@ export class LaboratoriosComponent implements OnInit {
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+            this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
         });
     }
 
@@ -64,7 +64,7 @@ export class LaboratoriosComponent implements OnInit {
             }).then((result) => {
                 if (result.value) {
                     this.laboratorio = Laboratorio;
-                    this.laboratorio.estado = 'ELIMINADO';
+                    this.laboratorio.estado_laboratorio = 'ELIMINADO';
                     this.laboratorioService.putLaboratorio(this.laboratorio).subscribe(res => {
                         this.laboratorio = res['result'];
                         swal(
@@ -72,7 +72,7 @@ export class LaboratoriosComponent implements OnInit {
                             '',
                             'success'
                         );
-                        this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+                        this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
                         this.updateTable();
                     });
                 }
@@ -89,7 +89,7 @@ export class LaboratoriosComponent implements OnInit {
                     'Información del laboratorio modificada',
                     'success'
                 );
-                this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+                this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
                 this.isEdit = false;
                 this.updateTable();
             });
@@ -101,7 +101,7 @@ export class LaboratoriosComponent implements OnInit {
                         'laboratorio registrado correctamente',
                         'success'
                     );
-                    this.laboratorio = {descripcion: '', nombre: '', estado: 'ACTIVO'};
+                    this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
                     this.updateTable();
                 } else {
                     swal(

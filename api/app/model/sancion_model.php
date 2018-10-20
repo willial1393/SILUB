@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,16 +13,13 @@ class SancionModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
-            $result = array();
-
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table");
             $stm->execute();
 
@@ -37,10 +35,7 @@ class SancionModel
 
     public function get($value)
     {
-        try
-        {
-            $result = array();
-
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_sancion = ?");
             $stm->execute(array($value));
 
@@ -57,11 +52,11 @@ class SancionModel
     public function insert($data)
     {
 
-        $id_sancion   = $data['id_sancion'];
-        $id_cliente   = $data['id_cliente'];
-        $descripcion  = $data['descripcion'];
+        $id_sancion = $data['id_sancion'];
+        $id_cliente = $data['id_cliente'];
+        $descripcion = $data['descripcion'];
         $fecha_inicio = $data['fecha_inicio'];
-        $fecha_fin    = $data['fecha_fin'];
+        $fecha_fin = $data['fecha_fin'];
 
         $query = "INSERT INTO $this->table (id_sancion, id_cliente, descripcion, fecha_inicio, fecha_fin) VALUES (:id_sancion, :id_cliente, :descripcion, :fecha_inicio, :fecha_fin)";
 
@@ -85,11 +80,11 @@ class SancionModel
 
     public function update($data)
     {
-        $id_sancion   = $data['id_sancion'];
-        $id_cliente   = $data['id_cliente'];
-        $descripcion  = $data['descripcion'];
+        $id_sancion = $data['id_sancion'];
+        $id_cliente = $data['id_cliente'];
+        $descripcion = $data['descripcion'];
         $fecha_inicio = $data['fecha_inicio'];
-        $fecha_fin    = $data['fecha_fin'];
+        $fecha_fin = $data['fecha_fin'];
 
         $query = "UPDATE $this->table SET id_sancion = :id_sancion, id_cliente = :id_cliente, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin WHERE id_sancion = :id_sancion";
 

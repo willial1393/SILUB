@@ -11,11 +11,40 @@ import {PrestamoService} from '../../services/prestamo.service';
 export class PrestamosComponent implements OnInit {
 
     date: Date = new Date();
-    equipos: any;
-    equipo: any;
-    prestamos: any;
+    date2: Date = new Date();
+    equipo: any = {
+        id_equipo: '',
+        id_tipo_equipo: '',
+        id_estante: '',
+        serial: '',
+        descripcion: '',
+        fecha_registro: '',
+        estado_equipo: '',
+        tipo: '',
+        id_bodega: '',
+        armario: '',
+        estante: '',
+        estado: '',
+        descripcion_bodega: ''
+    };
+    cliente: any = {
+        id_cliente: '',
+        id_persona: '',
+        correo_electronico: '',
+        nombre_persona: '',
+        estado_persona: '',
+        codigo: '',
+        tipo: ''
+    };
     prestamo: any;
-    isEdit: any = false;
+    prestamos: any;
+    sancion: any = {
+        id_sancion: '',
+        id_cliente: '',
+        descripcion: '',
+        fecha_inicio: '',
+        fecha_fin: ''
+    };
 
     constructor(private route: Router,
                 private prestamoService: PrestamoService) {
@@ -23,28 +52,21 @@ export class PrestamosComponent implements OnInit {
     }
 
     updateTable() {
-        this.prestamoService.getEquipos().subscribe(res => {
-            this.equipos = res['result'];
-        });
         this.prestamoService.getPrestamos().subscribe(res => {
             this.prestamos = res['result'];
         });
-        this.equipo = {
-            id_equipo: '',
-            id_tipo_equipo: '',
-            id_estante: '',
-            serial: '',
-            descripcion: '',
-            fecha_registro: '',
-            estado: ''
-        };
         this.prestamo = {
             id_prestamo: '',
             id_equipo: '',
             id_solicitud_adecuacion: '',
             id_cliente: '',
             fecha_solicitud: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
-            fecha_devolucion: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
+            fecha_devolucion: '',
+            fecha_prevista: '',
+            codigo_cliente: '',
+            nombre_persona: '',
+            dias: '',
+            serial: '',
             estado: ''
         };
     }
@@ -55,100 +77,96 @@ export class PrestamosComponent implements OnInit {
         }
     }
 
-    verEquipo(equipo) {
-        this.prestamoService.getEsquipoCodigo(equipo.id_equipo).subscribe(res => {
-            this.equipo = res['result'];
-            swal({
-                title: this.equipo.serial === null ? '' : 'Serial: ' + this.equipo.serial,
-                html: 'Nombre: ' + this.equipo.tipo
-                    + '<br>Fecha de registro: ' + this.equipo.fecha_registro
-                    + '<br>Estado: ' + this.equipo.estado
-                    + '<br>Descripción: ' + this.equipo.descripcion,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
-            this.equipo = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+    updatePrestamo() {
+        if (this.prestamo.dias !== null) {
+            this.date2 = new Date(
+                this.date.getFullYear(),
+                this.date.getMonth(),
+                this.date.getDate() + parseInt(this.prestamo.dias, 0),
+                this.date.getHours(),
+                this.date.getMinutes(),
+                this.date.getSeconds());
+            this.prestamo.fecha_prevista = this.date2.getDay() + '-' + (this.date2.getMonth() + 1) + '-' + this.date2.getFullYear();
+        } else {
+            this.prestamo.fecha_prevista = null;
+        }
+    }
+
+    getCliente() {
+        this.prestamoService.getClienteCodigo(this.prestamo.codigo_cliente).subscribe(res => {
+            this.cliente = res['result'];
         });
     }
 
-    editarEquipo(equipo) {
-        this.isEdit = true;
-        this.updateTable();
-        this.equipo = equipo;
+    getEquipo() {
+        this.prestamoService.getEquipoCodigo(this.prestamo.serial).subscribe(res => {
+            this.equipo = res['result'];
+        });
     }
 
-    eliminarEquipo(equipo) {
-        swal(
-            {
-                title: '¿Desea eliminar el equipo?',
-                text: 'No se podrá recuperar la información de este Equipo',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Aceptar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-            }
-        );
+    verPrestamo(prestamo) {
+        swal({
+            title: prestamo.serial + ' - ' + prestamo.tipo,
+            html: 'Descripción: ' + prestamo.descripcion,
+            type: 'info',
+            confirmButtonColor: '#999999'
+        });
     }
 
     guardar() {
-        if (this.isEdit) {
-            this.prestamoService.putEquipo(this.equipo).subscribe(res => {
-                this.equipo = res['result'];
-                swal(
-                    'OK',
-                    'Información del Equipo modificada',
-                    'success'
-                );
-                this.isEdit = false;
-                this.updateTable();
-            });
-        } else {
-            let aux = true;
-            for (let i = 0; i < this.equipo.cantidad; i++) {
-                this.prestamoService.postEquipo(this.equipo).subscribe(res => {
-                    this.equipo = res['result'];
-                    if (res['response'] !== true) {
+        this.prestamoService.getClienteSancionado(this.cliente.id_cliente).subscribe(res => {
+            this.sancion = res['result'];
+            if (this.sancion !== null) {
+                this.prestamoService.postPrestamo(this.prestamo, this.equipo).subscribe(res2 => {
+                    if (res2['response']) {
+                        this.equipo.estado_equipo = 'PRESTADO';
+                        this.prestamoService.putEquipo(this.equipo).subscribe(res3 => {
+                            if (res3['response']) {
+                                swal(
+                                    'OK',
+                                    '',
+                                    'success'
+                                );
+                                this.updateTable();
+                            } else {
+                                swal(
+                                    'Ups... Algo salio mal',
+                                    '',
+                                    'error'
+                                );
+                            }
+                        });
+                    } else {
                         swal(
                             'Ups... Algo salio mal',
                             '',
                             'error'
                         );
-                        aux = false;
-                        i = this.equipo.cantidad;
                     }
                 });
-            }
-            this.updateTable();
-            if (aux) {
-                swal(
-                    'OK',
-                    'Equipo registrado correctamente',
-                    'success'
-                ).then((res) => {
-                    window.location.reload();
+            } else {
+                swal({
+                    title: 'Cliente sancionado',
+                    html: 'Descripción: ' + this.sancion.descripcion +
+                        '<br>Fecha sanción: ' + this.sancion.fecha_inicio +
+                        '<br>Fecha terminación: ' + this.sancion.fecha_fin,
+                    type: 'error',
+                    confirmButtonColor: '#999999'
                 });
             }
-        }
+        });
     }
 
-    setSerialEquipo(equipo) {
+    terminarPrestamo(prestamo) {
         swal({
-            title: 'Serial del equipo',
-            input: 'text',
-            inputValue: equipo.serial !== null ? equipo.serial : '',
+            title: '¿Terminar prestamo del equipo con serial ' + prestamo.serial + '?',
             showCancelButton: true,
             confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-            preConfirm: (res) => {
-                equipo.serial = res.toString().toUpperCase();
-            }
+            cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.value) {
-                equipo.estado = 'ACTIVO';
-                this.prestamoService.putEquipo(equipo).subscribe(res => {
+                prestamo.fecha_devolucion = this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear();
+                this.prestamoService.putPrestamo(prestamo).subscribe(res => {
                     if (res['response']) {
                         swal(
                             'OK',

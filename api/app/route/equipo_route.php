@@ -24,6 +24,16 @@ $app->group('/equipos/', function () {
             );
     });
 
+    $this->get('serial/{id}', function ($req, $res, $args) {
+        $um = new EquiposModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode($um->getSerial($args['id']), JSON_UNESCAPED_UNICODE)
+            );
+    });
+
     $this->post('', function ($req, $res) {
         $um = new EquiposModel();
 

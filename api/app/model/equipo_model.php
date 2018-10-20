@@ -19,9 +19,7 @@ class EquiposModel
     public function getAll()
     {
         try {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.estado != 'ELIMINADO'");
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.estado_equipo != 'ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -37,9 +35,23 @@ class EquiposModel
     public function get($value)
     {
         try {
-            $result = array();
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? AND e.estado_equipo != 'ELIMINADO'");
+            $stm->execute(array($value));
 
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? AND e.estado != 'ELIMINADO'");
+            $this->response->setResponse(true);
+            $this->response->result = $stm->fetch();
+
+            return $this->response;
+        } catch (Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+            return $this->response;
+        }
+    }
+
+    public function getSerial($value)
+    {
+        try {
+            $stm = $this->db->prepare("CALL get_full_equipo(?)");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -101,9 +113,9 @@ class EquiposModel
         $id_estante = $data['id_estante'];
         $descripcion = $data['descripcion'];
         $serial = $data['serial'];
-        $estado = $data['estado'];
+        $estado_equipo = $data['estado_equipo'];
 
-        $query = "CALL update_equipo(:id_equipo, :id_tipo_equipo, :id_estante, :serial, :descripcion, :estado)";
+        $query = "CALL update_equipo(:id_equipo, :id_tipo_equipo, :id_estante, :serial, :descripcion, :estado_equipo)";
 
         try {
 
@@ -113,7 +125,7 @@ class EquiposModel
             $stmt->bindParam("id_estante", $id_estante);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("serial", $serial);
-            $stmt->bindParam("estado", $estado);
+            $stmt->bindParam("estado_equipo", $estado_equipo);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");

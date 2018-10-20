@@ -52,7 +52,7 @@
                                     <td (click)="setSerialEquipo(equipo)">{{equipo.serial}}</td>
                                 </ng-template>
                                 <td>{{equipo.tipo}}</td>
-                                <td>{{equipo.estado}}</td>
+                                <td>{{equipo.estado_equipo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25"
@@ -83,12 +83,13 @@
                                    type="text" class="form-control de" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-correo form-group">
-                            <label for="equipo-estado">Estado<span class="equipo-obligatorio">*</span></label>
-                            <input name="estado" [(ngModel)]="equipo.estado" id="equipo-estado" type="text"
+                            <label for="equipo-estado_equipo">Estado<span class="equipo-obligatorio">*</span></label>
+                            <input name="estado_equipo" [(ngModel)]="equipo.estado_equipo" id="equipo-estado_equipo"
+                                   type="text"
                                    class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-correo form-group">
-                            <label for="equipo-estado">Nombre<span class="equipo-obligatorio">*</span></label>
+                            <label for="equipo-estado_equipo">Nombre<span class="equipo-obligatorio">*</span></label>
                             <select name="tipo" [(ngModel)]="equipo.tipo" id="rol" class="form-control">
                                 <option value="0">- Seleccionar -</option>
                                 <option *ngFor="let tipo of tipo_equipos" value="{{tipo.tipo}}">

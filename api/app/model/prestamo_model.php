@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,17 +13,19 @@ class PrestamosModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+        try {
+            $stm = $this->db->prepare("SELECT p.*,c.tipo as tipo_cliente,r.*,e.*,t.*
+FROM persona p, prestamo r, cliente c, equipo e, tipo_equipo t
+WHERE r.id_cliente = c.id_cliente
+AND c.id_persona = p.id_persona
+AND r.id_equipo = e.id_equipo
+AND e.id_tipo_equipo = t.id_tipo_equipo");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -37,11 +40,14 @@ class PrestamosModel
 
     public function get($value)
     {
-        try
-        {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_prestamo = ?");
+        try {
+            $stm = $this->db->prepare("SELECT p.*,c.tipo as tipo_cliente,r.*,e.*,t.*
+FROM persona p, prestamo r, cliente c, equipo e, tipo_equipo t
+WHERE r.id_cliente = c.id_cliente
+AND c.id_persona = p.id_persona
+AND r.id_equipo = e.id_equipo
+AND e.id_tipo_equipo = t.id_tipo_equipo 
+AND r.id_prestamo = ?");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -57,13 +63,13 @@ class PrestamosModel
     public function insert($data)
     {
 
-        $id_prestamo             = $data['id_prestamo'];
-        $id_equipo               = $data['id_equipo'];
+        $id_prestamo = $data['id_prestamo'];
+        $id_equipo = $data['id_equipo'];
         $id_solicitud_adecuacion = $data['id_solicitud_adecuacion'];
-        $id_cliente              = $data['id_cliente'];
-        $fecha_solicitud         = $data['fecha_solicitud'];
-        $fecha_devolucion        = $data['fecha_devolucion'];
-        $estado                  = $data['estado'];
+        $id_cliente = $data['id_cliente'];
+        $fecha_solicitud = $data['fecha_solicitud'];
+        $fecha_devolucion = $data['fecha_devolucion'];
+        $estado = $data['estado'];
 
         $query = "INSERT INTO $this->table (id_prestamo, id_equipo, id_solicitud_adecuacion, id_cliente, fecha_solicitud, fecha_devolucion, estado) VALUES (:id_prestamo, :id_equipo, :id_solicitud_adecuacion, :id_cliente, :fecha_solicitud, :fecha_devolucion, :estado)";
 
@@ -89,13 +95,13 @@ class PrestamosModel
 
     public function update($data)
     {
-        $id_prestamo             = $data['id_prestamo'];
-        $id_equipo               = $data['id_equipo'];
+        $id_prestamo = $data['id_prestamo'];
+        $id_equipo = $data['id_equipo'];
         $id_solicitud_adecuacion = $data['id_solicitud_adecuacion'];
-        $id_cliente              = $data['id_cliente'];
-        $fecha_solicitud         = $data['fecha_solicitud'];
-        $fecha_devolucion        = $data['fecha_devolucion'];
-        $estado                  = $data['estado'];
+        $id_cliente = $data['id_cliente'];
+        $fecha_solicitud = $data['fecha_solicitud'];
+        $fecha_devolucion = $data['fecha_devolucion'];
+        $estado = $data['estado'];
 
         $query = "UPDATE $this->table SET id_prestamo = :id_prestamo, id_equipo = :id_equipo, id_solicitud_adecuacion = :id_solicitud_adecuacion, id_cliente = :id_cliente, fecha_solicitud = :fecha_solicitud, fecha_devolucion = :fecha_devolucion, estado = :estado WHERE id_prestamo = :id_prestamo";
 

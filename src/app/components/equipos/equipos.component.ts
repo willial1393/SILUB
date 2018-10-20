@@ -67,7 +67,7 @@ export class EquiposComponent implements OnInit {
         });
         this.equipo = {
             fecha_registro: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
-            estado: 'INACTIVO', cantidad: '1', tipo: '0'
+            estado_equipo: 'INACTIVO', cantidad: '1', tipo: '0'
         };
         this.getTipoEquipos();
     }
@@ -85,12 +85,12 @@ export class EquiposComponent implements OnInit {
                 title: this.equipo.serial === null ? '' : 'Serial: ' + this.equipo.serial,
                 html: 'Nombre: ' + this.equipo.tipo
                 + '<br>Fecha de registro: ' + this.equipo.fecha_registro
-                + '<br>Estado: ' + this.equipo.estado
+                    + '<br>estado_equipo: ' + this.equipo.estado_equipo
                 + '<br>Descripción: ' + this.equipo.descripcion,
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.equipo = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+            this.equipo = {estado_equipo: 'SELECCIONAR', tipo: 'SELECCIONAR'};
         });
     }
 
@@ -181,7 +181,7 @@ export class EquiposComponent implements OnInit {
             }
         }).then((result) => {
             if (result.value) {
-                equipo.estado = 'ACTIVO';
+                equipo.estado_equipo = 'ACTIVO';
                 this.equipoService.putEquipo(equipo).subscribe(res => {
                     if (res['response']) {
                         swal(

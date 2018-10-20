@@ -21,7 +21,7 @@ class PersonaUsuarioModel
         {
             $result = array();
 
-            $stm = $this->db->prepare("SELECT u.id_usuario,p.*,u.nombre_usuario,u.clave,u.tipo FROM persona as p, usuario as u WHERE u.id_persona = p.id_persona AND p.estado != 'ELIMINADO'");
+            $stm = $this->db->prepare("SELECT u.id_usuario,p.*,u.nombre_usuario,u.clave,u.tipo FROM persona as p, usuario as u WHERE u.id_persona = p.id_persona AND p.estado_persona != 'ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -38,7 +38,7 @@ class PersonaUsuarioModel
     {
         try
         {
-            $stm = $this->db->prepare("SELECT u.id_usuario,p.*,u.nombre_usuario,u.clave,u.tipo FROM persona as p, usuario as u WHERE p.codigo = ? AND p.estado != 'ELIMINADO'");
+            $stm = $this->db->prepare("SELECT u.id_usuario,p.*,u.nombre_usuario,u.clave,u.tipo FROM persona as p, usuario as u WHERE p.codigo = ? AND p.estado_persona != 'ELIMINADO'");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -55,21 +55,21 @@ class PersonaUsuarioModel
     {
         $correo_electronico  = $data['correo_electronico'];
         $nombre      = $data['nombre'];
-        $estado   = $data['estado'];
+        $estado_persona = $data['estado_persona'];
         $nombre_usuario   = $data['nombre_usuario'];
         $clave   = $data['clave'];
         $tipo   = $data['tipo'];
         $codigo   = $data['codigo'];
 
 
-        $query = "CALL insert_persona_usuario(:correo_electronico, :nombre, :estado, :nombre_usuario, :clave, :tipo, :codigo)";
+        $query = "CALL insert_persona_usuario(:correo_electronico, :nombre, :estado_persona, :nombre_usuario, :clave, :tipo, :codigo)";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("correo_electronico", $correo_electronico);
-            $stmt->bindParam("nombre", $nombre);            
-            $stmt->bindParam("estado", $estado);
+            $stmt->bindParam("nombre", $nombre);
+            $stmt->bindParam("estado_persona", $estado_persona);
             $stmt->bindParam("nombre_usuario", $nombre_usuario);   
             $stmt->bindParam("clave", $clave);            
             $stmt->bindParam("tipo", $tipo);            
@@ -91,13 +91,13 @@ class PersonaUsuarioModel
         $id_usuario = $data['id_usuario'];
         $correo_electronico  = $data['correo_electronico'];
         $nombre      = $data['nombre'];
-        $estado   = $data['estado'];
+        $estado_persona = $data['estado_persona'];
         $codigo   = $data['codigo'];
         $nombre_usuario   = $data['nombre_usuario'];
         $clave   = $data['clave'];
         $tipo   = $data['tipo'];
 
-        $query = "CALL update_persona_usuario(:id_persona, :id_usuario, :correo_electronico, :nombre, :estado, :codigo, :nombre_usuario, :clave, :tipo)";
+        $query = "CALL update_persona_usuario(:id_persona, :id_usuario, :correo_electronico, :nombre, :estado_persona, :codigo, :nombre_usuario, :clave, :tipo)";
 
         try {
 
@@ -105,8 +105,8 @@ class PersonaUsuarioModel
             $stmt->bindParam("id_persona", $id_persona);
             $stmt->bindParam("id_usuario", $id_usuario);
             $stmt->bindParam("correo_electronico", $correo_electronico);
-            $stmt->bindParam("nombre", $nombre);            
-            $stmt->bindParam("estado", $estado);
+            $stmt->bindParam("nombre", $nombre);
+            $stmt->bindParam("estado_persona", $estado_persona);
             $stmt->bindParam("codigo", $codigo);            
             $stmt->bindParam("nombre_usuario", $nombre_usuario);            
             $stmt->bindParam("clave", $clave);            

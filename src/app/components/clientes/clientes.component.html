@@ -8,7 +8,8 @@
               <p class="pl-1">Gestion de Clientes</p>
               <div class="ml-3 ">
                 <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
-                  <img class="tabla-encabezado-contenedor-imprimir mr-1" src="assets/imagenes/imprimir.png" alt="Icon imprimir"
+                  <img class="tabla-encabezado-contenedor-imprimir mr-1" src="../../../assets/imagenes/imprimir.png"
+                       alt="Icon imprimir"
                        width="25">
                   Imprimir
                 </button>
@@ -17,7 +18,8 @@
             <div class="cont-tabla-search border border-secondary d-flex align-items-center">
               <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
               <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                <img src="assets/imagenes/search.png" alt="buscar usuario." width="23" class="cnt-tabla-search-img ">
+                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                     class="cnt-tabla-search-img ">
               </div>
             </div>
           </div>
@@ -34,7 +36,7 @@
               <tr>
                 <th scope="col">Codigo</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Estado</th>
+                <th scope="col">estado_persona</th>
                 <th scope="col">Tipo</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -42,17 +44,17 @@
               <tbody>
               <tr *ngFor="let cliente of clientes">
                 <td>{{cliente.codigo}}</td>
-                <td>{{cliente.nombre}}</td>
-                <td>{{cliente.estado}}</td>
+                <td>{{cliente.nombre_persona}}</td>
+                <td>{{cliente.estado_persona}}</td>
                 <td>{{cliente.tipo}}</td>
                 <td>
-                  <input class="boton-accion" type=image src="assets/imagenes/eye.png" width="25" height="25"
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png" width="25" height="25"
                          (click)="verCliente(cliente.codigo)">
-                  <input class="boton-accion" type=image src="assets/imagenes/edit.png" width="25" height="25"
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png" width="25" height="25"
                          (click)="editarCliente(cliente)">
-                  <input class="boton-accion" type=image src="assets/imagenes/trash.png" width="25" height="25"
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png" width="25" height="25"
                          (click)="eliminarCliente(cliente)">
-                  <input class="boton-accion" type=image src="assets/imagenes/lock.png" width="25" height="25"
+                  <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png" width="25" height="25"
                          (click)="sancionarCliente(cliente)">
                 </td>
               </tr>
@@ -62,49 +64,50 @@
         </div>
       </div>
       <div class="usuario border border-secondary col-md-4 rounded pb-3">
-        <form action="" class="form-usuario container-form">
+        <form ngNativeValidate action="" class="form-usuario container-form" (submit)="guardar()">
           <div class="usuarios-gestor">
             <div class="usuario-gestor-codigo form-group">
               <label for="usuario-codigo">Codigo
                 <span class="usuario-obligatorio">*</span>
               </label>
               <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
-                     class="form-codigo form-control">
+                     class="form-codigo form-control" required>
             </div>
             <div class="usuario-gestor-correo form-group">
               <label for="usuario-nombre">nombre
                 <span class="usuario-obligatorio">*</span>
               </label>
-              <input name="nombre" [(ngModel)]="cliente.nombre" id="usuario-nombre" type="text" class="form-control">
+              <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona" id="usuario-nombre" type="text"
+                     class="form-control" required>
             </div>
             <div class="usuario-gestor-nombre form-group">
               <label for="usuario-correo">Correo electronico
                 <span class="usuario-obligatorio">*</span>
               </label>
-              <input name="correo" [(ngModel)]="cliente.correo_electronico" id="usuario-correo" type="text" class="form-control">
+              <input name="correo" [(ngModel)]="cliente.correo_electronico" id="usuario-correo" type="text"
+                     class="form-control" required>
             </div>
             <div class="usuario-gestor-correo form-group">
               <label for="usuario-tipo">Tipo
                 <span class="usuario-obligatorio">*</span>
               </label>
-              <select name="tipo" [(ngModel)]="cliente.tipo" id="usuario-tipo" class="form-control">
-                <option value="SELECCIONAR">- Seleccionar -</option>
+              <select name="tipo" [(ngModel)]="cliente.tipo" id="usuario-tipo" class="form-control" required>
                 <option value="ESTUDIANTE">Estudiante</option>
                 <option value="DOCENTE">Docente</option>
               </select>
             </div>
             <div class="usuario-gestor-rol form-group">
-              <label for="usuario-estado">Estado
+              <label for="usuario-estado_persona">estado_persona
                 <span class="usuario-obligatorio">*</span>
               </label>
-              <select name="estado" [(ngModel)]="cliente.estado" id="usuario-estado" class="form-control">
-                <option value="SELECCIONAR">- Seleccionar -</option>
+              <select name="estado_persona" [(ngModel)]="cliente.estado_persona" id="usuario-estado_persona"
+                      class="form-control" required>
                 <option value="ACTIVO">Activo</option>
                 <option value="INACTIVO">Inactivo</option>
               </select>
             </div>
             <div class="usuario-boton">
-              <button type="submit" class="btn btn-dark btn-guardar " (click)="guardar()">Guardar</button>
+              <button type="submit" class="btn btn-dark btn-guardar ">Guardar</button>
             </div>
           </div>
         </form>

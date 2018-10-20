@@ -14,7 +14,7 @@ export class UsuariosComponent implements OnInit {
     usuario: any = {
         correo_electronico: '',
         nombre: '',
-        estado: 'SELECCIONAR',
+        estado_persona: 'SELECCIONAR',
         nombre_usuario: '',
         clave: '',
         tipo: 'SELECCIONAR',
@@ -44,15 +44,15 @@ export class UsuariosComponent implements OnInit {
             this.usuario = res['result'];
             swal({
                 title: 'Código: ' + codigo,
-                html: 'Nombre: ' + this.usuario.nombre
+                html: 'Nombre: ' + this.usuario.nombre_persona
                     + '<br>Correo electrónico: ' + this.usuario.correo_electronico
                     + '<br>Rol: ' + this.usuario.tipo
-                    + '<br>Estado: ' + this.usuario.estado
+                    + '<br>estado_persona: ' + this.usuario.estado_persona
                     + '<br>Usuario: ' + this.usuario.nombre_usuario,
                 type: 'info',
                 confirmButtonColor: '#999999'
             });
-            this.usuario = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+            this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
         });
     }
 
@@ -76,7 +76,7 @@ export class UsuariosComponent implements OnInit {
             }).then((result) => {
                 if (result.value) {
                     this.usuario = usuario;
-                    this.usuario.estado = 'ELIMINADO';
+                    this.usuario.estado_persona = 'ELIMINADO';
                     this.usuarioService.putUsuario(this.usuario).subscribe(res => {
                         this.usuario = res['result'];
                         swal(
@@ -84,7 +84,7 @@ export class UsuariosComponent implements OnInit {
                             '',
                             'success'
                         );
-                        this.usuario = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+                        this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
                         this.updateTable();
                     });
                 }
@@ -93,7 +93,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     sancionarUsuario(usuario) {
-        this.usuario = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+        this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
         swal(
             'Sancionar',
             'Sancionar usuario',
@@ -110,7 +110,7 @@ export class UsuariosComponent implements OnInit {
                     'Información del usuario modificada',
                     'success'
                 );
-                this.usuario = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+                this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
                 this.isEdit = false;
                 this.updateTable();
             });
@@ -122,7 +122,7 @@ export class UsuariosComponent implements OnInit {
                     'Usuario registrado correctamente',
                     'success'
                 );
-                this.usuario = {estado: 'SELECCIONAR', tipo: 'SELECCIONAR'};
+                this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
                 this.updateTable();
             });
         }

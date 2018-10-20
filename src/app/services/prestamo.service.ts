@@ -7,6 +7,7 @@ import {AppGlobals} from '../models/appGlobals';
 })
 export class PrestamoService {
 
+    urlGetClientes = this.appGlobals.base_url + 'clientes/';
     urlGetEquipos = this.appGlobals.base_url + 'equipos/';
     urlGetPrestamos = this.appGlobals.base_url + 'prestamos/';
     headers = this.appGlobals.headers;
@@ -15,16 +16,16 @@ export class PrestamoService {
                 private appGlobals: AppGlobals) {
     }
 
-    getEquipos() {
-        return this.http.get(this.urlGetEquipos, {headers: this.headers});
+    getClienteCodigo(codigo) {
+        return this.http.get(this.urlGetClientes + codigo, {headers: this.headers});
     }
 
-    getEsquipoCodigo(codigo) {
-        return this.http.get(this.urlGetEquipos + codigo, {headers: this.headers});
+    getClienteSancionado(codigo) {
+        return this.http.get(this.urlGetClientes + 'sancionado/' + codigo, {headers: this.headers});
     }
 
-    postEquipo(equipo) {
-        return this.http.post(this.urlGetEquipos, equipo, {headers: this.headers});
+    getEquipoCodigo(codigo) {
+        return this.http.get(this.urlGetEquipos + 'serial/' + codigo, {headers: this.headers});
     }
 
     putEquipo(equipo) {
@@ -39,8 +40,8 @@ export class PrestamoService {
         return this.http.get(this.urlGetPrestamos + codigo, {headers: this.headers});
     }
 
-    postPrestamo(prestamos) {
-        return this.http.post(this.urlGetPrestamos, prestamos, {headers: this.headers});
+    postPrestamo(prestamo, equipo) {
+        return this.http.post(this.urlGetPrestamos, prestamo, {headers: this.headers});
     }
 
     putPrestamo(prestamo) {
