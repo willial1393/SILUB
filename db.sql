@@ -25,16 +25,8 @@ CREATE TABLE IF NOT EXISTS `bodega` (
   UNIQUE KEY `descripcion_UNIQUE` (`descripcion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.bodega: ~7 rows (aproximadamente)
+-- Volcando datos para la tabla silub.bodega: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `bodega` DISABLE KEYS */;
-INSERT IGNORE INTO `bodega` (`id_bodega`, `descripcion`, `estado`) VALUES
-	(1, 'LABORATORIO DE ELECTRONICA', 'ACTIVO'),
-	(2, 'LABORATORIO DE FISICA', 'ACTIVO'),
-	(3, 'pruebaupdate', 'ELIMINADO'),
-	(4, 'dfghj', 'ELIMINADO'),
-	(5, 'asdf', 'ELIMINADO'),
-	(6, 'ASDFASDF', 'ELIMINADO'),
-	(8, 'dfghjhj', 'ELIMINADO');
 /*!40000 ALTER TABLE `bodega` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.cliente
@@ -42,20 +34,17 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
   `id_persona` int(11) NOT NULL,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `codigo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `estado_cliente` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
+  `correo_electronico` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `nombre` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_cliente`),
-  KEY `fk_cliente_persona1_idx` (`id_persona`),
-  CONSTRAINT `fk_cliente_persona1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  UNIQUE KEY `codigo_UNIQUE` (`codigo`),
+  UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.cliente: ~6 rows (aproximadamente)
+-- Volcando datos para la tabla silub.cliente: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT IGNORE INTO `cliente` (`id_cliente`, `id_persona`, `tipo`) VALUES
-	(1, 13, 'AUXILIAR'),
-	(2, 14, 'ESTUDIANTE'),
-	(3, 15, 'ESTUDIANTE'),
-	(4, 28, 'ESTUDIANTE'),
-	(5, 33, ''),
-	(6, 54, 'DOCENTE');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.cliente_sancionado
@@ -102,23 +91,8 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~14 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
-INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(2, 1, 1, '1234', 'descripción', '2018-10-20 01:57:15', 'INACTIVO'),
-	(3, 2, NULL, '2135324', 'Dispositivo de medición ', '2018-10-17 09:12:08', 'ACTIVO'),
-	(5, 2, NULL, '14423', 'Dispositivo de medición', '2018-10-19 16:02:44', 'ACTIVO'),
-	(6, 2, NULL, NULL, 'Dispositivo de medición', '2018-10-19 16:02:53', 'ELIMINADO'),
-	(7, 2, NULL, NULL, 'Dispositivo de medición', '2018-10-10 08:15:00', 'ELIMINADO'),
-	(8, 6, NULL, NULL, 'Tarjeta de programación', '2018-10-10 09:29:47', 'INACTIVO'),
-	(9, 6, NULL, NULL, 'Tarjeta de programación', '2018-10-10 09:29:47', 'INACTIVO'),
-	(10, 6, NULL, NULL, 'Tarjeta', '2018-10-10 09:34:16', 'INACTIVO'),
-	(11, 1, NULL, '45678', 'Medición', '2018-10-10 15:57:04', 'INACTIVO'),
-	(12, 1, NULL, '5748634', 'Medición', '2018-10-19 16:01:50', 'ELIMINADO'),
-	(13, 1, NULL, NULL, 'Medición', '2018-10-10 09:35:30', 'INACTIVO'),
-	(14, 6, NULL, NULL, 'prueba', '2018-10-17 08:53:21', 'ELIMINADO'),
-	(15, 1, NULL, NULL, 'prueba', '2018-10-17 09:04:36', 'INACTIVO'),
-	(16, 1, NULL, NULL, 'prueba', '2018-10-17 09:04:36', 'INACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -134,12 +108,8 @@ CREATE TABLE IF NOT EXISTS `estante` (
   CONSTRAINT `fk_estante_bodega1` FOREIGN KEY (`id_bodega`) REFERENCES `bodega` (`id_bodega`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.estante: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.estante: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `estante` DISABLE KEYS */;
-INSERT IGNORE INTO `estante` (`id_estante`, `id_bodega`, `armario`, `estante`, `descripcion`, `estado`) VALUES
-	(1, 1, '1', '1-2', 'Prueba2', 'ACTIVO'),
-	(14, 1, '1', '1-1', '', 'ACTIVO'),
-	(15, 2, '1', '1-1', '', 'ACTIVO');
 /*!40000 ALTER TABLE `estante` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.get_full_equipo
@@ -208,59 +178,6 @@ estado = 'INACTIVO';
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento silub.insert_persona_cliente
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_persona_cliente`(
-	IN `_correo_electronico` VARCHAR(200),
-	IN `_nombre` VARCHAR(50),
-	IN `_estado` VARCHAR(50),
-	IN `_codigo` VARCHAR(50),
-	IN `_tipo` VARCHAR(50)
-
-
-)
-BEGIN
-DECLARE idpersona INT;
-INSERT INTO persona set
-correo_electronico = _correo_electronico,
-nombre_persona = _nombre,
-estado_persona = _estado,
-codigo = _codigo;
-SELECT p.id_persona INTO idpersona FROM persona as p WHERE p.correo_electronico = _correo_electronico; 
-INSERT INTO cliente set
-id_persona = idpersona,
-tipo = _tipo;
-END//
-DELIMITER ;
-
--- Volcando estructura para procedimiento silub.insert_persona_usuario
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_persona_usuario`(
-	IN `_correo_electronico` VARCHAR(50),
-	IN `_nombre` VARCHAR(50),
-	IN `_estado` VARCHAR(50),
-	IN `_nombre_usuario` VARCHAR(50),
-	IN `_clave` VARCHAR(50),
-	IN `_tipo` VARCHAR(50),
-	IN `_codigo` VARCHAR(50)
-
-)
-BEGIN
-DECLARE idpersona INT;
-INSERT INTO persona set
-correo_electronico = _correo_electronico,
-nombre_persona = _nombre,
-estado_persona = _estado,
-codigo = _codigo;
-SELECT p.id_persona INTO idpersona FROM persona as p WHERE p.correo_electronico = _correo_electronico; 
-INSERT INTO usuario set
-id_persona = idpersona,
-nombre_usuario = _nombre_usuario,
-clave = _clave,
-tipo = _tipo;
-END//
-DELIMITER ;
-
 -- Volcando estructura para tabla silub.kardex
 CREATE TABLE IF NOT EXISTS `kardex` (
   `id_kardex` int(11) NOT NULL AUTO_INCREMENT,
@@ -287,22 +204,8 @@ CREATE TABLE IF NOT EXISTS `laboratorio` (
   PRIMARY KEY (`id_laboratorio`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.laboratorio: ~13 rows (aproximadamente)
+-- Volcando datos para la tabla silub.laboratorio: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `laboratorio` DISABLE KEYS */;
-INSERT IGNORE INTO `laboratorio` (`id_laboratorio`, `descripcion`, `nombre`, `estado_laboratorio`) VALUES
-	(1, 'Edificio 4', 'ELECTRÓNICA', 'ACTIVO'),
-	(5, '123', 'prueba', 'ELIMINADO'),
-	(6, 'Edificio 4', 'ELECTRÓNICA', 'ELIMINADO'),
-	(7, 'asdf', 'asdf', 'ELIMINADO'),
-	(8, 'asdf', 'asdf', 'ELIMINADO'),
-	(9, 'asdf', 'asdfa', 'ELIMINADO'),
-	(10, 'asdf', 'asdf', 'ELIMINADO'),
-	(11, 'Edificio 4', 'ELECTRÓNICA', 'null'),
-	(12, 'asdasd', 'asdas', 'ELIMINADO'),
-	(13, 'descuento', 'ELECTRÓNICA', 'ELIMINADO'),
-	(14, 'qewrqwer', 'qwwer', 'ELIMINADO'),
-	(15, 'qewrqwer', 'qwwer', 'ELIMINADO'),
-	(16, 'prueba1', '1231', 'ELIMINADO');
 /*!40000 ALTER TABLE `laboratorio` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.operacion
@@ -321,37 +224,6 @@ CREATE TABLE IF NOT EXISTS `operacion` (
 -- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
 /*!40000 ALTER TABLE `operacion` ENABLE KEYS */;
-
--- Volcando estructura para tabla silub.persona
-CREATE TABLE IF NOT EXISTS `persona` (
-  `id_persona` int(11) NOT NULL AUTO_INCREMENT,
-  `correo_electronico` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `nombre_persona` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `estado_persona` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `codigo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id_persona`),
-  UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`),
-  UNIQUE KEY `codigo_UNIQUE` (`codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- Volcando datos para la tabla silub.persona: ~14 rows (aproximadamente)
-/*!40000 ALTER TABLE `persona` DISABLE KEYS */;
-INSERT IGNORE INTO `persona` (`id_persona`, `correo_electronico`, `nombre_persona`, `estado_persona`, `codigo`) VALUES
-	(11, 'wavega@uniboyaca.edu.co', 'Jhon Vega', 'ELIMINADO', '123456'),
-	(12, 'willial1393@gmail.com', 'william vega', 'ACTIVO', '789456'),
-	(13, 'prueba cliente', '123', 'ELIMINADO', '13245677'),
-	(14, 'jhon@gmail.com', 'Jhon', 'ACTIVO', '1234'),
-	(15, 'william@gmail.com', 'William Vega', 'INACTIVO', '2314123'),
-	(17, 'willial13@gmail.com', 'Leydinzoon ', 'ELIMINADO', '55215507'),
-	(18, 'luis@uniboyaca.edu.co', 'Luis Chaparro', 'ELIMINADO', '123'),
-	(19, 'sdfghjk', 'asdf', 'ACTIVO', 'sdf'),
-	(23, 'wavega2@uniboyaca.edu.co', 'William Vega', 'ACTIVO', '1234562'),
-	(25, 'wavega234@uniboyaca.edu.co', 'William Vega', 'ELIMINADO', '1234562443'),
-	(26, 'sdfgsdfg', 'sdgsdfgsdfgsdf', 'ELIMINADO', '34567890'),
-	(28, 'prueba cliente 2', '123', 'ELIMINADO', '132456778'),
-	(33, '', '', 'ELIMINADO', ''),
-	(54, 'jhon@gmail.com1423234', 'Leydinzoon233234', 'ACTIVO', '123456234');
-/*!40000 ALTER TABLE `persona` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.prestamo
 CREATE TABLE IF NOT EXISTS `prestamo` (
@@ -413,18 +285,14 @@ CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
 -- Volcando estructura para tabla silub.tipo_equipo
 CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   `id_tipo_equipo` int(11) NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `total` int(11) NOT NULL,
   PRIMARY KEY (`id_tipo_equipo`),
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.tipo_equipo: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.tipo_equipo: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
-INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(1, 'MULTIMETRO', 5),
-	(2, 'OSCILOSCOPIO', 2),
-	(6, 'RASPBERRY PI 3 B+', 3);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.update_equipo
@@ -451,63 +319,6 @@ END IF;
 END//
 DELIMITER ;
 
--- Volcando estructura para procedimiento silub.update_persona_cliente
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_persona_cliente`(
-	IN `_id_cliente` INT,
-	IN `_id_persona` INT,
-	IN `_correo_electronico` VARCHAR(200),
-	IN `_nombre` VARCHAR(50),
-	IN `_estado` VARCHAR(50),
-	IN `_codigo` VARCHAR(50),
-	IN `_tipo` VARCHAR(50)
-
-
-)
-BEGIN
-UPDATE persona set
-correo_electronico = _correo_electronico,
-nombre_persona = _nombre,
-estado_persona = _estado,
-codigo = _codigo
-WHERE id_persona = _id_persona;
-UPDATE cliente set
-tipo = _tipo
-WHERE id_cliente = _id_cliente;
-END//
-DELIMITER ;
-
--- Volcando estructura para procedimiento silub.update_persona_usuario
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_persona_usuario`(
-	IN `_id_persona` INT,
-	IN `_id_usuario` INT,
-	IN `_correo_electronico` VARCHAR(50),
-	IN `_nombre` VARCHAR(50),
-	IN `_estado` VARCHAR(50),
-	IN `_codigo` VARCHAR(50),
-	IN `_nombre_usuario` VARCHAR(50),
-	IN `_clave` VARCHAR(50),
-	IN `_tipo` VARCHAR(50)
-
-
-
-)
-BEGIN
-UPDATE persona set
-correo_electronico = _correo_electronico,
-nombre_persona = _nombre,
-estado_persona = _estado,
-codigo = _codigo
-WHERE id_persona = _id_persona;
-UPDATE usuario set
-nombre_usuario = _nombre_usuario,
-clave = _clave,
-tipo = _tipo
-WHERE id_usuario = _id_usuario;
-END//
-DELIMITER ;
-
 -- Volcando estructura para tabla silub.usuario
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
@@ -515,21 +326,18 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `nombre_usuario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `clave` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `codigo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
+  `correo_electronico` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `nombre_persona` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_usuario`),
   UNIQUE KEY `nombre_usuario_UNIQUE` (`nombre_usuario`),
-  KEY `fk_usuario_persona1_idx` (`id_persona`),
-  CONSTRAINT `fk_usuario_persona1` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  UNIQUE KEY `codigo_UNIQUE` (`codigo`),
+  UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~6 rows (aproximadamente)
+-- Volcando datos para la tabla silub.usuario: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT IGNORE INTO `usuario` (`id_usuario`, `id_persona`, `nombre_usuario`, `clave`, `tipo`) VALUES
-	(1, 11, 'jhon', '123', 'DEPARTAMENTO'),
-	(2, 12, 'william', '123', 'AUXILIAR'),
-	(3, 17, 'leydinzoon', '123', 'LABORATORIO'),
-	(4, 18, 'luis', '1234567890', 'DEPARTAMENTO'),
-	(7, 25, 'william23', '123', 'AUXILIAR'),
-	(8, 26, 'william123', '123', 'DEPARTAMENTO');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub._login

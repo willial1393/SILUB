@@ -25,14 +25,13 @@ export class UsuariosComponent implements OnInit {
         });
         this.usuario = {
             id_usuario: '',
-            id_persona: '',
-            correo_electronico: '',
-            nombre_persona: '',
-            estado_persona: '',
             nombre_usuario: '',
-            codigo: '',
             clave: '',
-            tipo: ''
+            tipo: '',
+            codigo: '',
+            estado: '',
+            correo_electronico: '',
+            nombre_persona: ''
         };
         this.isEdit = false;
     }
@@ -43,20 +42,16 @@ export class UsuariosComponent implements OnInit {
         }
     }
 
-    verUsuario(codigo) {
-        this.usuarioService.getUsuarioCodigo(codigo).subscribe(res => {
-            this.usuario = res['result'];
-            swal({
-                title: 'Código: ' + codigo,
-                html: 'Nombre: ' + this.usuario.nombre_persona
-                    + '<br>Correo electrónico: ' + this.usuario.correo_electronico
-                    + '<br>Rol: ' + this.usuario.tipo
-                    + '<br>estado_persona: ' + this.usuario.estado_persona
-                    + '<br>Usuario: ' + this.usuario.nombre_usuario,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
-            this.updateTable();
+    verUsuario(usuario) {
+        swal({
+            title: 'Código: ' + usuario.codigo,
+            html: 'Nombre: ' + usuario.nombre_persona
+                + '<br>Correo electrónico: ' + usuario.correo_electronico
+                + '<br>Rol: ' + usuario.tipo
+                + '<br>Estado: ' + usuario.estado
+                + '<br>Usuario: ' + usuario.nombre_usuario,
+            type: 'info',
+            confirmButtonColor: '#999999'
         });
     }
 
@@ -78,9 +73,7 @@ export class UsuariosComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    this.usuario = usuario;
-                    this.usuario.estado_persona = 'ELIMINADO';
-                    this.usuarioService.putUsuario(this.usuario).subscribe(res => {
+                    this.usuarioService.deleteUsuario(usuario).subscribe(res => {
                         this.usuario = res['result'];
                         swal(
                             'Eliminado!',
@@ -94,16 +87,9 @@ export class UsuariosComponent implements OnInit {
         );
     }
 
-    sancionarUsuario(usuario) {
-        this.usuario = {estado_persona: 'SELECCIONAR', tipo: 'SELECCIONAR'};
-        swal(
-            'Sancionar',
-            'Sancionar usuario',
-            'error'
-        );
-    }
-
     guardar() {
+        this.usuario.nombre_persona = this.usuario.nombre_persona.toUpperCase();
+        this.usuario.correo_electronico = this.usuario.correo_electronico.toLowerCase();
         if (this.isEdit) {
             this.usuarioService.putUsuario(this.usuario).subscribe(res => {
                 this.usuario = res['result'];

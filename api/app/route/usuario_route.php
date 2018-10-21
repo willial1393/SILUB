@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\UsuariosModel;
 
 $app->group('/usuarios/', function () {
@@ -31,6 +32,20 @@ $app->group('/usuarios/', function () {
             ->write(
                 json_encode(
                     $um->insert(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
+
+    $this->post('delete/', function ($req, $res) {
+        $um = new UsuariosModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
                         $req->getParsedBody()
                     )
                     , JSON_UNESCAPED_UNICODE)

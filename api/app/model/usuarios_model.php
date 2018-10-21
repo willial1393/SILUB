@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,14 +13,13 @@ class UsuariosModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table");
             $stm->execute();
 
@@ -35,10 +35,7 @@ class UsuariosModel
 
     public function get($value)
     {
-        try
-        {
-            $result = array();
-
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_usuario = ?");
             $stm->execute(array($value));
 
@@ -55,22 +52,48 @@ class UsuariosModel
     public function insert($data)
     {
 
-        $id_usuario     = $data['id_usuario'];
-        $id_persona     = $data['id_persona'];
+        $id_usuario = $data['id_usuario'];
         $nombre_usuario = $data['nombre_usuario'];
-        $clave          = $data['clave'];
-        $tipo           = $data['tipo'];
+        $clave = $data['clave'];
+        $tipo = $data['tipo'];
+        $codigo = $data['codigo'];
+        $estado = $data['estado'];
+        $correo_electronico = $data['correo_electronico'];
+        $nombre_persona = $data['nombre_persona'];
 
-        $query = "INSERT INTO $this->table (id_usuario, id_persona, nombre_usuario, clave, tipo) VALUES (:id_usuario, :id_persona, :nombre_usuario, :clave, :tipo)";
+        $query = "INSERT INTO $this->table (id_usuario, nombre_usuario, clave, tipo, codigo, estado, correo_electronico, nombre_persona) VALUES (:id_usuario, :nombre_usuario, :clave, :tipo, :codigo, :estado, :correo_electronico, :nombre_persona)";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_usuario", $id_usuario);
-            $stmt->bindParam("id_persona", $id_persona);
             $stmt->bindParam("nombre_usuario", $nombre_usuario);
             $stmt->bindParam("clave", $clave);
             $stmt->bindParam("tipo", $tipo);
+            $stmt->bindParam("codigo", $codigo);
+            $stmt->bindParam("estado", $estado);
+            $stmt->bindParam("correo_electronico", $correo_electronico);
+            $stmt->bindParam("nombre_persona", $nombre_persona);
+            $stmt->execute();
+
+            $this->response->setResponse(true, 'Successfully Insertion');
+            $this->response->result = "";
+        } catch (Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
+    }
+
+    public function delete($data)
+    {
+        $id_usuario = $data['id_usuario'];
+
+        $query = "DELETE FROM $this->table WHERE  id_usuario = :id_usuario";
+
+        try {
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam("id_usuario", $id_usuario);
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -83,22 +106,28 @@ class UsuariosModel
 
     public function update($data)
     {
-        $id_usuario     = $data['id_usuario'];
-        $id_persona     = $data['id_persona'];
+        $id_usuario = $data['id_usuario'];
         $nombre_usuario = $data['nombre_usuario'];
-        $clave          = $data['clave'];
-        $tipo           = $data['tipo'];
+        $clave = $data['clave'];
+        $tipo = $data['tipo'];
+        $codigo = $data['codigo'];
+        $estado = $data['estado'];
+        $correo_electronico = $data['correo_electronico'];
+        $nombre_persona = $data['nombre_persona'];
 
-        $query = "UPDATE $this->table SET id_usuario = :id_usuario, id_persona = :id_persona, nombre_usuario = :nombre_usuario, clave = :clave, tipo = :tipo WHERE id_usuario = :id_usuario";
+        $query = "UPDATE $this->table SET id_usuario = :id_usuario, nombre_usuario = :nombre_usuario, clave = :clave, tipo = :tipo, codigo = :codigo, estado = :estado, correo_electronico = :correo_electronico, nombre_persona = :nombre_persona WHERE id_usuario = :id_usuario";
 
         try {
 
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_usuario", $id_usuario);
-            $stmt->bindParam("id_persona", $id_persona);
             $stmt->bindParam("nombre_usuario", $nombre_usuario);
             $stmt->bindParam("clave", $clave);
             $stmt->bindParam("tipo", $tipo);
+            $stmt->bindParam("codigo", $codigo);
+            $stmt->bindParam("estado", $estado);
+            $stmt->bindParam("correo_electronico", $correo_electronico);
+            $stmt->bindParam("nombre_persona", $nombre_persona);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");

@@ -1,10 +1,10 @@
 <div class="container">
     <section id="" class="main row mr-123 contenedor">
         <div class="contenedor-usuarios row m-0 p-3">
-            <div class="usuarios-tabla col-md-8 p-0 ml-">
+            <div class="usuarios-tabla col-md-8 p-0">
                 <div class="cont-tabla border border-secondary rounded mr-4">
                     <div class="usuario-tabla-encabezado ml-2">
-                        <p class="encabezado">Gestion de Usuarios</p>
+                        <p class="encabezado">Usuarios</p>
                     </div>
                     <div class="usuario-tabla-des m-2">
                         <p>
@@ -22,7 +22,7 @@
                                 <th scope="col">Codigo</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col">Tipo</th>
+                                <th scope="col">Rol</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
@@ -30,21 +30,18 @@
                             <tr *ngFor="let usuario of usuarios">
                                 <td>{{usuario.codigo}}</td>
                                 <td>{{usuario.nombre_persona}}</td>
-                                <td>{{usuario.estado_persona}}</td>
+                                <td>{{usuario.estado}}</td>
                                 <td>{{usuario.tipo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
-                                           (click)="verUsuario(usuario.codigo)">
+                                           (click)="verUsuario(usuario)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarUsuario(usuario)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
                                            width="25" height="25"
                                            (click)="eliminarUsuario(usuario)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png"
-                                           width="25" height="25"
-                                           (click)="sancionarUsuario(usuario)">
                                 </td>
                             </tr>
                             </tbody>
@@ -58,32 +55,34 @@
                         <div class="usuario-gestor-codigo form-group">
                             <label for="usuario-codigo1">Codigo <span class="usuario-obligatorio">*</span></label>
                             <input name="codigo" [(ngModel)]="usuario.codigo" id="usuario-codigo1" type="text"
-                                   class="form-control" required>
+                                   class="form-control" required
+                                   pattern="[0-9]+">
                         </div>
                         <div class="usuario-gestor-nombre form-group">
                             <label for="usuario-nombre">Nombre <span class="usuario-obligatorio">*</span></label>
                             <input name="nombre_persona" [(ngModel)]="usuario.nombre_persona" id="usuario-nombre"
-                                   type="text" class="form-control" required>
+                                   type="text" class="form-control" required
+                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+">
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-correo">Correo electronico<span
                                     class="usuario-obligatorio">*</span></label>
                             <input name="correo_electronico" [(ngModel)]="usuario.correo_electronico"
-                                   id="usuario-correo" type="text" class="form-control" required>
+                                   id="usuario-correo" type="email" class="form-control" required>
                         </div>
                         <div class="usuario-gestor-rol form-group">
                             <label for="rol">Rol<span class="usuario-obligatorio">*</span></label>
-                            <select name="tipo" [(ngModel)]="usuario.tipo" id="rol" class="form-control">
+                            <select name="tipo" [(ngModel)]="usuario.tipo" id="rol"
+                                    class="form-control" required>
                                 <option value="AUXILIAR">Auxiliar de laboratorio</option>
                                 <option value="LABORATORIO">Jefe de laboratorio</option>
                                 <option value="DEPARTAMENTO">Jefe de departamento</option>
                             </select>
                         </div>
-                        <div class="usuario-gestor-estado_persona form-group">
-                            <label for="usuario-estado_persona">estado_persona<span class="usuario-obligatorio">*</span></label>
-                            <select name="estado_persona" [(ngModel)]="usuario.estado_persona"
-                                    id="usuario-estado_persona"
-                                    class="form-control">
+                        <div class="usuario-gestor-estado form-group">
+                            <label for="usuario-estado">estado<span class="usuario-obligatorio">*</span></label>
+                            <select name="estado" [(ngModel)]="usuario.estado" id="usuario-estado"
+                                    class="form-control" required>
                                 <option value="ACTIVO">Activo</option>
                                 <option value="INACTIVO">Inactivo</option>
                             </select>
