@@ -20,33 +20,31 @@ class SancionModel
     public function getAll()
     {
         try {
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+            $stm = $this->db->prepare("SELECT s.*, c.codigo as codigo, c.nombre as nombre, c.estado_cliente as estado
+FROM sancion s, cliente c
+WHERE s.id_cliente = c.id_cliente");
             $stm->execute();
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function get($value)
     {
         try {
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_sancion = ?");
+            $stm = $this->db->prepare("SELECT s.*, c.codigo as codigo, c.nombre as nombre, c.estado_cliente as estado
+FROM sancion s, cliente c
+WHERE s.id_cliente = c.id_cliente and id_sancion = ?");
             $stm->execute(array($value));
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function insert($data)
@@ -61,7 +59,6 @@ class SancionModel
         $query = "INSERT INTO $this->table (id_sancion, id_cliente, descripcion, fecha_inicio, fecha_fin) VALUES (:id_sancion, :id_cliente, :descripcion, :fecha_inicio, :fecha_fin)";
 
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_sancion", $id_sancion);
             $stmt->bindParam("id_cliente", $id_cliente);
@@ -69,10 +66,27 @@ class SancionModel
             $stmt->bindParam("fecha_inicio", $fecha_inicio);
             $stmt->bindParam("fecha_fin", $fecha_fin);
             $stmt->execute();
-
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
+    }
+
+    public function delete($data)
+    {
+
+        $id_sancion = $data['id_sancion'];
+
+        $query = "DELETE FROM $this->table  WHERE  id_sancion = :id_sancion";
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam("id_sancion", $id_sancion);
+            $stmt->execute();
+            $this->response->setResponse(true, 'Successfully delete');
+            $this->response->result = "";
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;
@@ -87,9 +101,7 @@ class SancionModel
         $fecha_fin = $data['fecha_fin'];
 
         $query = "UPDATE $this->table SET id_sancion = :id_sancion, id_cliente = :id_cliente, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin WHERE id_sancion = :id_sancion";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_sancion", $id_sancion);
             $stmt->bindParam("id_cliente", $id_cliente);
@@ -97,13 +109,11 @@ class SancionModel
             $stmt->bindParam("fecha_inicio", $fecha_inicio);
             $stmt->bindParam("fecha_fin", $fecha_fin);
             $stmt->execute();
-
             $this->response->setResponse(true, "Successfully Updated");
             $this->response->result = "";
-            return $this->response;
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
+        return $this->response;
     }
 }

@@ -39,31 +39,29 @@
                             <tr>
                                 <th scope="col">Codigo</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Tipo</th>
+                                <th scope="col">Estado</th>
                                 <th scope="col">Fecha inicio</th>
                                 <th scope="col">Fecha fin</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let cliente of clientes">
-                                <td>{{cliente.codigo}}</td>
-                                <td>{{cliente.nombre_persona}}</td>
-                                <td>{{cliente.estado_persona}}</td>
-                                <td>{{cliente.tipo}}</td>
+                            <tr *ngFor="let sancion of sanciones">
+                                <td>{{sancion.codigo}}</td>
+                                <td>{{sancion.nombre}}</td>
+                                <td>{{sancion.estado}}</td>
+                                <td>{{sancion.fecha_inicio | date: 'yyyy/MM/dd'}}</td>
+                                <td>{{sancion.fecha_fin | date: 'yyyy/MM/dd'}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
-                                           (click)="verCliente(cliente.codigo)">
+                                           (click)="verSancion(sancion)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
                                            width="25" height="25"
-                                           (click)="editarCliente(cliente)">
+                                           (click)="editarSancion(sancion)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
                                            width="25" height="25"
-                                           (click)="eliminarCliente(cliente)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/lock.png"
-                                           width="25" height="25"
-                                           (click)="sancionarCliente(cliente)">
+                                           (click)="eliminarSancion(sancion)">
                                 </td>
                             </tr>
                             </tbody>
@@ -78,14 +76,16 @@
                             <label for="usuario-codigo">Fecha inicio
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
+                            <input name="fecha_inicio" [(ngModel)]="sancion.fecha_inicio" id="usuario-codigo"
+                                   type="text"
                                    class="form-codigo form-control" required>
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-nombre">Fecha fin
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona" id="usuario-nombre"
+                            <input name="fecha_fin" [(ngModel)]="sancion.fecha_fin"
+                                   id="usuario-nombre"
                                    type="text"
                                    class="form-control" required>
                         </div>

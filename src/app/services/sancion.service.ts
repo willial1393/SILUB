@@ -26,6 +26,10 @@ export class SancionService {
         return this.http.post(this.urlGetSanciones, sancion, {headers: this.headers});
     }
 
+    deleteSancion(sancion) {
+        return this.http.post(this.urlGetSanciones + 'delete/', sancion, {headers: this.headers});
+    }
+
     putSancion(sancion) {
         return this.http.put(this.urlGetSanciones, sancion, {headers: this.headers});
     }

@@ -22,6 +22,10 @@ export class AppGlobals {
         return this.datePipe.transform(date, 'yyyy-MM-dd');
     }
 
+    isValidDate(date) {
+        return !isNaN(Date.parse(date));
+    }
+
     errorUPS(res) {
         if (this.delvelopment) {
             swal(
