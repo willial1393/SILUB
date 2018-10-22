@@ -40,20 +40,20 @@
                                 <th scope="col">Codigo</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col">Tipo</th>
+                                <th scope="col">Rol</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let cliente of clientes">
                                 <td>{{cliente.codigo}}</td>
-                                <td>{{cliente.nombre_persona}}</td>
-                                <td>{{cliente.estado_persona}}</td>
+                                <td>{{cliente.nombre}}</td>
+                                <td>{{cliente.estado_cliente}}</td>
                                 <td>{{cliente.tipo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
-                                           (click)="verCliente(cliente.codigo)">
+                                           (click)="verCliente(cliente)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarCliente(cliente)">
@@ -78,26 +78,28 @@
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
-                                   class="form-codigo form-control" required>
+                                   class="form-codigo form-control" required
+                                   pattern="[0-9]+">
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-nombre">nombre
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona" id="usuario-nombre"
+                            <input name="nombre" [(ngModel)]="cliente.nombre" id="usuario-nombre"
                                    type="text"
-                                   class="form-control" required>
+                                   class="form-control" required
+                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+">
                         </div>
                         <div class="usuario-gestor-nombre form-group">
                             <label for="usuario-correo">Correo electronico
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="correo" [(ngModel)]="cliente.correo_electronico" id="usuario-correo"
-                                   type="text"
+                                   type="email"
                                    class="form-control" required>
                         </div>
                         <div class="usuario-gestor-correo form-group">
-                            <label for="usuario-tipo">Tipo
+                            <label for="usuario-tipo">Rol
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <select name="tipo" [(ngModel)]="cliente.tipo" id="usuario-tipo" class="form-control"
@@ -107,11 +109,11 @@
                             </select>
                         </div>
                         <div class="usuario-gestor-rol form-group">
-                            <label for="usuario-estado_persona">estado_persona
+                            <label for="usuario-estado_cliente">Estado
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <select name="estado_persona" [(ngModel)]="cliente.estado_persona"
-                                    id="usuario-estado_persona"
+                            <select name="estado_cliente" [(ngModel)]="cliente.estado_cliente"
+                                    id="usuario-estado_cliente"
                                     class="form-control" required>
                                 <option value="ACTIVO">Activo</option>
                                 <option value="INACTIVO">Inactivo</option>

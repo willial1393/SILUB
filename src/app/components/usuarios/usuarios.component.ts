@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {UsuarioService} from '../../services/usuario.service';
+import {AppGlobals} from '../../models/appGlobals';
 
 @Component({
     selector: 'app-usuarios',
@@ -16,7 +17,8 @@ export class UsuariosComponent implements OnInit {
     isEdit: any = false;
 
     constructor(private route: Router,
-                private usuarioService: UsuarioService) {
+                private usuarioService: UsuarioService,
+                private appGlobals: AppGlobals) {
         this.updateTable();
     }
 
@@ -75,13 +77,16 @@ export class UsuariosComponent implements OnInit {
             }).then((result) => {
                 if (result.value) {
                     this.usuarioService.deleteUsuario(usuario).subscribe(res => {
-                        this.usuario = res['result'];
-                        swal(
-                            'Eliminado!',
-                            '',
-                            'success'
-                        );
-                        this.updateTable();
+                        if (res['response']) {
+                            swal(
+                                'Eliminado!',
+                                '',
+                                'success'
+                            );
+                            this.updateTable();
+                        } else {
+                            this.appGlobals.errorUPS(res);
+                        }
                     });
                 }
             }
@@ -124,7 +129,7 @@ export class UsuariosComponent implements OnInit {
         if (res['message'].toString().indexOf('codigo_UNIQUE') >= 0) {
             swal(
                 '',
-                'Codigo se encuentra registrado',
+                'Codigo ya se encuentra registrado',
                 'error'
             );
             return;
@@ -132,7 +137,7 @@ export class UsuariosComponent implements OnInit {
         if (res['message'].toString().indexOf('correo_electronico_UNIQUE') >= 0) {
             swal(
                 '',
-                'Correo electronico se encuentra registrado',
+                'Correo electronico ya se encuentra registrado',
                 'error'
             );
             return;
@@ -140,15 +145,11 @@ export class UsuariosComponent implements OnInit {
         if (res['message'].toString().indexOf('nombre_usuario_UNIQUE') >= 0) {
             swal(
                 '',
-                'Nombre de usuario se encuentra registrado',
+                'Nombre de usuario ya se encuentra registrado',
                 'error'
             );
             return;
         }
-        swal(
-            'Error de conexión',
-            '',
-            'error'
-        );
+        this.appGlobals.errorUPS(res);
     }
 }

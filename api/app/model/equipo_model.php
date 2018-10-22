@@ -25,7 +25,6 @@ class EquiposModel
             $this->response->result = $stm->fetchAll();
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            $this->response->result = $stm->fetchAll();
         }
         return $this->response;
     }
@@ -48,15 +47,12 @@ class EquiposModel
         try {
             $stm = $this->db->prepare("CALL get_full_equipo(?)");
             $stm->execute(array($value));
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function insert($data)
@@ -64,14 +60,11 @@ class EquiposModel
         $descripcion = $data['descripcion'];
         $tipo = $data['tipo'];
         $query = "call insert_equipo(:descripcion, :tipo)";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("tipo", $tipo);
             $stmt->execute();
-
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
         } catch (\Exception $e) {
@@ -85,14 +78,11 @@ class EquiposModel
         $id_equipo = $data['id_equipo'];
         $id_tipo_equipo = $data['id_tipo_equipo'];
         $query = "call delete_equipo(:id_equipo, :id_tipo_equipo)";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_equipo", $id_equipo);
             $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
             $stmt->execute();
-
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
         } catch (\Exception $e) {
@@ -111,9 +101,7 @@ class EquiposModel
         $estado_equipo = $data['estado_equipo'];
 
         $query = "CALL update_equipo(:id_equipo, :id_tipo_equipo, :id_estante, :serial, :descripcion, :estado_equipo)";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_equipo", $id_equipo);
             $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
@@ -122,13 +110,11 @@ class EquiposModel
             $stmt->bindParam("serial", $serial);
             $stmt->bindParam("estado_equipo", $estado_equipo);
             $stmt->execute();
-
             $this->response->setResponse(true, "Successfully Updated");
             $this->response->result = "";
-            return $this->response;
-
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
+        return $this->response;
     }
 }

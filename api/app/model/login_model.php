@@ -24,15 +24,13 @@ class LoginModel
         $query = "CALL _login(:usuario, :clave)";
 
         try {
-
-            $stmt = $this->db->prepare($query);           
+            $stmt = $this->db->prepare($query);
             $stmt->bindParam("usuario", $usuario);
             $stmt->bindParam("clave", $clave);            
             $stmt->execute();
-
-            $this->response->setResponse(true, 'Successfully Insertion');
+            $this->response->setResponse(true, 'Successfully login');
             $this->response->result = $stmt->fetch()?true:false;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;

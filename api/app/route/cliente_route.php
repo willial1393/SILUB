@@ -11,13 +11,13 @@ $app->group('/clientes/', function () {
             json_encode($um->getAll(), JSON_UNESCAPED_UNICODE)
         );
 
-        return $res;            
+        return $res;
     });
 
     $this->get('{id}', function ($req, $res, $args) {
         $um = new ClientesModel();
 
-        return $res            
+        return $res
             ->getBody()
             ->write(
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
@@ -36,7 +36,7 @@ $app->group('/clientes/', function () {
     $this->post('', function ($req, $res) {
         $um = new ClientesModel();
 
-        return $res           
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -47,10 +47,23 @@ $app->group('/clientes/', function () {
             );
     });
 
+    $this->post('delete/', function ($req, $res) {
+        $um = new ClientesModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
 
     $this->put('', function ($req, $res) {
         $um = new ClientesModel();
-        return $res            
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -59,5 +72,5 @@ $app->group('/clientes/', function () {
                     )
                     , JSON_UNESCAPED_UNICODE)
             );
-    });  
+    });
 });

@@ -71,7 +71,7 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
-            $this->response->result = '';
+            $this->response->result = "";
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
@@ -91,7 +91,7 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
-            $this->response->result = '';
+            $this->response->result = "";
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
@@ -125,7 +125,7 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");
-            $this->response->result = '';
+            $this->response->result = "";
         } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
