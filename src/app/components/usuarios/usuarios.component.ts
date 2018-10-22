@@ -10,6 +10,7 @@ import {UsuarioService} from '../../services/usuario.service';
 })
 export class UsuariosComponent implements OnInit {
 
+    result: any;
     usuarios: any;
     usuario: any;
     isEdit: any = false;
@@ -92,24 +93,62 @@ export class UsuariosComponent implements OnInit {
         this.usuario.correo_electronico = this.usuario.correo_electronico.toLowerCase();
         if (this.isEdit) {
             this.usuarioService.putUsuario(this.usuario).subscribe(res => {
-                this.usuario = res['result'];
-                swal(
-                    'OK',
-                    'Información del usuario modificada',
-                    'success'
-                );
-                this.updateTable();
+                if (res['result']) {
+                    swal(
+                        'OK',
+                        'Información del usuario modificada',
+                        'success'
+                    );
+                    this.updateTable();
+                } else {
+                    this.showValidation(res);
+                }
             });
         } else {
             this.usuarioService.postUsuario(this.usuario).subscribe(res => {
-                this.usuario = res['result'];
-                swal(
-                    'OK',
-                    'Usuario registrado correctamente',
-                    'success'
-                );
-                this.updateTable();
+                if (res['result']) {
+                    swal(
+                        'OK',
+                        'Usuario registrado correctamente',
+                        'success'
+                    );
+                    this.updateTable();
+                } else {
+                    this.showValidation(res);
+                }
             });
         }
+    }
+
+    showValidation(res) {
+        if (res['message'].toString().indexOf('codigo_UNIQUE') >= 0) {
+            swal(
+                '',
+                'Codigo se encuentra registrado',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('correo_electronico_UNIQUE') >= 0) {
+            swal(
+                '',
+                'Correo electronico se encuentra registrado',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('nombre_usuario_UNIQUE') >= 0) {
+            swal(
+                '',
+                'Nombre de usuario se encuentra registrado',
+                'error'
+            );
+            return;
+        }
+        swal(
+            'Error de conexión',
+            '',
+            'error'
+        );
     }
 }

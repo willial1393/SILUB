@@ -22,15 +22,12 @@ class UsuariosModel
         try {
             $stm = $this->db->prepare("SELECT * FROM $this->table");
             $stm->execute();
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function get($value)
@@ -41,12 +38,10 @@ class UsuariosModel
 
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function insert($data)
@@ -64,7 +59,6 @@ class UsuariosModel
         $query = "INSERT INTO $this->table (id_usuario, nombre_usuario, clave, tipo, codigo, estado, correo_electronico, nombre_persona) VALUES (:id_usuario, :nombre_usuario, :clave, :tipo, :codigo, :estado, :correo_electronico, :nombre_persona)";
 
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_usuario", $id_usuario);
             $stmt->bindParam("nombre_usuario", $nombre_usuario);
@@ -77,9 +71,10 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
-            $this->response->result = "";
-        } catch (Exception $e) {
+            $this->response->result = true;
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
+            $this->response->result = false;
         }
         return $this->response;
     }
@@ -97,9 +92,10 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
-            $this->response->result = "";
-        } catch (Exception $e) {
+            $this->response->result = true;
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
+            $this->response->result = false;
         }
         return $this->response;
     }
@@ -131,11 +127,11 @@ class UsuariosModel
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");
-            $this->response->result = "";
-            return $this->response;
-
-        } catch (Exception $e) {
+            $this->response->result = true;
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
+            $this->response->result = false;
         }
+        return $this->response;
     }
 }
