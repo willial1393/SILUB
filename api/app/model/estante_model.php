@@ -20,7 +20,7 @@ class EstantesModel
     public function getAll()
     {
         try {
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE estado != 'ELIMINADO'");
             $stm->execute();
 
             $this->response->setResponse(true);
@@ -36,7 +36,7 @@ class EstantesModel
     public function get($value)
     {
         try {
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ?");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_bodega = ? AND estado != 'ELIMINADO'");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);
@@ -57,8 +57,9 @@ class EstantesModel
         $armario = $data['armario'];
         $estante = $data['estante'];
         $descripcion = $data['descripcion'];
+        $estado = $data['estado'];
 
-        $query = "INSERT INTO $this->table (id_estante, id_bodega, armario, estante, descripcion) VALUES (:id_estante, :id_bodega, :armario, :estante, :descripcion)";
+        $query = "INSERT INTO $this->table (id_estante, id_bodega, armario, estante, descripcion, estado) VALUES (:id_estante, :id_bodega, :armario, :estante, :descripcion, :estado)";
 
         try {
 
@@ -68,6 +69,7 @@ class EstantesModel
             $stmt->bindParam("armario", $armario);
             $stmt->bindParam("estante", $estante);
             $stmt->bindParam("descripcion", $descripcion);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -86,8 +88,9 @@ class EstantesModel
         $armario = $data['armario'];
         $estante = $data['estante'];
         $descripcion = $data['descripcion'];
+        $estado = $data['estado'];
 
-        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, armario = :armario, estante = :estante, descripcion = :descripcion WHERE id_estante = :id_estante";
+        $query = "UPDATE $this->table SET id_estante = :id_estante, id_bodega = :id_bodega, armario = :armario, estante = :estante, descripcion = :descripcion, estado = :estado WHERE id_estante = :id_estante";
 
         try {
 
@@ -97,6 +100,7 @@ class EstantesModel
             $stmt->bindParam("armario", $armario);
             $stmt->bindParam("estante", $estante);
             $stmt->bindParam("descripcion", $descripcion);
+            $stmt->bindParam("estado", $estado);
             $stmt->execute();
 
             $this->response->setResponse(true, "Successfully Updated");

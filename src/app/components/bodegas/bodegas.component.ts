@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {BodegaService} from '../../services/bodega.service';
+import {AppGlobals} from '../../models/appGlobals';
 
 @Component({
     selector: 'app-bodegas',
@@ -19,6 +20,7 @@ export class BodegasComponent implements OnInit {
     bodegaSelect: any = 0;
 
     constructor(private route: Router,
+                private appGlobals: AppGlobals,
                 private bodegaService: BodegaService) {
         this.updateTable();
     }
@@ -30,7 +32,6 @@ export class BodegasComponent implements OnInit {
     }
 
     updateTable() {
-        console.log(this.bodegaSelect);
         this.bodegaService.getBodega().subscribe(res => {
             this.bodegas = res['result'];
         });
@@ -39,25 +40,33 @@ export class BodegasComponent implements OnInit {
                 this.estantes = res['result'];
             });
         }
-        this.bodega = {id_bodega: '', descripcion: '', estado: 'ACTIVO'};
-        this.estante = {id_estante: '', id_bodega: '', armario: '', estante: '', descripcion: ''};
+        this.bodega = {
+            id_bodega: '',
+            descripcion: '',
+            estado: 'ACTIVO'
+        };
+        this.estante = {
+            id_estante: '',
+            id_bodega: '',
+            armario: '',
+            estante: '',
+            descripcion: '',
+            estado: 'ACTIVO'
+        };
         this.isEditBodega = false;
         this.isEditEstante = false;
     }
 
-    verEstante(codigo) {
-        this.bodegaService.getEstanteCodigo(codigo).subscribe(res => {
-            this.estante = res['result'];
-            swal({
-                title: '',
-                html: 'Armario: ' + this.estante.armario +
-                    '<br>Estante: ' + this.estante.estante +
-                    '<br>Descripcion: ' + this.estante.descripcion,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
-            this.updateTable();
+    verEstante(estante) {
+        swal({
+            title: '',
+            html: 'Armario: ' + estante.armario +
+                '<br>Estante: ' + estante.estante +
+                '<br>Descripcion: ' + estante.descripcion,
+            type: 'info',
+            confirmButtonColor: '#999999'
         });
+        this.updateTable();
     }
 
     editarEstante(estante) {
@@ -66,6 +75,7 @@ export class BodegasComponent implements OnInit {
     }
 
     eliminarEstante(estante) {
+        estante.estado = 'ELIMINADO';
         swal(
             {
                 title: '¿Desea eliminar el estante?',
@@ -81,13 +91,16 @@ export class BodegasComponent implements OnInit {
                     this.estante = estante;
                     this.estante.estado = 'ELIMINADO';
                     this.bodegaService.putEstante(this.estante).subscribe(res => {
-                        this.estante = res['result'];
-                        swal(
-                            'Eliminado!',
-                            '',
-                            'success'
-                        );
-                        this.updateTable();
+                        if (res['response']) {
+                            swal(
+                                'Eliminado!',
+                                '',
+                                'success'
+                            );
+                            this.updateTable();
+                        } else {
+                            this.appGlobals.errorUPS(res);
+                        }
                     });
                 }
             }
@@ -97,46 +110,41 @@ export class BodegasComponent implements OnInit {
     guardarEstante() {
         if (this.isEditEstante) {
             this.bodegaService.putEstante(this.estante).subscribe(res => {
-                this.estante = res['result'];
-                swal(
-                    'OK',
-                    'Información del estante modificada',
-                    'success'
-                );
-                this.isEditEstante = false;
-                this.updateTable();
+                if (res['response']) {
+                    swal(
+                        'OK',
+                        'Información del estante modificada',
+                        'success'
+                    );
+                    this.updateTable();
+                } else {
+                    this.showValidation(res);
+                }
             });
         } else {
             this.bodegaService.postEstante(this.estante).subscribe(res => {
-                if (res['response'] === true) {
+                if (res['response']) {
                     swal(
                         'OK',
                         'Estante registrado correctamente',
                         'success'
                     );
+                    this.updateTable();
                 } else {
-                    swal(
-                        'OK',
-                        'Ups...algo salio mal',
-                        'error'
-                    );
+                    this.showValidation(res);
                 }
-                this.updateTable();
             });
         }
     }
 
-    verBodega(codigo) {
-        this.bodegaService.getBodegaCodigo(codigo).subscribe(res => {
-            this.bodega = res['result'];
-            swal({
-                title: 'ID: ' + this.bodega.id_bodega,
-                html: 'Descripcion: ' + this.bodega.descripcion,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
-            this.updateTable();
+    verBodega(bodega) {
+        swal({
+            title: 'ID: ' + bodega.id_bodega,
+            html: 'Descripcion: ' + bodega.descripcion,
+            type: 'info',
+            confirmButtonColor: '#999999'
         });
+        this.updateTable();
     }
 
     editarBodega(bodega) {
@@ -159,13 +167,16 @@ export class BodegasComponent implements OnInit {
                 if (result.value) {
                     bodega.estado = 'ELIMINADO';
                     this.bodegaService.putBodega(bodega).subscribe(res => {
-                        this.bodega = res['result'];
-                        swal(
-                            'Eliminado!',
-                            '',
-                            'success'
-                        );
-                        this.updateTable();
+                        if (res['response']) {
+                            swal(
+                                'Eliminado!',
+                                '',
+                                'success'
+                            );
+                            this.updateTable();
+                        } else {
+                            this.appGlobals.errorUPS(res);
+                        }
                     });
                 }
             }
@@ -173,34 +184,46 @@ export class BodegasComponent implements OnInit {
     }
 
     guardarBodega() {
+        this.bodega.descripcion = this.bodega.descripcion.toUpperCase();
         if (this.isEditBodega) {
             this.bodegaService.putBodega(this.bodega).subscribe(res => {
-                this.bodega = res['result'];
-                swal(
-                    'OK',
-                    'Información del bodega modificada',
-                    'success'
-                );
-                this.isEditBodega = false;
-                this.updateTable();
+                if (res['response']) {
+                    swal(
+                        'OK',
+                        'Información del bodega modificada',
+                        'success'
+                    );
+                    this.isEditBodega = false;
+                    this.updateTable();
+                } else {
+                    this.showValidation(res);
+                }
             });
         } else {
             this.bodegaService.postBodega(this.bodega).subscribe(res => {
-                if (res['response'] === true) {
+                if (res['response']) {
                     swal(
                         'OK',
                         'estante registrado correctamente',
                         'success'
                     );
+                    this.updateTable();
                 } else {
-                    swal(
-                        'OK',
-                        'laboratorio registrado correctamente',
-                        'error'
-                    );
+                    this.showValidation(res);
                 }
-                this.updateTable();
             });
         }
+    }
+
+    showValidation(res) {
+        if (res['message'].toString().indexOf('descripcion_UNIQUE') >= 0) {
+            swal(
+                '',
+                'Bodega ya se encuentra registrada',
+                'error'
+            );
+            return;
+        }
+        this.appGlobals.errorUPS(res);
     }
 }
