@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {PrestamoService} from '../../services/prestamo.service';
+import {AppGlobals} from '../../models/appGlobals';
 
 @Component({
     selector: 'app-prestamos',
@@ -12,41 +13,14 @@ export class PrestamosComponent implements OnInit {
 
     date: Date = new Date();
     date2: Date = new Date();
-    equipo: any = {
-        id_equipo: '',
-        id_tipo_equipo: '',
-        id_estante: '',
-        serial: '',
-        descripcion: '',
-        fecha_registro: '',
-        estado_equipo: '',
-        tipo: '',
-        id_bodega: '',
-        armario: '',
-        estante: '',
-        estado: '',
-        descripcion_bodega: ''
-    };
-    cliente: any = {
-        id_cliente: '',
-        id_persona: '',
-        correo_electronico: '',
-        nombre_persona: '',
-        estado_persona: '',
-        codigo: '',
-        tipo: ''
-    };
+    equipo: any;
+    cliente: any;
     prestamo: any;
     prestamos: any;
-    sancion: any = {
-        id_sancion: '',
-        id_cliente: '',
-        descripcion: '',
-        fecha_inicio: '',
-        fecha_fin: ''
-    };
+    sancion: any;
 
     constructor(private route: Router,
+                private appGlobals: AppGlobals,
                 private prestamoService: PrestamoService) {
         this.updateTable();
     }
@@ -60,7 +34,7 @@ export class PrestamosComponent implements OnInit {
             id_equipo: '',
             id_solicitud_adecuacion: '',
             id_cliente: '',
-            fecha_solicitud: this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear(),
+            fecha_solicitud: this.appGlobals.getCurrentDate(),
             fecha_devolucion: '',
             fecha_prevista: '',
             codigo_cliente: '',
