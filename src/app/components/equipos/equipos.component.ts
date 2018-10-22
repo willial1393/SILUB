@@ -4,6 +4,7 @@ import swal from 'sweetalert2';
 import {EquipoService} from '../../services/equipo.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {BodegaService} from '../../services/bodega.service';
+import {KardexService} from '../../services/kardex.service';
 
 @Component({
     selector: 'app-equipos',
@@ -14,6 +15,7 @@ export class EquiposComponent implements OnInit {
 
     equipos: any;
     equipo: any;
+    kardex: any;
     tipo_equipos: any;
     tipo_equipo: any;
     isEdit: any = false;
@@ -21,6 +23,7 @@ export class EquiposComponent implements OnInit {
     constructor(private route: Router,
                 private equipoService: EquipoService,
                 private  bodegaService: BodegaService,
+                private  kardexService: KardexService,
                 private appGlobals: AppGlobals) {
         this.updateTable();
     }
@@ -70,6 +73,11 @@ export class EquiposComponent implements OnInit {
             estado_equipo: 'INACTIVO',
             cantidad: '1',
             tipo: '0'
+        };
+        this.kardex = {
+            id_tipo_equipo: '',
+            tipo: '',
+            cantidad: '',
         };
         this.isEdit = false;
     }
@@ -174,6 +182,7 @@ export class EquiposComponent implements OnInit {
                 if (result.value) {
                     this.equipoService.deleteEquipo(equipo).subscribe(res => {
                         if (res['response']) {
+
                             swal(
                                 'Eliminado!',
                                 '',
@@ -204,27 +213,18 @@ export class EquiposComponent implements OnInit {
                 }
             });
         } else {
-            let aux = true;
-            for (let i = 0; i < this.equipo.cantidad; i++) {
-                this.equipoService.postEquipo(this.equipo).subscribe(res => {
-                    this.equipo = res['result'];
-                    if (!res['response']) {
-                        this.appGlobals.errorUPS(res);
-                        aux = false;
-                        i = this.equipo.cantidad;
-                    }
-                });
-            }
-            this.updateTable();
-            if (aux) {
-                swal(
-                    'OK',
-                    'Equipo registrado correctamente',
-                    'success'
-                ).then((res) => {
+            this.equipoService.postEquipo(this.equipo).subscribe(res => {
+                if (res['response']) {
+                    swal(
+                        'OK',
+                        'Equipo registrado correctamente',
+                        'success'
+                    );
                     this.updateTable();
-                });
-            }
+                } else {
+                    this.appGlobals.errorUPS(res);
+                }
+            });
         }
     }
 

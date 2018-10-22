@@ -27,10 +27,6 @@ export class EquipoService {
         return this.http.post(this.urlGetTipoEquipos, tipoEquipo, {headers: this.headers});
     }
 
-    getEsquipoCodigo(codigo) {
-        return this.http.get(this.urlGetEquipos + codigo, {headers: this.headers});
-    }
-
     postEquipo(equipo) {
         return this.http.post(this.urlGetEquipos, equipo, {headers: this.headers});
     }

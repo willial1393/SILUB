@@ -14,7 +14,8 @@ export class KardexService {
                 private appGlobals: AppGlobals) {
     }
 
-    geKardex() {
+    getKardex() {
         return this.http.get(this.urlGetKardex, {headers: this.headers});
     }
+
 }

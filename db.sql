@@ -23,16 +23,19 @@ CREATE TABLE IF NOT EXISTS `bodega` (
   `estado` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
   PRIMARY KEY (`id_bodega`),
   UNIQUE KEY `descripcion_UNIQUE` (`descripcion`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.bodega: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.bodega: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `bodega` DISABLE KEYS */;
+INSERT IGNORE INTO `bodega` (`id_bodega`, `descripcion`, `estado`) VALUES
+	(1, 'FÍSICA', 'ACTIVO'),
+	(2, 'EDIFICIO 4', 'ELIMINADO'),
+	(3, '', 'ELIMINADO');
 /*!40000 ALTER TABLE `bodega` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.cliente
 CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
-  `id_persona` int(11) NOT NULL,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `codigo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `estado_cliente` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
@@ -41,10 +44,13 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id_cliente`),
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.cliente: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.cliente: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
+	(2, 'ESTUDIANTE', '123', 'SANCIONADO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
+	(5, 'DOCENTE', '1234', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.cliente_sancionado
@@ -67,10 +73,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo` INT
 
+
+
+
+
+
 )
 BEGIN
-UPDATE equipo SET estado = 'ELIMINADO' WHERE id_equipo = _id_equipo;
+DECLARE v_tipo VARCHAR(50);
+SELECT tipo INTO v_tipo FROM tipo_equipo WHERE id_tipo_equipo = _id_tipo;
+UPDATE equipo SET estado_equipo = 'ELIMINADO' WHERE id_equipo = _id_equipo;
 UPDATE tipo_equipo SET total = total-1 WHERE id_tipo_equipo = _id_tipo;
+call insert_kardex(v_tipo, 'SALIDA', '1');
 END//
 DELIMITER ;
 
@@ -89,10 +103,14 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   KEY `fk_equipo_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_equipo_estante1` FOREIGN KEY (`id_estante`) REFERENCES `estante` (`id_estante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=ujis;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~12 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
+INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
+	(46, 5, NULL, NULL, 'oooooo', '2018-10-22 04:50:45', 'INACTIVO'),
+	(47, 5, NULL, NULL, 'oooooo', '2018-10-22 04:50:46', 'INACTIVO'),
+	(48, 5, NULL, NULL, 'oooooo', '2018-10-22 04:51:00', 'ELIMINADO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -106,10 +124,14 @@ CREATE TABLE IF NOT EXISTS `estante` (
   PRIMARY KEY (`id_estante`),
   KEY `fk_estante_bodega1_idx` (`id_bodega`),
   CONSTRAINT `fk_estante_bodega1` FOREIGN KEY (`id_bodega`) REFERENCES `bodega` (`id_bodega`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.estante: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.estante: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `estante` DISABLE KEYS */;
+INSERT IGNORE INTO `estante` (`id_estante`, `id_bodega`, `armario`, `estante`, `descripcion`, `estado`) VALUES
+	(1, 1, '1', '1-2', 'Algo', 'ELIMINADO'),
+	(2, 1, '1', '1-1', '', 'ACTIVO'),
+	(3, 1, '1', '1-2', '', 'ACTIVO');
 /*!40000 ALTER TABLE `estante` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.get_full_equipo
@@ -151,6 +173,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_equipo`(
 
 
 
+
 )
 BEGIN
 DECLARE v_tipo VARCHAR(50);
@@ -174,7 +197,51 @@ END IF;
 INSERT INTO equipo set
 id_tipo_equipo = v_id_tipo_equipo,
 descripcion = _descripcion,
-estado = 'INACTIVO';
+estado_equipo = 'INACTIVO';
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento silub.insert_kardex
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_kardex`(
+	IN `_id_tipo_equipo` VARCHAR(50),
+	IN `_tipo` VARCHAR(50),
+	IN `_cantidad` VARCHAR(50)
+
+
+
+)
+BEGIN
+DECLARE v_total VARCHAR(50);
+DECLARE v_id_tipo_equipo INT(11);
+SELECT id_tipo_equipo INTO v_id_tipo_equipo FROM tipo_equipo WHERE tipo = _id_tipo_equipo;
+SELECT total INTO v_total FROM tipo_equipo WHERE id_tipo_equipo = v_id_tipo_equipo;
+INSERT INTO kardex SET
+id_tipo_equipo = v_id_tipo_equipo,
+tipo = _tipo,
+cantidad = _cantidad,
+total = v_total;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento silub.insert_varios_equipos
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_varios_equipos`(
+	IN `_cantidad` VARCHAR(50),
+	IN `_descripcion` VARCHAR(50),
+	IN `_tipo` VARCHAR(50)
+
+)
+BEGIN
+DECLARE a INT Default 0 ;
+simple_loop: LOOP
+SET a=a+1;
+call insert_equipo(_descripcion, _tipo);
+IF a= _cantidad THEN
+   LEAVE simple_loop;
+END IF;
+END LOOP simple_loop;
+call insert_kardex(_tipo, 'ENTRADA', _cantidad);
 END//
 DELIMITER ;
 
@@ -189,10 +256,13 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
+INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
+	(17, 5, '2018-10-22 04:50:46', 'ENTRADA', 3, 3),
+	(18, 5, '2018-10-22 04:51:00', 'SALIDA', 1, 2);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -201,11 +271,14 @@ CREATE TABLE IF NOT EXISTS `laboratorio` (
   `descripcion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `nombre` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `estado_laboratorio` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
-  PRIMARY KEY (`id_laboratorio`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  PRIMARY KEY (`id_laboratorio`),
+  UNIQUE KEY `nombre_UNIQUE` (`nombre`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.laboratorio: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.laboratorio: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `laboratorio` DISABLE KEYS */;
+INSERT IGNORE INTO `laboratorio` (`id_laboratorio`, `descripcion`, `nombre`, `estado_laboratorio`) VALUES
+	(1, 'Edificio 4', 'ELECTRÓNICA', 'ACTIVO');
 /*!40000 ALTER TABLE `laboratorio` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.operacion
@@ -257,10 +330,12 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   PRIMARY KEY (`id_sancion`),
   KEY `fk_sancion_cliente1_idx` (`id_cliente`),
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.sancion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
+INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `descripcion`, `fecha_inicio`, `fecha_fin`) VALUES
+	(7, 2, 'USUARIO', '2018-10-22 00:00:00', '2018-10-02 00:00:00');
 /*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion
@@ -289,10 +364,13 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   `total` int(11) NOT NULL,
   PRIMARY KEY (`id_tipo_equipo`),
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.tipo_equipo: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.tipo_equipo: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
+INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
+	(4, 'MULTÍMETRO', 0),
+	(5, 'OSCILOSCOPIO', 2);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.update_equipo
@@ -304,13 +382,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipo`(
 	IN `_serial` VARCHAR(50),
 	IN `_descripcion` VARCHAR(50),
 	IN `_estado` VARCHAR(50)
+
 )
 BEGIN
 UPDATE equipo set
 id_estante = _id_estante,
 serial = _serial,
 descripcion = _descripcion,
-estado = _estado
+estado_equipo = _estado
 WHERE id_equipo = _id_equipo;
 IF _estado = 'DE_BAJA' THEN
 	UPDATE tipo_equipo set
@@ -322,7 +401,6 @@ DELIMITER ;
 -- Volcando estructura para tabla silub.usuario
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
-  `id_persona` int(11) NOT NULL,
   `nombre_usuario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `clave` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
@@ -334,20 +412,23 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `nombre_usuario_UNIQUE` (`nombre_usuario`),
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.usuario: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `codigo`, `estado`, `correo_electronico`, `nombre_persona`) VALUES
+	(9, 'william', '123', 'LABORATORIO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub._login
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `_login`(
-	IN `usuario` VARCHAR(50),
-	IN `clave` VARCHAR(50)
+	IN `_usuario` VARCHAR(50),
+	IN `_clave` VARCHAR(50)
+
 )
 BEGIN
-SELECT * FROM usuario as u WHERE u.nombre_usuario = usuario AND u.clave = clave;
+SELECT * FROM usuario u WHERE u.nombre_usuario = _usuario AND u.clave = _clave AND u.estado = 'ACTIVO';
 END//
 DELIMITER ;
 

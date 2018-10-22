@@ -57,11 +57,13 @@ class EquiposModel
 
     public function insert($data)
     {
+        $cantidad = $data['cantidad'];
         $descripcion = $data['descripcion'];
         $tipo = $data['tipo'];
-        $query = "call insert_equipo(:descripcion, :tipo)";
+        $query = "call insert_varios_equipos(:cantidad, :descripcion, :tipo)";
         try {
             $stmt = $this->db->prepare($query);
+            $stmt->bindParam("cantidad", $cantidad);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("tipo", $tipo);
             $stmt->execute();
