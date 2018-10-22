@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {EquipoService} from '../../services/equipo.service';
 import {AppGlobals} from '../../models/appGlobals';
+import {BodegaService} from '../../services/bodega.service';
 
 @Component({
     selector: 'app-equipos',
@@ -11,7 +12,6 @@ import {AppGlobals} from '../../models/appGlobals';
 })
 export class EquiposComponent implements OnInit {
 
-    date: Date = new Date();
     equipos: any;
     equipo: any;
     tipo_equipos: any;
@@ -20,6 +20,7 @@ export class EquiposComponent implements OnInit {
 
     constructor(private route: Router,
                 private equipoService: EquipoService,
+                private  bodegaService: BodegaService,
                 private appGlobals: AppGlobals) {
         this.updateTable();
     }
@@ -80,15 +81,15 @@ export class EquiposComponent implements OnInit {
     }
 
     verEquipo(equipo) {
-            swal({
-                title: equipo.serial === null ? '' : 'Serial: ' + equipo.serial,
-                html: 'Nombre: ' + equipo.tipo
-                    + '<br>Fecha de registro: ' + equipo.fecha_registro
-                    + '<br>Estado: ' + equipo.estado_equipo
-                    + '<br>Descripción: ' + equipo.descripcion,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
+        swal({
+            title: equipo.serial === null ? '' : 'Serial: ' + equipo.serial,
+            html: 'Nombre: ' + equipo.tipo
+                + '<br>Fecha de registro: ' + equipo.fecha_registro
+                + '<br>Estado: ' + equipo.estado_equipo
+                + '<br>Descripción: ' + equipo.descripcion,
+            type: 'info',
+            confirmButtonColor: '#999999'
+        });
         this.updateTable();
     }
 
@@ -96,6 +97,66 @@ export class EquiposComponent implements OnInit {
         this.isEdit = true;
         this.equipo = equipo;
         this.equipo.cantidad = 1;
+    }
+
+    estanteEquipo(equipo) {
+        swal.mixin({
+            input: 'text',
+            confirmButtonText: 'Next &rarr;',
+            showCancelButton: true,
+            progressSteps: ['1', '2', '3']
+        }).queue([
+            {
+                title: 'Bodega',
+                input: 'select',
+                inputOptions: {
+                    'LABORATORIOS DE FÍSICA': 'LABORATORIOS DE FÍSICA'
+                },
+                inputPlaceholder: '- Seleccionar -',
+                showCancelButton: true,
+                preConfirm: (res) => {
+                    console.log(res);
+                }
+            },
+            {
+                title: 'Armario',
+                input: 'select',
+                inputOptions: {
+                    '1': '1',
+                    '2': '2',
+                    '3': '3',
+                    '4': '4'
+                },
+                inputPlaceholder: '- Seleccionar -',
+                showCancelButton: true,
+                preConfirm: (res) => {
+                    console.log(res);
+                }
+            },
+            {
+                title: 'Estante',
+                input: 'select',
+                inputOptions: {
+                    '1': '1',
+                    '2': '2',
+                    '3': '3',
+                    '4': '4'
+                },
+                inputPlaceholder: '- Seleccionar -',
+                showCancelButton: true,
+                preConfirm: (res) => {
+                    console.log(res);
+                }
+            }
+        ]).then((result) => {
+            if (result.value) {
+                swal({
+                    title: 'OK',
+                    text: '',
+                    type: 'success'
+                });
+            }
+        });
     }
 
     eliminarEquipo(equipo) {

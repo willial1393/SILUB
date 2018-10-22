@@ -49,6 +49,22 @@ class BodegaModel
         }
     }
 
+    public function getNombres()
+    {
+        try {
+            $stm = $this->db->prepare("SELECT descripcion FROM $this->table WHERE estado!='ELIMINADO'");
+            $stm->execute();
+
+            $this->response->setResponse(true);
+            $this->response->result = $stm->fetchAll();
+
+            return $this->response;
+        } catch (Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+            return $this->response;
+        }
+    }
+
     public function insert($data)
     {
 

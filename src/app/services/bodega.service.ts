@@ -46,4 +46,16 @@ export class BodegaService {
     putEstante(estante) {
         return this.http.put(this.urlGetEstante, estante, {headers: this.headers});
     }
+
+    getNombresBodegas() {
+        return this.http.get(this.urlGetBodega + 'nombres/', {headers: this.headers});
+    }
+
+    getNombresArmarios(nombre_bodega) {
+        return this.http.get(this.urlGetEstante + 'nombres_armarios/' + nombre_bodega, {headers: this.headers});
+    }
+
+    getNombresEstantes(nombre_armario) {
+        return this.http.get(this.urlGetEstante + 'nombres_estantes/' + nombre_armario, {headers: this.headers});
+    }
 }

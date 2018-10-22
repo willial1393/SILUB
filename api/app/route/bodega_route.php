@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\BodegaModel;
 
 $app->group('/bodegas/', function () {
@@ -10,13 +11,23 @@ $app->group('/bodegas/', function () {
             json_encode($um->getAll(), JSON_UNESCAPED_UNICODE)
         );
 
-        return $res;            
+        return $res;
     });
+    $this->get('nombres/', function ($req, $res, $args) {
+        $um = new BodegaModel();
+
+        $res->write(
+            json_encode($um->getNombres(), JSON_UNESCAPED_UNICODE)
+        );
+
+        return $res;
+    });
+
 
     $this->get('{id}', function ($req, $res, $args) {
         $um = new BodegaModel();
 
-        return $res            
+        return $res
             ->getBody()
             ->write(
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
@@ -26,7 +37,7 @@ $app->group('/bodegas/', function () {
     $this->post('', function ($req, $res) {
         $um = new BodegaModel();
 
-        return $res           
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -40,7 +51,7 @@ $app->group('/bodegas/', function () {
 
     $this->put('', function ($req, $res) {
         $um = new BodegaModel();
-        return $res            
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -49,5 +60,5 @@ $app->group('/bodegas/', function () {
                     )
                     , JSON_UNESCAPED_UNICODE)
             );
-    });  
+    });
 });
