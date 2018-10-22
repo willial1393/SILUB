@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {LaboratorioService} from '../../services/laboratorio.service';
+import {AppGlobals} from '../../models/appGlobals';
 
 @Component({
     selector: 'app-laboratorios',
@@ -15,6 +16,7 @@ export class LaboratoriosComponent implements OnInit {
     isEdit: any = false;
 
     constructor(private route: Router,
+                private appGlobals: AppGlobals,
                 private laboratorioService: LaboratorioService) {
         this.updateTable();
     }
@@ -23,6 +25,13 @@ export class LaboratoriosComponent implements OnInit {
         this.laboratorioService.getLaboratorios().subscribe(res => {
             this.laboratorios = res['result'];
         });
+        this.laboratorio = {
+            id_laboratorio: '',
+            descripcion: '',
+            nombre: '',
+            estado_laboratorio: 'ACTIVO'
+        };
+        this.isEdit = false;
     }
 
     ngOnInit() {
@@ -31,26 +40,22 @@ export class LaboratoriosComponent implements OnInit {
         }
     }
 
-    verLaboratorio(codigo) {
-        this.laboratorioService.getLaboratorioCodigo(codigo).subscribe(res => {
-            this.laboratorio = res['result'];
-            swal({
-                title: 'laboratorio: ' + this.laboratorio.nombre,
-                html: 'Nombre: ' + this.laboratorio.descripcion,
-                type: 'info',
-                confirmButtonColor: '#999999'
-            });
-            this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
+    verLaboratorio(laboratorio) {
+        swal({
+            title: 'laboratorio: ' + laboratorio.nombre,
+            html: 'Nombre: ' + laboratorio.descripcion,
+            type: 'info',
+            confirmButtonColor: '#999999'
         });
-    }
-
-    editarLaboratorio(Laboratorio) {
-        this.isEdit = true;
-        this.laboratorio = Laboratorio;
         this.updateTable();
     }
 
-    eliminarLaboratorio(Laboratorio) {
+    editarLaboratorio(laboratorio) {
+        this.isEdit = true;
+        this.laboratorio = laboratorio;
+    }
+
+    eliminarLaboratorio(laboratorio) {
         swal(
             {
                 title: '¿Desea eliminar el laboratorio?',
@@ -63,17 +68,18 @@ export class LaboratoriosComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    this.laboratorio = Laboratorio;
-                    this.laboratorio.estado_laboratorio = 'ELIMINADO';
-                    this.laboratorioService.putLaboratorio(this.laboratorio).subscribe(res => {
-                        this.laboratorio = res['result'];
-                        swal(
-                            'Eliminado!',
-                            '',
-                            'success'
-                        );
-                        this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
-                        this.updateTable();
+                    laboratorio.estado_laboratorio = 'ELIMINADO';
+                    this.laboratorioService.putLaboratorio(laboratorio).subscribe(res => {
+                        if (res['response']) {
+                            swal(
+                                'Eliminado!',
+                                '',
+                                'success'
+                            );
+                            this.updateTable();
+                        } else {
+                            this.appGlobals.errorUPS(res);
+                        }
                     });
                 }
             }
@@ -81,37 +87,45 @@ export class LaboratoriosComponent implements OnInit {
     }
 
     guardar() {
+        this.laboratorio.nombre = this.laboratorio.nombre.toUpperCase();
         if (this.isEdit) {
             this.laboratorioService.putLaboratorio(this.laboratorio).subscribe(res => {
-                this.laboratorio = res['result'];
-                swal(
-                    'OK',
-                    'Información del laboratorio modificada',
-                    'success'
-                );
-                this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
-                this.isEdit = false;
-                this.updateTable();
+                if (res['response']) {
+                    swal(
+                        'OK',
+                        'Información del laboratorio modificada',
+                        'success'
+                    );
+                    this.updateTable();
+                } else {
+                    this.showValidation(res);
+                }
             });
         } else {
             this.laboratorioService.postLaboratorio(this.laboratorio).subscribe(res => {
-                if (res['response'] === true) {
+                if (res['response']) {
                     swal(
                         'OK',
                         'laboratorio registrado correctamente',
                         'success'
                     );
-                    this.laboratorio = {descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
                     this.updateTable();
                 } else {
-                    swal(
-                        'OK',
-                        'laboratorio registrado correctamente',
-                        'error'
-                    );
+                    this.showValidation(res);
                 }
             });
         }
     }
 
+    showValidation(res) {
+        if (res['message'].toString().indexOf('nombre_UNIQUE') >= 0) {
+            swal(
+                '',
+                'Nombre ya se encuentra registrado',
+                'error'
+            );
+            return;
+        }
+        this.appGlobals.errorUPS(res);
+    }
 }

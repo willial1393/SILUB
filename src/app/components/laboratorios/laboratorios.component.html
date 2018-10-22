@@ -5,7 +5,7 @@
                 <div class="cont-tabla border border-secondary rounded mr-4">
                     <div class="usuario-tabla-encabezado ">
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-                            <p class="pl-1">Gestion de Laboratorios</p>
+                            <p class="pl-1">Laboratorios</p>
                             <div class="ml-3 ">
                                 <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
@@ -49,7 +49,7 @@
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
-                                           (click)="verLaboratorio(laboratorio.id_laboratorio)">
+                                           (click)="verLaboratorio(laboratorio)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarLaboratorio(laboratorio)">
@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="usuario border border-secondary col-md-4 rounded pb-3">
-                <form action="" class="form-usuario container-form">
+                <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
                     <div class="usuarios-gestor">
                         <div class="usuario-gestor-codigo form-group">
                             <label for="usuario-codigo">Nombre
@@ -82,7 +82,7 @@
                                    class="form-control" required>
                         </div>
                         <div class="usuario-boton">
-                            <button type="submit" class="btn btn-dark btn-guardar " (click)="guardar()">Guardar</button>
+                            <button type="submit" class="btn btn-dark btn-guardar">Guardar</button>
                         </div>
                     </div>
                 </form>

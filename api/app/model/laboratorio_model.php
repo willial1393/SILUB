@@ -22,15 +22,12 @@ class LaboratoriosModel
         try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE estado_laboratorio != 'ELIMINADO'");
             $stm->execute();
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function get($value)
@@ -38,15 +35,12 @@ class LaboratoriosModel
         try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_laboratorio = ? AND estado_laboratorio != 'ELIMINADO'");
             $stm->execute(array($value));
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function insert($data)
@@ -58,19 +52,16 @@ class LaboratoriosModel
         $estado_laboratorio = $data['estado_laboratorio'];
 
         $query = "INSERT INTO $this->table (id_laboratorio, descripcion, nombre, estado_laboratorio) VALUES (:id_laboratorio, :descripcion, :nombre, :estado_laboratorio)";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("nombre", $nombre);
             $stmt->bindParam("estado_laboratorio", $estado_laboratorio);
             $stmt->execute();
-
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = true;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;
@@ -84,22 +75,18 @@ class LaboratoriosModel
         $estado_laboratorio = $data['estado_laboratorio'];
 
         $query = "UPDATE $this->table SET id_laboratorio = :id_laboratorio, descripcion = :descripcion, nombre = :nombre, estado_laboratorio = :estado_laboratorio WHERE id_laboratorio = :id_laboratorio";
-
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
             $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("nombre", $nombre);
             $stmt->bindParam("estado_laboratorio", $estado_laboratorio);
             $stmt->execute();
-
             $this->response->setResponse(true, "Successfully Updated");
             $this->response->result = "";
-            return $this->response;
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
+        return $this->response;
     }
 }
