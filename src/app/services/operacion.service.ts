@@ -7,7 +7,7 @@ import {AppGlobals} from '../models/appGlobals';
 })
 export class OperacionService {
 
-    urlGetOperaciones = this.appGlobals.base_url + 'operacione/';
+    urlGetOperaciones = this.appGlobals.base_url + 'operaciones/';
     headers = this.appGlobals.headers;
 
     constructor(private http: HttpClient,
@@ -24,6 +24,10 @@ export class OperacionService {
 
     postOperacion(operacion) {
         return this.http.post(this.urlGetOperaciones, operacion, {headers: this.headers});
+    }
+
+    deleteOperacion(operacion) {
+        return this.http.post(this.urlGetOperaciones + 'delete/', operacion, {headers: this.headers});
     }
 
     putOperacion(operacion) {

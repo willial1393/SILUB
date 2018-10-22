@@ -88,6 +88,20 @@ call insert_kardex(v_tipo, 'SALIDA', '1');
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento silub.delete_operacion
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_operacion`(
+	IN `_id_equipo` INT,
+	IN `_id_operacion` INT
+)
+BEGIN
+DELETE FROM operacion WHERE id_operacion = _id_operacion;
+UPDATE equipo SET
+estado_equipo = 'ACTIVO'
+WHERE id_equipo = _id_equipo;
+END//
+DELIMITER ;
+
 -- Volcando estructura para tabla silub.equipo
 CREATE TABLE IF NOT EXISTS `equipo` (
   `id_equipo` int(11) NOT NULL AUTO_INCREMENT,
@@ -105,12 +119,22 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~12 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(46, 5, NULL, NULL, 'oooooo', '2018-10-22 04:50:45', 'INACTIVO'),
-	(47, 5, NULL, NULL, 'oooooo', '2018-10-22 04:50:46', 'INACTIVO'),
-	(48, 5, NULL, NULL, 'oooooo', '2018-10-22 04:51:00', 'ELIMINADO');
+	(46, 5, NULL, '123', 'oooooo', '2018-10-22 05:49:34', 'MANTENIMIENTO'),
+	(47, 5, NULL, '1234', 'oooooo', '2018-10-22 05:54:49', 'REPARACIÓN'),
+	(48, 5, NULL, NULL, 'oooooo', '2018-10-22 04:51:00', 'ELIMINADO'),
+	(49, 4, NULL, '12345', 'ccccccc', '2018-10-22 05:55:35', 'ACTIVO'),
+	(50, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(51, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(52, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(53, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(54, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(55, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:23', 'INACTIVO'),
+	(56, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:24', 'INACTIVO'),
+	(57, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:24', 'INACTIVO'),
+	(58, 4, NULL, NULL, 'ccccccc', '2018-10-22 05:55:24', 'INACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -224,6 +248,26 @@ total = v_total;
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento silub.insert_operacion
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_operacion`(
+	IN `_id_equipo` INT,
+	IN `_descripcion` VARCHAR(50),
+	IN `_fecha_fin` VARCHAR(50),
+	IN `_tipo` VARCHAR(50)
+)
+BEGIN
+INSERT INTO operacion SET
+id_equipo = _id_equipo,
+descripcion = _descripcion,
+fecha_fin = _fecha_fin,
+tipo = _tipo;
+UPDATE equipo SET
+estado_equipo = _tipo
+WHERE id_equipo = _id_equipo;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento silub.insert_varios_equipos
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_varios_equipos`(
@@ -256,13 +300,14 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
 INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
 	(17, 5, '2018-10-22 04:50:46', 'ENTRADA', 3, 3),
-	(18, 5, '2018-10-22 04:51:00', 'SALIDA', 1, 2);
+	(18, 5, '2018-10-22 04:51:00', 'SALIDA', 1, 2),
+	(19, 4, '2018-10-22 05:55:24', 'ENTRADA', 10, 10);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -292,10 +337,13 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   PRIMARY KEY (`id_operacion`),
   KEY `fk_mantenimiento_equipo_idx` (`id_equipo`),
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
+INSERT IGNORE INTO `operacion` (`id_operacion`, `id_equipo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `tipo`) VALUES
+	(7, 46, 'sadsd', '2018-10-22 05:49:34', '0000-00-00 00:00:00', 'MANTENIMIENTO'),
+	(8, 47, 'SDFASDF', '2018-10-22 05:54:49', '2018-10-24 00:00:00', 'REPARACIÓN');
 /*!40000 ALTER TABLE `operacion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.prestamo
@@ -366,10 +414,10 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.tipo_equipo: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.tipo_equipo: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(4, 'MULTÍMETRO', 0),
+	(4, 'MULTÍMETRO', 10),
 	(5, 'OSCILOSCOPIO', 2);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 

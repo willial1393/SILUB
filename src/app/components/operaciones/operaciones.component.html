@@ -37,7 +37,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th scope="col">Codigo</th>
+                                <th scope="col">Serial</th>
                                 <th scope="col">Equipo</th>
                                 <th scope="col">Fecha inicio</th>
                                 <th scope="col">Fecha fin</th>
@@ -46,18 +46,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let cliente of clientes">
-                                <td>{{cliente.codigo}}</td>
-                                <td>{{cliente.nombre_persona}}</td>
-                                <td>{{cliente.estado_persona}}</td>
-                                <td>{{cliente.tipo}}</td>
+                            <tr *ngFor="let operacion of operaciones">
+                                <td>{{operacion.serial}}</td>
+                                <td>{{operacion.equipo}}</td>
+                                <td>{{operacion.fecha_inicio}}</td>
+                                <td>{{operacion.fecha_fin}}</td>
+                                <td>{{operacion.tipo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
-                                           (click)="verCliente(cliente.codigo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/ok.png"
+                                           (click)="verOperacion(operacion)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
                                            width="25" height="25"
-                                           (click)="editarCliente(cliente)">
+                                           (click)="editarOperacion(operacion)">
+                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                           width="25" height="25"
+                                           (click)="eliminarOperacion(operacion)">
                                 </td>
                             </tr>
                             </tbody>
@@ -69,35 +73,49 @@
                 <form ngNativeValidate action="" class="form-usuario container-form" (submit)="guardar()">
                     <div class="usuarios-gestor">
                         <div class="usuario-gestor-codigo form-group">
-                            <label for="usuario-codigo">Fecha de operación
+                            <label for="usuario-codigo">Fecha inicio de operación
                             </label>
-                            <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
+                            <input name="fecha_inicio" [(ngModel)]="operacion.fecha_inicio" id="usuario-codigo"
+                                   type="text"
                                    class="form-codigo form-control" readonly>
+                        </div>
+                        <div class="usuario-gestor-codigo form-group">
+                            <label for="usuario-codigo">Fecha fin de operación
+                            </label>
+                            <input name="fecha_fin" [(ngModel)]="operacion.fecha_fin" type="text"
+                                   class="form-codigo form-control" placeholder="Año/Mes/Día" required>
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-nombre">Serial equipo
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona" id="usuario-nombre"
+                            <input name="serial" [(ngModel)]="operacion.serial" id="usuario-nombre"
                                    type="text"
-                                   class="form-control" required>
+                                   class="form-control" required (keyup)="getEquipo()"
+                                   pattern="[0-9]+">
+                        </div>
+                        <div class="usuario-gestor-correo form-group">
+                            <label for="usuario-nombre">Nombre equipo
+                                <span class="usuario-obligatorio">*</span>
+                            </label>
+                            <input name="tipo" [(ngModel)]="equipo.tipo"
+                                   type="text"
+                                   class="form-control" readonly required>
                         </div>
                         <div class="usuario-gestor-nombre form-group">
                             <label>Tipo de operación
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
+                            <select name="tipo" [(ngModel)]="operacion.tipo" class="form-control"
+                                    id="exampleFormControlSelect1" required>
+                                <option value="MANTENIMIENTO">Mantenimiento</option>
+                                <option value="REPARACIÓN">Reparación</option>
                             </select>
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <div class="equipo-gestor-nombre form-group">
                                 <label>Descripción<span class="equipo-obligatorio">*</span></label>
-                                <textarea name="descripcion" [(ngModel)]="equipo.descripcion" class="form-control"
+                                <textarea name="descripcion" [(ngModel)]="operacion.descripcion" class="form-control"
                                           rows="5"
                                           id="textarea" required></textarea>
                             </div>

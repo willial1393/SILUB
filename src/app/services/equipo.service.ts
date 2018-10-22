@@ -19,6 +19,11 @@ export class EquipoService {
         return this.http.get(this.urlGetEquipos, {headers: this.headers});
     }
 
+    getEquipoSerial(serial) {
+        return this.http.get(this.urlGetEquipos + 'serial/' + serial, {headers: this.headers});
+    }
+
+
     getTipoEquipos() {
         return this.http.get(this.urlGetTipoEquipos, {headers: this.headers});
     }

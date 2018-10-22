@@ -38,6 +38,20 @@ $app->group('/operaciones/', function () {
             );
     });
 
+    $this->post('delete/', function ($req, $res) {
+        $um = new MantenimientosModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
+
     $this->put('', function ($req, $res) {
         $um = new MantenimientosModel();
         return $res
