@@ -104,7 +104,6 @@ export class UsuariosComponent implements OnInit {
                     this.showValidation(res);
                 }
             });
-
         } else {
             this.usuarioService.postUsuario(this.usuario).subscribe(res => {
                 if (res['response']) {
