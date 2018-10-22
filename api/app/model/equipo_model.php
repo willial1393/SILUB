@@ -21,15 +21,13 @@ class EquiposModel
         try {
             $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.estado_equipo != 'ELIMINADO'");
             $stm->execute();
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
+            $this->response->result = $stm->fetchAll();
         }
+        return $this->response;
     }
 
     public function get($value)
@@ -37,15 +35,12 @@ class EquiposModel
         try {
             $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? AND e.estado_equipo != 'ELIMINADO'");
             $stm->execute(array($value));
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function getSerial($value)
@@ -58,7 +53,7 @@ class EquiposModel
             $this->response->result = $stm->fetch();
 
             return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
             return $this->response;
         }
@@ -79,7 +74,7 @@ class EquiposModel
 
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;
@@ -100,7 +95,7 @@ class EquiposModel
 
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;
@@ -132,7 +127,7 @@ class EquiposModel
             $this->response->result = "";
             return $this->response;
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
     }

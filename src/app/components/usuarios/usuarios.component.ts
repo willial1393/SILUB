@@ -93,7 +93,7 @@ export class UsuariosComponent implements OnInit {
         this.usuario.correo_electronico = this.usuario.correo_electronico.toLowerCase();
         if (this.isEdit) {
             this.usuarioService.putUsuario(this.usuario).subscribe(res => {
-                if (res['result']) {
+                if (res['response']) {
                     swal(
                         'OK',
                         'Información del usuario modificada',
@@ -107,7 +107,7 @@ export class UsuariosComponent implements OnInit {
 
         } else {
             this.usuarioService.postUsuario(this.usuario).subscribe(res => {
-                if (res['result']) {
+                if (res['response']) {
                     swal(
                         'OK',
                         'Usuario registrado correctamente',
