@@ -37,10 +37,18 @@ export class EquipoService {
     }
 
     deleteEquipo(equipo) {
-        return this.http.post(this.urlGetEquipos + 'delete', equipo, {headers: this.headers});
+        return this.http.post(this.urlGetEquipos + 'delete/', equipo, {headers: this.headers});
+    }
+
+    deleteTipoEquipo(tipoEquipo) {
+        return this.http.post(this.urlGetTipoEquipos + 'delete/', tipoEquipo, {headers: this.headers});
     }
 
     putEquipo(equipo) {
         return this.http.put(this.urlGetEquipos, equipo, {headers: this.headers});
+    }
+
+    putTipoEquipo(tipoEquipo) {
+        return this.http.put(this.urlGetTipoEquipos, tipoEquipo, {headers: this.headers});
     }
 }

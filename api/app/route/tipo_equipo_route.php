@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\TipoEquipoModel;
 
 $app->group('/tipos_equipos/', function () {
@@ -31,6 +32,20 @@ $app->group('/tipos_equipos/', function () {
             ->write(
                 json_encode(
                     $um->insert(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
+
+    $this->post('delete/', function ($req, $res) {
+        $um = new TipoEquipoModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
                         $req->getParsedBody()
                     )
                     , JSON_UNESCAPED_UNICODE)

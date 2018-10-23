@@ -34,7 +34,7 @@
                             <thead>
                             <tr>
                                 <th scope="col">Serial</th>
-                                <th scope="col">Nombre de equipo</th>
+                                <th scope="col">Tipo de equipo</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col">Acciones</th>
                             </tr>
@@ -93,7 +93,8 @@
                                    class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-correo form-group">
-                            <label for="equipo-estado_equipo">Nombre<span class="equipo-obligatorio">*</span></label>
+                            <label for="equipo-estado_equipo">Tipo de equipo<span
+                                    class="equipo-obligatorio">*</span></label>
                             <div *ngIf="isEdit; then thenBlock else elseBlock"></div>
                             <ng-template #thenBlock><select name="tipo" [(ngModel)]="equipo.tipo" class="form-control"
                                                             disabled>

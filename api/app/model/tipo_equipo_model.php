@@ -63,20 +63,36 @@ class TipoEquipoModel
         return $this->response;
     }
 
-    public function update($data)
+    public function delete($data)
     {
-        $id_nombre_equipo = $data['id_nombre_equipo'];
-        $nombre = $data['nombre'];
-        $total = $data['total'];
-        $tipo = $data['tipo'];
 
-        $query = "UPDATE $this->table SET id_nombre_equipo = :id_nombre_equipo, nombre = :nombre, total = :total, tipo = :tipo WHERE id_nombre_equipo = :id_nombre_equipo";
+        $id_tipo_equipo = $data['id_tipo_equipo'];
+
+        $query = "DELETE FROM tipo_equipo WHERE id_tipo_equipo = :id_tipo_equipo";
         try {
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam("id_nombre_equipo", $id_nombre_equipo);
-            $stmt->bindParam("nombre", $nombre);
-            $stmt->bindParam("total", $total);
+            $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
+            $stmt->execute();
+            $this->response->setResponse(true, 'Successfully delete');
+            $this->response->result = "";
+        } catch (\Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
+    }
+
+    public function update($data)
+    {
+        $id_tipo_equipo = $data['id_tipo_equipo'];
+        $tipo = $data['tipo'];
+        $total = $data['total'];
+
+        $query = "UPDATE $this->table SET id_tipo_equipo = :id_tipo_equipo, tipo = :tipo, total = :total  WHERE id_tipo_equipo = :id_tipo_equipo";
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
             $stmt->bindParam("tipo", $tipo);
+            $stmt->bindParam("total", $total);
             $stmt->execute();
             $this->response->setResponse(true, "Successfully Updated");
             $this->response->result = "";

@@ -22,6 +22,7 @@ import {SolicitudesComponent} from './components/solicitudes/solicitudes.compone
 import {SancionesComponent} from './components/sanciones/sanciones.component';
 import {KardexComponent} from './components/kardex/kardex.component';
 import {OperacionesComponent} from './components/operaciones/operaciones.component';
+import {TiposEquiposComponent} from './components/tipos-equipos/tipos-equipos.component';
 
 const appRutes: Routes = [
     {path: '', component: LoginComponent},
@@ -36,6 +37,7 @@ const appRutes: Routes = [
     {path: 'solicitudes', component: SolicitudesComponent},
     {path: 'kardex', component: KardexComponent},
     {path: 'operaciones', component: OperacionesComponent},
+    {path: 'tipos_equipos', component: TiposEquiposComponent},
     {path: 'bodegas', component: BodegasComponent}
 ];
 
@@ -53,7 +55,8 @@ const appRutes: Routes = [
         SolicitudesComponent,
         SancionesComponent,
         KardexComponent,
-        OperacionesComponent
+        OperacionesComponent,
+        TiposEquiposComponent
     ],
     imports: [
         BrowserModule,
