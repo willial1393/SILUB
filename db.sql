@@ -250,8 +250,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_operacion`(
 	IN `_descripcion` VARCHAR(50),
 	IN `_fecha_fin` VARCHAR(50),
 	IN `_tipo` VARCHAR(50)
+
+
 )
 BEGIN
+DECLARE v_estado_equipo VARCHAR(20);
+SELECT e.estado_equipo INTO v_estado_equipo FROM equipo e WHERE e.id_equipo = _id_equipo;
+IF v_estado_equipo = 'PRESTADO' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'EQUIPO PRESTADO';
+END IF;
+IF v_estado_equipo != 'ACTIVO' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'EQUIPO NO ACTIVO';
+END IF;
 INSERT INTO operacion SET
 id_equipo = _id_equipo,
 descripcion = _descripcion,
@@ -357,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.prestamo: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.prestamo: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
 INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
 	(1, 67, NULL, 5, '2018-10-24 01:38:11', '2018-10-23', '2018-10-23', 'TERMINADO'),

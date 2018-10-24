@@ -93,7 +93,7 @@ export class OperacionesComponent implements OnInit {
                 );
                 this.updateTable();
             } else {
-                this.appGlobals.errorUPS(res);
+                this.showValidation(res);
             }
         });
     }
@@ -117,7 +117,7 @@ export class OperacionesComponent implements OnInit {
                     );
                     this.updateTable();
                 } else {
-                    this.appGlobals.errorUPS(res);
+                    this.showValidation(res);
                 }
             });
         } else {
@@ -130,10 +130,30 @@ export class OperacionesComponent implements OnInit {
                     );
                     this.updateTable();
                 } else {
-                    this.appGlobals.errorUPS(res);
+                    this.showValidation(res);
                 }
             });
         }
+    }
+
+    showValidation(res) {
+        if (res['message'].toString().indexOf('EQUIPO NO ACTIVO') >= 0) {
+            swal(
+                '',
+                'El equipo se encuentra en operación',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('EQUIPO PRESTADO') >= 0) {
+            swal(
+                '',
+                'El equipo esta prestado',
+                'error'
+            );
+            return;
+        }
+        this.appGlobals.errorUPS(res);
     }
 
 }
