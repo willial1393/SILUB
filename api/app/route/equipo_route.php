@@ -48,13 +48,26 @@ $app->group('/equipos/', function () {
             );
     });
 
-    $this->post('delete', function ($req, $res) {
+    $this->post('delete/', function ($req, $res) {
         $um = new EquiposModel();
         return $res
             ->getBody()
             ->write(
                 json_encode(
                     $um->delete(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
+
+    $this->post('baja/', function ($req, $res) {
+        $um = new EquiposModel();
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->darDeBaja(
                         $req->getParsedBody()
                     )
                     , JSON_UNESCAPED_UNICODE)

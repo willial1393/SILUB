@@ -30,7 +30,7 @@ export class EquiposComponent implements OnInit {
 
     nuevoTipoEquipo() {
         swal({
-            title: 'Nuevo nombre de equipo',
+            title: 'Nuevo tipo de equipo',
             input: 'text',
             showCancelButton: true,
             confirmButtonText: 'Aceptar',
@@ -91,7 +91,7 @@ export class EquiposComponent implements OnInit {
     verEquipo(equipo) {
         swal({
             title: equipo.serial === null ? '' : 'Serial: ' + equipo.serial,
-            html: 'Nombre: ' + equipo.tipo
+            html: 'Tipo: ' + equipo.tipo
                 + '<br>Fecha de registro: ' + equipo.fecha_registro
                 + '<br>Estado: ' + equipo.estado_equipo
                 + '<br>Descripción: ' + equipo.descripcion,
@@ -182,9 +182,38 @@ export class EquiposComponent implements OnInit {
                 if (result.value) {
                     this.equipoService.deleteEquipo(equipo).subscribe(res => {
                         if (res['response']) {
-
                             swal(
                                 'Eliminado!',
+                                '',
+                                'success'
+                            );
+                            this.updateTable();
+                        } else {
+                            this.appGlobals.errorUPS(res);
+                        }
+                    });
+                }
+            }
+        );
+    }
+
+    darBajaEquipo(equipo) {
+        swal(
+            {
+                title: '¿Desea dar de baja el equipo?',
+                text: '',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    this.equipoService.darDeBajaEquipo(equipo).subscribe(res => {
+                        if (res['response']) {
+                            swal(
+                                'OK',
                                 '',
                                 'success'
                             );

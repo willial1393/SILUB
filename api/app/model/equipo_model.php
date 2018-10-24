@@ -19,7 +19,7 @@ class EquiposModel
     public function getAll()
     {
         try {
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.estado_equipo != 'ELIMINADO'");
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo");
             $stm->execute();
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
@@ -32,7 +32,7 @@ class EquiposModel
     public function get($value)
     {
         try {
-            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? AND e.estado_equipo != 'ELIMINADO'");
+            $stm = $this->db->prepare("SELECT e.*,t.tipo,t.total FROM equipo AS e, tipo_equipo AS t WHERE e.id_tipo_equipo = t.id_tipo_equipo AND e.id_equipo = ? ");
             $stm->execute(array($value));
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
@@ -79,7 +79,27 @@ class EquiposModel
     {
         $id_equipo = $data['id_equipo'];
         $id_tipo_equipo = $data['id_tipo_equipo'];
+
         $query = "call delete_equipo(:id_equipo, :id_tipo_equipo)";
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam("id_equipo", $id_equipo);
+            $stmt->bindParam("id_tipo_equipo", $id_tipo_equipo);
+            $stmt->execute();
+            $this->response->setResponse(true, 'Successfully Insertion');
+            $this->response->result = "";
+        } catch (\Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
+    }
+
+    public function darDeBaja($data)
+    {
+        $id_equipo = $data['id_equipo'];
+        $id_tipo_equipo = $data['id_tipo_equipo'];
+
+        $query = "call dar_baja_equipo(:id_equipo, :id_tipo_equipo)";
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_equipo", $id_equipo);

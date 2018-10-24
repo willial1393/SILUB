@@ -40,6 +40,10 @@ export class EquipoService {
         return this.http.post(this.urlGetEquipos + 'delete/', equipo, {headers: this.headers});
     }
 
+    darDeBajaEquipo(equipo) {
+        return this.http.post(this.urlGetEquipos + 'baja/', equipo, {headers: this.headers});
+    }
+
     deleteTipoEquipo(tipoEquipo) {
         return this.http.post(this.urlGetTipoEquipos + 'delete/', tipoEquipo, {headers: this.headers});
     }
