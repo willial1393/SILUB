@@ -42,19 +42,6 @@ class ClientesModel
         return $this->response;
     }
 
-    public function getClienteSancionado($value)
-    {
-        try {
-            $stm = $this->db->prepare("CALL cliente_sancionado(?)");
-            $stm->execute(array($value));
-            $this->response->setResponse(true);
-            $this->response->result = $stm->fetch();
-        } catch (\Exception $e) {
-            $this->response->setResponse(false, $e->getMessage());
-        }
-        return $this->response;
-    }
-
     public function insert($data)
     {
 

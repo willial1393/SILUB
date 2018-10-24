@@ -3,6 +3,8 @@ import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {PrestamoService} from '../../services/prestamo.service';
 import {AppGlobals} from '../../models/appGlobals';
+import {ClienteService} from '../../services/cliente.service';
+import {EquipoService} from '../../services/equipo.service';
 
 @Component({
     selector: 'app-prestamos',
@@ -17,11 +19,12 @@ export class PrestamosComponent implements OnInit {
     cliente: any;
     prestamo: any;
     prestamos: any;
-    sancion: any;
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
-                private prestamoService: PrestamoService) {
+                private prestamoService: PrestamoService,
+                private clienteService: ClienteService,
+                private equipoService: EquipoService) {
         this.updateTable();
     }
 
@@ -30,18 +33,58 @@ export class PrestamosComponent implements OnInit {
             this.prestamos = res['result'];
         });
         this.prestamo = {
-            id_prestamo: '',
             id_equipo: '',
+            id_tipo_equipo: '',
+            id_estante: '',
+            serial: '',
+            descripcion: '',
+            fecha_registro: '',
+            estado_equipo: '',
+            id_prestamo: '',
             id_solicitud_adecuacion: '',
             id_cliente: '',
             fecha_solicitud: this.appGlobals.getCurrentDate(),
             fecha_devolucion: '',
             fecha_prevista: '',
-            codigo_cliente: '',
-            nombre_persona: '',
-            dias: '',
+            estado_prestamo: '',
+            tipo: '',
+            codigo: '',
+            estado_cliente: '',
+            correo_electronico: '',
+            nombre: '',
+            tipo_equipo: '',
+            total: '',
+            id_bodega: '',
+            armario: '',
+            estante: '',
+            estado: '',
+            descripcion_estante: '',
+            estado_estante: '',
+            descripcion_bodega: '',
+            estado_bodega: ''
+        };
+        this.cliente = {
+            id_cliente: '',
+            tipo: '',
+            codigo: '',
+            estado_cliente: '',
+            correo_electronico: '',
+            nombre: ''
+        };
+        this.equipo = {
+            id_equipo: '',
+            id_tipo_equipo: '',
+            id_estante: '',
             serial: '',
-            estado: ''
+            descripcion: '',
+            fecha_registro: '',
+            estado_equipo: '',
+            tipo: '',
+            id_bodega: '',
+            armario: '',
+            estante: '',
+            estado: '',
+            descripcion_bodega: ''
         };
     }
 
@@ -51,114 +94,118 @@ export class PrestamosComponent implements OnInit {
         }
     }
 
-    updatePrestamo() {
-        if (this.prestamo.dias !== null) {
-            this.date2 = new Date(
-                this.date.getFullYear(),
-                this.date.getMonth(),
-                this.date.getDate() + parseInt(this.prestamo.dias, 0),
-                this.date.getHours(),
-                this.date.getMinutes(),
-                this.date.getSeconds());
-            this.prestamo.fecha_prevista = this.date2.getDay() + '-' + (this.date2.getMonth() + 1) + '-' + this.date2.getFullYear();
-        } else {
-            this.prestamo.fecha_prevista = null;
-        }
-    }
-
     getCliente() {
-        this.prestamoService.getClienteCodigo(this.prestamo.codigo_cliente).subscribe(res => {
+        this.clienteService.getClienteCodigo(this.prestamo.codigo).subscribe(res => {
             this.cliente = res['result'];
+            this.prestamo.id_cliente = this.cliente.id_cliente;
+            this.prestamo.tipo = this.cliente.tipo;
+            this.prestamo.estado_cliente = this.cliente.estado_cliente;
+            this.prestamo.correo_electronico = this.cliente.correo_electronico;
+            this.prestamo.nombre = this.cliente.nombre;
         });
     }
 
     getEquipo() {
-        this.prestamoService.getEquipoCodigo(this.prestamo.serial).subscribe(res => {
+        this.equipoService.getEquipoSerial(this.prestamo.serial).subscribe(res => {
             this.equipo = res['result'];
+            this.prestamo.id_equipo = this.equipo.id_equipo;
+            this.prestamo.descripcion = this.equipo.descripcion;
+            this.prestamo.estado_equipo = this.equipo.estado;
+            this.prestamo.tipo_equipo = this.equipo.tipo;
+            this.prestamo.armario = this.equipo.armario;
+            this.prestamo.estante = this.equipo.estante;
+            this.prestamo.descripcion_bodega = this.equipo.descripcion_bodega;
         });
     }
 
     verPrestamo(prestamo) {
         swal({
-            title: prestamo.serial + ' - ' + prestamo.tipo,
-            html: 'Descripción: ' + prestamo.descripcion,
+            title: 'Cliente: ' + prestamo.nombre,
+            html: 'Rol:' + prestamo.tipo
+                + '<br>Código: ' + prestamo.codigo
+                + '<br>Correo: ' + prestamo.correo_electronico
+                + '<br>Estado cliente: ' + prestamo.estado_cliente
+                + '<br>fecha de solicitud: ' + prestamo.fecha_solicitud
+                + '<br>fecha de prevista: ' + prestamo.fecha_prevista
+                + '<br>fecha de devolución: ' + prestamo.fecha_devolucion
+                + '<br>Equipo: ' + prestamo.tipo_equipo
+                + '<br>Serial: ' + prestamo.serial
+                + '<br>Descripción equipo: ' + prestamo.descripcion
+                + '<br>Bodega: ' + prestamo.descripcion_bodega
+                + '<br>Armario: ' + prestamo.armario
+                + '<br>Estante: ' + prestamo.estante,
             type: 'info',
             confirmButtonColor: '#999999'
         });
     }
 
     guardar() {
-        this.prestamoService.getClienteSancionado(this.cliente.id_cliente).subscribe(res => {
-            this.sancion = res['result'];
-            if (this.sancion !== null) {
-                this.prestamoService.postPrestamo(this.prestamo, this.equipo).subscribe(res2 => {
-                    if (res2['response']) {
-                        this.equipo.estado_equipo = 'PRESTADO';
-                        this.prestamoService.putEquipo(this.equipo).subscribe(res3 => {
-                            if (res3['response']) {
-                                swal(
-                                    'OK',
-                                    '',
-                                    'success'
-                                );
-                                this.updateTable();
-                            } else {
-                                swal(
-                                    'Ups... Algo salio mal',
-                                    '',
-                                    'error'
-                                );
-                            }
-                        });
-                    } else {
-                        swal(
-                            'Ups... Algo salio mal',
-                            '',
-                            'error'
-                        );
-                    }
-                });
+        if (!this.appGlobals.isValidDate(this.prestamo.fecha_prevista)) {
+            swal(
+                'Formato de fecha invalido',
+                '',
+                'error'
+            );
+            return;
+        }
+        this.prestamoService.postPrestamo(this.prestamo).subscribe(res => {
+            if (res['response']) {
+                swal(
+                    'OK',
+                    '',
+                    'success'
+                );
+                this.updateTable();
             } else {
-                swal({
-                    title: 'Cliente sancionado',
-                    html: 'Descripción: ' + this.sancion.descripcion +
-                        '<br>Fecha sanción: ' + this.sancion.fecha_inicio +
-                        '<br>Fecha terminación: ' + this.sancion.fecha_fin,
-                    type: 'error',
-                    confirmButtonColor: '#999999'
-                });
+                this.showValidation(res);
             }
         });
     }
 
     terminarPrestamo(prestamo) {
-        swal({
-            title: '¿Terminar prestamo del equipo con serial ' + prestamo.serial + '?',
-            showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.value) {
-                prestamo.fecha_devolucion = this.date.getDay() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear();
-                this.prestamoService.putPrestamo(prestamo).subscribe(res => {
-                    if (res['response']) {
-                        swal(
-                            'OK',
-                            '',
-                            'success'
-                        ).then((x) => {
+        if (prestamo.estado_prestamo === 'ACTIVO') {
+            swal({
+                title: '¿Terminar prestamo del equipo con serial ' + prestamo.serial + '?',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    prestamo.fecha_devolucion = this.appGlobals.getCurrentDate();
+                    this.prestamoService.terminarPrestamo(prestamo).subscribe(res => {
+                        if (res['response']) {
+                            swal(
+                                'OK',
+                                '',
+                                'success'
+                            );
                             this.updateTable();
-                        });
-                    } else {
-                        swal(
-                            'Ups... Algo salio mal',
-                            '',
-                            'error'
-                        );
-                    }
-                });
-            }
-        });
+                        } else {
+                            this.showValidation(res);
+                        }
+                    });
+                }
+            });
+        }
     }
 
+    showValidation(res) {
+        if (res['message'].toString().indexOf('SANCIONADO') >= 0) {
+            swal(
+                '',
+                'El cliente se encuentra sancionado',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('EQUIPO NO ACTIVO') >= 0) {
+            swal(
+                '',
+                'El equipo no esta disponible en este momento',
+                'error'
+            );
+            return;
+        }
+        this.appGlobals.errorUPS(res);
+    }
 }

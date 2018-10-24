@@ -23,15 +23,6 @@ $app->group('/clientes/', function () {
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
             );
     });
-    $this->get('sancionado/{id}', function ($req, $res, $args) {
-        $um = new ClientesModel();
-
-        return $res
-            ->getBody()
-            ->write(
-                json_encode($um->getClienteSancionado($args['id']), JSON_UNESCAPED_UNICODE)
-            );
-    });
 
     $this->post('', function ($req, $res) {
         $um = new ClientesModel();

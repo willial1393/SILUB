@@ -37,16 +37,17 @@
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Fecha Préstamo</th>
                                 <th scope="col">Fecha prevista de devolución</th>
-                                <th scope="col">Fecha de devolución realizada</th>
+                                <th scope="col">Estado</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let prestamo of prestamos">
                                 <td>{{prestamo.codigo}}</td>
-                                <td>{{prestamo.fecha_solicitud}}</td>
+                                <td>{{prestamo.nombre}}</td>
+                                <td>{{prestamo.fecha_solicitud | date:'yyyy-MM-dd'}}</td>
                                 <td>{{prestamo.fecha_prevista}}</td>
-                                <td>{{prestamo.fecha_devolucion}}</td>
+                                <td>{{prestamo.estado_prestamo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25"
@@ -72,58 +73,52 @@
                             <input name="fecha_solicitud" [(ngModel)]="prestamo.fecha_solicitud"
                                    type="text" class="form-control" readonly="readonly">
                         </div>
+                        <div class="equipo-gestor-codigo form-group">
+                            <label>Fecha de devolución<span
+                                    class="equipo-obligatorio">*</span></label>
+                            <input name="fecha_prevista" [(ngModel)]="prestamo.fecha_prevista"
+                                   type="text" class="form-control" required placeholder="Año/Mes/Día">
+                        </div>
                         <div class="equipo-gestor-correo form-group">
                             <label>Código cliente<span class="equipo-obligatorio">*</span></label>
-                            <input name="codigo_cliente" [(ngModel)]="prestamo.codigo_cliente"
-                                   type="text"
+                            <input name="codigo" [(ngModel)]="prestamo.codigo" pattern="[0-9]+"
+                                   type="text" required
                                    class="form-control" (keyup)="getCliente()">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Nombre cliente<span
                                     class="equipo-obligatorio">*</span></label>
-                            <input name="nombre_persona" [(ngModel)]="cliente.nombre_persona"
-                                   type="text" class="form-control de" readonly="readonly">
+                            <input name="nombre" [(ngModel)]="prestamo.nombre"
+                                   type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-correo form-group">
                             <label>Serial equipo<span class="equipo-obligatorio">*</span></label>
                             <input name="serial" [(ngModel)]="prestamo.serial" type="text"
-                                   class="form-control" (keyup)="getEquipo()">
+                                   class="form-control" (keyup)="getEquipo()" required pattern="[0-9]+">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
-                            <label>Nombre equipo<span
+                            <label>Tipo de equipo<span
                                     class="equipo-obligatorio">*</span></label>
-                            <input name="tipo" [(ngModel)]="equipo.tipo"
-                                   type="text" class="form-control de" readonly="readonly">
-                        </div>
-                        <div class="equipo-gestor-equipo form-group">
-                            <label>Días de préstamo<span class="equipo-obligatorio">*</span></label>
-                            <input name="dias" [(ngModel)]="prestamo.dias"
-                                   class="form-control" type="number" min="0" max="300" step="1" required
-                                   (keyup)="updatePrestamo()" (click)="updatePrestamo()">
-                        </div>
-                        <div class="equipo-gestor-codigo form-group">
-                            <label>Fecha de devolución<span
-                                    class="equipo-obligatorio">*</span></label>
-                            <input name="fecha_prevista" [(ngModel)]="prestamo.fecha_prevista"
-                                   type="text" class="form-control de" readonly="readonly">
+                            <input name="tipo_equipo" [(ngModel)]="prestamo.tipo_equipo"
+                                   type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Bodega<span
                                     class="equipo-obligatorio">*</span></label>
-                            <input name="descripcion_bodega" [(ngModel)]="equipo.descripcion_bodega"
-                                   type="text" class="form-control de" readonly="readonly">
+                            <input name="descripcion_bodega" [(ngModel)]="prestamo.descripcion_bodega"
+                                   type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Armario<span
                                     class="equipo-obligatorio">*</span></label>
-                            <input name="armario" [(ngModel)]="equipo.armario"
-                                   type="text" class="form-control de" readonly="readonly">
+                            <input name="armario" [(ngModel)]="prestamo.armario"
+                                   type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Estante<span
                                     class="equipo-obligatorio">*</span></label>
-                            <input name="estante" [(ngModel)]="equipo.estante"
-                                   type="text" class="form-control de" readonly="readonly">
+                            <input name="estante" [(ngModel)]="prestamo.estante"
+                                   type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-boton">
                             <button type="submit" class="btn btn-dark btn-guardar">Realizar préstamo</button>

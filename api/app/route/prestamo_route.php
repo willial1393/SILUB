@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\PrestamosModel;
 
 $app->group('/prestamos/', function () {
@@ -11,16 +12,6 @@ $app->group('/prestamos/', function () {
         );
 
         return $res;
-    });
-
-    $this->get('{id}', function ($req, $res, $args) {
-        $um = new PrestamosModel();
-
-        return $res
-            ->getBody()
-            ->write(
-                json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
-            );
     });
 
     $this->post('', function ($req, $res) {
@@ -37,13 +28,14 @@ $app->group('/prestamos/', function () {
             );
     });
 
-    $this->put('', function ($req, $res) {
+    $this->post('terminar/', function ($req, $res) {
         $um = new PrestamosModel();
+
         return $res
             ->getBody()
             ->write(
                 json_encode(
-                    $um->update(
+                    $um->terminar(
                         $req->getParsedBody()
                     )
                     , JSON_UNESCAPED_UNICODE)
