@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Model;
 
 use App\Lib\Database;
@@ -12,64 +13,70 @@ class SolicitudAdecuacionModel
 
     public function __CONSTRUCT()
     {
-        $this->db       = Database::StartUp();
+        $this->db = Database::StartUp();
         $this->response = new Response();
     }
 
     public function getAll()
     {
-        try
-        {
-            $result = array();
-
-            $stm = $this->db->prepare("SELECT * FROM $this->table");
+        try {
+            $stm = $this->db->prepare("SELECT s.*,c.*, l.nombre as laboratorio
+FROM solicitud_adecuacion s, cliente c, laboratorio l
+WHERE s.id_laboratorio = l.id_laboratorio
+AND s.id_cliente = c.id_cliente");
             $stm->execute();
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
+    }
+
+    public function getEquipos($value)
+    {
+        try {
+            $stm = $this->db->prepare("SELECT s.*,t.*
+FROM solicitud_adecuacion_equipo s, tipo_equipo t
+WHERE s.id_solicitud_adecuacion = ?
+AND s.id_tipo_equipo = t.id_tipo_equipo");
+            $stm->execute(array($value));
+            $this->response->setResponse(true);
+            $this->response->result = $stm->fetchAll();
+        } catch (\Exception $e) {
+            $this->response->setResponse(false, $e->getMessage());
+        }
+        return $this->response;
     }
 
     public function get($value)
     {
-        try
-        {
-            $result = array();
-
+        try {
             $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_solicitud_adecuacion = ?");
             $stm->execute(array($value));
-
             $this->response->setResponse(true);
             $this->response->result = $stm->fetch();
-
-            return $this->response;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
-            return $this->response;
         }
+        return $this->response;
     }
 
     public function insert($data)
     {
 
         $id_solicitud_adecuacion = $data['id_solicitud_adecuacion'];
-        $id_laboratorio          = $data['id_laboratorio'];
-        $fecha_solicitud         = $data['fecha_solicitud'];
-        $fecha_adecuacion        = $data['fecha_adecuacion'];
-        $hora_ingreso_sala       = $data['hora_ingreso_sala'];
-        $hora_salida_sala        = $data['hora_salida_sala'];
-        $puestos_trabajo         = $data['puestos_trabajo'];
-        $estado                  = $data['estado'];
+        $id_laboratorio = $data['id_laboratorio'];
+        $fecha_solicitud = $data['fecha_solicitud'];
+        $fecha_adecuacion = $data['fecha_adecuacion'];
+        $hora_ingreso_sala = $data['hora_ingreso_sala'];
+        $hora_salida_sala = $data['hora_salida_sala'];
+        $puestos_trabajo = $data['puestos_trabajo'];
+        $estado = $data['estado'];
 
         $query = "INSERT INTO $this->table (id_solicitud_adecuacion, id_laboratorio, fecha_solicitud, fecha_adecuacion, hora_ingreso_sala, hora_salida_sala, puestos_trabajo, estado) VALUES (:id_solicitud_adecuacion, :id_laboratorio, :fecha_solicitud, :fecha_adecuacion, :hora_ingreso_sala, :hora_salida_sala, :puestos_trabajo, :estado)";
 
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_solicitud_adecuacion", $id_solicitud_adecuacion);
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
@@ -80,10 +87,9 @@ class SolicitudAdecuacionModel
             $stmt->bindParam("puestos_trabajo", $puestos_trabajo);
             $stmt->bindParam("estado", $estado);
             $stmt->execute();
-
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
         return $this->response;
@@ -92,18 +98,17 @@ class SolicitudAdecuacionModel
     public function update($data)
     {
         $id_solicitud_adecuacion = $data['id_solicitud_adecuacion'];
-        $id_laboratorio          = $data['id_laboratorio'];
-        $fecha_solicitud         = $data['fecha_solicitud'];
-        $fecha_adecuacion        = $data['fecha_adecuacion'];
-        $hora_ingreso_sala       = $data['hora_ingreso_sala'];
-        $hora_salida_sala        = $data['hora_salida_sala'];
-        $puestos_trabajo         = $data['puestos_trabajo'];
-        $estado                  = $data['estado'];
+        $id_laboratorio = $data['id_laboratorio'];
+        $fecha_solicitud = $data['fecha_solicitud'];
+        $fecha_adecuacion = $data['fecha_adecuacion'];
+        $hora_ingreso_sala = $data['hora_ingreso_sala'];
+        $hora_salida_sala = $data['hora_salida_sala'];
+        $puestos_trabajo = $data['puestos_trabajo'];
+        $estado = $data['estado'];
 
         $query = "UPDATE $this->table SET id_solicitud_adecuacion = :id_solicitud_adecuacion, id_laboratorio = :id_laboratorio, fecha_solicitud = :fecha_solicitud, fecha_adecuacion = :fecha_adecuacion, hora_ingreso_sala = :hora_ingreso_sala, hora_salida_sala = :hora_salida_sala, puestos_trabajo = :puestos_trabajo, estado = :estado WHERE id_solicitud_adecuacion = :id_solicitud_adecuacion";
 
         try {
-
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_solicitud_adecuacion", $id_solicitud_adecuacion);
             $stmt->bindParam("id_laboratorio", $id_laboratorio);
@@ -114,13 +119,11 @@ class SolicitudAdecuacionModel
             $stmt->bindParam("puestos_trabajo", $puestos_trabajo);
             $stmt->bindParam("estado", $estado);
             $stmt->execute();
-
             $this->response->setResponse(true, "Successfully Updated");
             $this->response->result = "";
-            return $this->response;
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->response->setResponse(false, $e->getMessage());
         }
+        return $this->response;
     }
 }

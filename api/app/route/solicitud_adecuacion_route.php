@@ -1,4 +1,5 @@
 <?php
+
 use App\Model\SolicitudAdecuacionModel;
 
 $app->group('/solicitudes_adecuacion/', function () {
@@ -20,6 +21,15 @@ $app->group('/solicitudes_adecuacion/', function () {
             ->getBody()
             ->write(
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
+            );
+    });
+    $this->get('equipos/{id}', function ($req, $res, $args) {
+        $um = new SolicitudAdecuacionModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode($um->getEquipos($args['id']), JSON_UNESCAPED_UNICODE)
             );
     });
 

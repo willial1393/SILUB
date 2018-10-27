@@ -13,8 +13,6 @@ import {EquipoService} from '../../services/equipo.service';
 })
 export class PrestamosComponent implements OnInit {
 
-    date: Date = new Date();
-    date2: Date = new Date();
     equipo: any;
     cliente: any;
     prestamo: any;

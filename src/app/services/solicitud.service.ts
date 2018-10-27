@@ -18,6 +18,10 @@ export class SolicitudService {
         return this.http.get(this.urlGetSolicitudes, {headers: this.headers});
     }
 
+    getSolicitudEquipos(id_solicitud) {
+        return this.http.get(this.urlGetSolicitudes + 'equipos/' + id_solicitud, {headers: this.headers});
+    }
+
     getSolicitudCodigo(codigo) {
         return this.http.get(this.urlGetSolicitudes + codigo, {headers: this.headers});
     }

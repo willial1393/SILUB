@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   `id_estante` int(11) DEFAULT NULL,
   `serial` varchar(45) DEFAULT NULL,
   `descripcion` varchar(45) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha_registro` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `estado_equipo` varchar(45) NOT NULL,
   PRIMARY KEY (`id_equipo`),
   UNIQUE KEY `serial_UNIQUE` (`serial`),
@@ -121,13 +121,16 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   KEY `fk_equipo_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_equipo_estante1` FOREIGN KEY (`id_estante`) REFERENCES `estante` (`id_estante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=ujis;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(67, 7, 1, '123', 'medición', '2018-10-24 01:41:10', 'PRESTADO'),
-	(68, 7, NULL, NULL, 'medición', '2018-10-23 13:31:39', 'INACTIVO');
+	(67, 7, 1, '123', 'medición', '2018-10-24 01:41:10', 'ACTIVO'),
+	(68, 7, NULL, '1234', 'medición', '2018-10-23 13:31:39', 'ACTIVO'),
+	(70, 8, NULL, '1253', 'dispositivos de medición', '2018-10-27 00:00:03', 'ACTIVO'),
+	(71, 8, NULL, '23452', 'dispositivos de medición', '2018-10-27 00:00:03', 'ACTIVO'),
+	(72, 8, NULL, '123525', 'dispositivos de medición', '2018-10-27 00:00:03', 'ACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -298,20 +301,21 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `kardex` (
   `id_kardex` int(11) NOT NULL AUTO_INCREMENT,
   `id_tipo_equipo` int(11) NOT NULL,
-  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tipo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `cantidad` int(11) NOT NULL,
   `total` int(11) NOT NULL,
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
 INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
 	(33, 7, '2018-10-23 13:31:39', 'ENTRADA', 3, 3),
-	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2);
+	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2),
+	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -336,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   `id_operacion` int(11) NOT NULL AUTO_INCREMENT,
   `id_equipo` int(11) NOT NULL,
   `descripcion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `fecha_inicio` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha_inicio` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_fin` datetime NOT NULL,
   `tipo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id_operacion`),
@@ -344,7 +348,7 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.operacion: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
 /*!40000 ALTER TABLE `operacion` ENABLE KEYS */;
 
@@ -354,7 +358,7 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   `id_equipo` int(11) NOT NULL,
   `id_solicitud_adecuacion` int(11) DEFAULT NULL,
   `id_cliente` int(11) NOT NULL,
-  `fecha_solicitud` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha_solicitud` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_devolucion` date NOT NULL,
   `fecha_prevista` date NOT NULL,
   `estado_prestamo` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
@@ -372,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
 INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
 	(1, 67, NULL, 5, '2018-10-24 01:38:11', '2018-10-23', '2018-10-23', 'TERMINADO'),
 	(2, 67, NULL, 2, '2018-10-24 01:41:03', '0000-00-00', '2018-10-24', 'TERMINADO'),
-	(3, 67, NULL, 2, '2018-10-24 00:00:00', '0000-00-00', '2018-10-24', 'ACTIVO');
+	(3, 67, NULL, 2, '2018-10-24 00:00:00', '0000-00-00', '2018-10-24', 'TERMINADO');
 /*!40000 ALTER TABLE `prestamo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.prestar_equipo
@@ -417,14 +421,14 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   `id_sancion` int(11) NOT NULL AUTO_INCREMENT,
   `id_cliente` int(11) NOT NULL,
   `descripcion` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `fecha_inicio` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `fecha_inicio` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_fin` datetime NOT NULL,
   PRIMARY KEY (`id_sancion`),
   KEY `fk_sancion_cliente1_idx` (`id_cliente`),
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.sancion: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.sancion: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `descripcion`, `fecha_inicio`, `fecha_fin`) VALUES
 	(7, 2, 'USUARIO', '2018-10-22 00:00:00', '2018-10-23 00:00:00'),
@@ -435,20 +439,43 @@ INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `descripcion`, `fecha_
 CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
   `id_solicitud_adecuacion` int(11) NOT NULL AUTO_INCREMENT,
   `id_laboratorio` int(11) NOT NULL,
-  `fecha_solicitud` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `fecha_adecuacion` datetime NOT NULL,
+  `id_cliente` int(11) NOT NULL,
+  `fecha_solicitud` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_adecuacion` date NOT NULL,
   `hora_ingreso_sala` time NOT NULL,
   `hora_salida_sala` time NOT NULL,
-  `puestos_trabajo` int(11) NOT NULL,
-  `estado_solicitud_adecuacion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `puestos_trabajo` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `estado_solicitud_adecuacion` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
   PRIMARY KEY (`id_solicitud_adecuacion`),
   KEY `fk_solicitud_adecuacion_laboratorio1_idx` (`id_laboratorio`),
+  KEY `FK_solicitud_adecuacion_cliente` (`id_cliente`),
+  CONSTRAINT `FK_solicitud_adecuacion_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
   CONSTRAINT `fk_solicitud_adecuacion_laboratorio1` FOREIGN KEY (`id_laboratorio`) REFERENCES `laboratorio` (`id_laboratorio`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Volcando datos para la tabla silub.solicitud_adecuacion: ~1 rows (aproximadamente)
+/*!40000 ALTER TABLE `solicitud_adecuacion` DISABLE KEYS */;
+INSERT IGNORE INTO `solicitud_adecuacion` (`id_solicitud_adecuacion`, `id_laboratorio`, `id_cliente`, `fecha_solicitud`, `fecha_adecuacion`, `hora_ingreso_sala`, `hora_salida_sala`, `puestos_trabajo`, `estado_solicitud_adecuacion`) VALUES
+	(1, 1, 2, '2018-10-26 23:55:19', '2018-10-26', '23:55:21', '23:55:22', '2', 'ACTIVO');
+/*!40000 ALTER TABLE `solicitud_adecuacion` ENABLE KEYS */;
+
+-- Volcando estructura para tabla silub.solicitud_adecuacion_equipo
+CREATE TABLE IF NOT EXISTS `solicitud_adecuacion_equipo` (
+  `id_solicitud_adecuacion` int(11) DEFAULT NULL,
+  `id_tipo_equipo` int(11) DEFAULT NULL,
+  `cantidad` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  KEY `FK_solicitud_adecuacion_equipo_solicitud_adecuacion` (`id_solicitud_adecuacion`),
+  KEY `FK_solicitud_adecuacion_equipo_tipo_equipo` (`id_tipo_equipo`),
+  CONSTRAINT `FK_solicitud_adecuacion_equipo_solicitud_adecuacion` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON UPDATE NO ACTION,
+  CONSTRAINT `FK_solicitud_adecuacion_equipo_tipo_equipo` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.solicitud_adecuacion: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `solicitud_adecuacion` DISABLE KEYS */;
-/*!40000 ALTER TABLE `solicitud_adecuacion` ENABLE KEYS */;
+-- Volcando datos para la tabla silub.solicitud_adecuacion_equipo: ~2 rows (aproximadamente)
+/*!40000 ALTER TABLE `solicitud_adecuacion_equipo` DISABLE KEYS */;
+INSERT IGNORE INTO `solicitud_adecuacion_equipo` (`id_solicitud_adecuacion`, `id_tipo_equipo`, `cantidad`) VALUES
+	(1, 7, '2'),
+	(1, 8, '3');
+/*!40000 ALTER TABLE `solicitud_adecuacion_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.terminar_prestamo
 DELIMITER //
@@ -474,12 +501,13 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   `total` int(11) NOT NULL,
   PRIMARY KEY (`id_tipo_equipo`),
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.tipo_equipo: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(7, 'MULTÍMETRO', 2);
+	(7, 'MULTÍMETRO', 2),
+	(8, 'OSCILOSCOPIO', 3);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.update_equipo
@@ -523,7 +551,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.usuario: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `codigo`, `estado`, `correo_electronico`, `nombre_persona`) VALUES
 	(9, 'william', '123', 'LABORATORIO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA'),
