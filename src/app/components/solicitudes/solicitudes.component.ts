@@ -181,6 +181,14 @@ export class SolicitudesComponent implements OnInit {
     }
 
     guardar() {
+        if (!this.appGlobals.isValidDate(this.solicitud.fecha_adecuacion)) {
+            swal(
+                '',
+                'Error de formato en fecha de adecuación',
+                'success'
+            );
+            return;
+        }
         this.solicitudService.postSolicitud(this.solicitud).subscribe(res => {
             if (res['response']) {
                 swal(

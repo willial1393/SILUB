@@ -80,7 +80,7 @@
                         <div class="usuario-gestor-bodega form-group">
                             <label>Fecha de adecuación </label>
                             <input name="fecha_adecuacion" [(ngModel)]="solicitud.fecha_adecuacion"
-                                   type="text"
+                                   type="date"
                                    class="form-control"
                                    placeholder="Año/Mes/Día" required>
                         </div>
@@ -90,6 +90,7 @@
                             </label>
                             <input name="codigo" [(ngModel)]="solicitud.codigo"
                                    type="text" class="form-control"
+                                   pattern="[0-9]+"
                                    required (keyup)="getCliente()">
                         </div>
                         <div class="usuario-gestor-bodega form-group">
@@ -112,14 +113,16 @@
                             <label>Hora ingreso
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="hora_ingreso_sala" [(ngModel)]="solicitud.hora_ingreso_sala" type="text"
+                            <input name="hora_ingreso_sala" [(ngModel)]="solicitud.hora_ingreso_sala"
+                                   type="time"
                                    class="form-control" required placeholder="hh:mm:ss">
                         </div>
                         <div class="usuario-gestor-bodega form-group">
                             <label>Hora salida
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <input name="hora_salida_sala" [(ngModel)]="solicitud.hora_salida_sala" type="text"
+                            <input name="hora_salida_sala" [(ngModel)]="solicitud.hora_salida_sala"
+                                   type="time"
                                    class="form-control" required placeholder="hh:mm:ss">
                         </div>
                         <div class="usuario-gestor-bodega form-group">
