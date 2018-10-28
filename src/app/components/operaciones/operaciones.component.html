@@ -76,13 +76,13 @@
                             <label for="usuario-codigo">Fecha inicio de operación
                             </label>
                             <input name="fecha_inicio" [(ngModel)]="operacion.fecha_inicio" id="usuario-codigo"
-                                   type="text"
+                                   type="date"
                                    class="form-codigo form-control" readonly>
                         </div>
                         <div class="usuario-gestor-codigo form-group">
                             <label for="usuario-codigo">Fecha fin de operación
                             </label>
-                            <input name="fecha_fin" [(ngModel)]="operacion.fecha_fin" type="text"
+                            <input name="fecha_fin" [(ngModel)]="operacion.fecha_fin" type="date"
                                    class="form-codigo form-control" placeholder="Año/Mes/Día" required>
                         </div>
                         <div class="usuario-gestor-correo form-group">

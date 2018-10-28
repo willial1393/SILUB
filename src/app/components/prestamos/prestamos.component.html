@@ -71,13 +71,13 @@
                             <label>Fecha de prestamo <span
                                     class="equipo-obligatorio">*</span></label>
                             <input name="fecha_solicitud" [(ngModel)]="prestamo.fecha_solicitud"
-                                   type="text" class="form-control" readonly="readonly">
+                                   type="date" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Fecha de devolución<span
                                     class="equipo-obligatorio">*</span></label>
                             <input name="fecha_prevista" [(ngModel)]="prestamo.fecha_prevista"
-                                   type="text" class="form-control" required placeholder="Año/Mes/Día">
+                                   type="date" class="form-control" required placeholder="Año/Mes/Día">
                         </div>
                         <div class="equipo-gestor-correo form-group">
                             <label>Código cliente<span class="equipo-obligatorio">*</span></label>

@@ -5,7 +5,7 @@
                 <div class="cont-tabla border border-secondary rounded mr-4">
                     <div class="usuario-tabla-encabezado ">
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-                            <p class="pl-1">Gestion de Laboratorios</p>
+                            <p class="pl-1">Kardex</p>
                             <div class="ml-3 ">
                                 <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
@@ -67,12 +67,12 @@
                         </div>
                         <div class="usuario-gestor-codigo form-group">
                             <label for="usuario-codigo">Fecha inicio </label>
-                            <input name="nombre" [(ngModel)]="filtro.fecha_inicio" type="text"
+                            <input name="nombre" [(ngModel)]="filtro.fecha_inicio" type="date"
                                    class="form-codigo form-control" placeholder="Año/Mes/Día">
                         </div>
                         <div class="usuario-gestor-codigo form-group">
                             <label for="usuario-codigo">Fecha fin </label>
-                            <input name="nombre" [(ngModel)]="filtro.fecha_fin" type="text"
+                            <input name="nombre" [(ngModel)]="filtro.fecha_fin" type="date"
                                    class="form-codigo form-control" placeholder="Año/Mes/Día">
                         </div>
                         <div class="usuario-boton">
