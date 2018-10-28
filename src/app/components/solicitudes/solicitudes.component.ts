@@ -223,7 +223,7 @@ export class SolicitudesComponent implements OnInit {
         if (res['message'].toString().indexOf('LABORATORIO NO DISPONIBLE PARA LA FECHA') >= 0) {
             swal(
                 '',
-                'El laboratorio no se encuentra disponible apra la fecha indicada',
+                'El laboratorio no se encuentra disponible para la fecha indicada',
                 'error'
             );
             return;
