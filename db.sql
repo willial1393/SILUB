@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
 	(2, 'ESTUDIANTE', '123', 'ACTIVO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
-	(5, 'DOCENTE', '1234', 'SANCIONADO', 'jhon@gmail.com', 'JHON VEGA'),
+	(5, 'DOCENTE', '1234', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA'),
 	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `equipo` (
 -- Volcando datos para la tabla silub.equipo: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(67, 7, 1, '123', 'medición', '2018-10-24 01:41:10', 'ACTIVO'),
+	(67, 7, 1, '123', 'medición', '2018-10-24 01:41:10', 'PRESTADO'),
 	(68, 7, NULL, '1234', 'medición', '2018-10-23 13:31:39', 'ACTIVO'),
 	(70, 8, NULL, '1253', 'dispositivos de medición', '2018-10-27 00:00:03', 'ACTIVO'),
 	(71, 8, NULL, '23452', 'dispositivos de medición', '2018-10-27 00:00:03', 'ACTIVO'),
@@ -276,6 +276,63 @@ WHERE id_equipo = _id_equipo;
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento silub.insert_solicitud_adecuacion
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_solicitud_adecuacion`(
+	IN `_id_laboratorio` INT,
+	IN `_id_cliente` INT,
+	IN `_fecha_adecuacion` DATE,
+	IN `_hora_ingreso_sala` TIME,
+	IN `_hora_salida_sala` TIME,
+	IN `_puestos_trabajo` VARCHAR(50)
+
+)
+BEGIN
+DECLARE sancionado VARCHAR(20);
+DECLARE var_tipo_cliente VARCHAR(20);
+
+SELECT c.estado_cliente INTO sancionado
+FROM cliente c
+WHERE c.id_cliente = _id_cliente;
+
+SELECT c.tipo INTO var_tipo_cliente
+FROM cliente c
+WHERE c.id_cliente = _id_cliente;
+
+IF var_tipo_cliente != 'DOCENTE' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CLIENTE NO ES DOCENTE';
+END IF;
+
+IF sancionado = 'SANCIONADO' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'SANCIONADO';
+END IF;
+
+IF IF((select COUNT(*) from solicitud_adecuacion s 
+			where s.id_laboratorio = _id_laboratorio 
+			and _fecha_adecuacion = s.fecha_adecuacion
+			and _hora_ingreso_sala >= s.hora_ingreso_sala
+			and _hora_ingreso_sala <= s.hora_salida_sala)>0,1,0) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LABORATORIO NO DISPONIBLE PARA LA FECHA';
+END IF;
+
+IF IF((select COUNT(*) from solicitud_adecuacion s 
+			where s.id_laboratorio = _id_laboratorio 
+			and _fecha_adecuacion = s.fecha_adecuacion
+			and _hora_salida_sala >= s.hora_ingreso_sala
+			and _hora_salida_sala <= s.hora_salida_sala)>0,1,0) THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'LABORATORIO NO DISPONIBLE PARA LA FECHA';
+END IF;
+
+INSERT INTO solicitud_adecuacion SET
+id_laboratorio = _id_laboratorio,
+id_cliente = _id_cliente,
+fecha_adecuacion = _fecha_adecuacion,
+hora_ingreso_sala = _hora_ingreso_sala,
+hora_salida_sala = _hora_salida_sala,
+puestos_trabajo = _puestos_trabajo;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento silub.insert_varios_equipos
 DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_varios_equipos`(
@@ -369,14 +426,15 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_equipo1` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.prestamo: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.prestamo: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
 INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
 	(1, 67, NULL, 5, '2018-10-24 01:38:11', '2018-10-23', '2018-10-23', 'TERMINADO'),
 	(2, 67, NULL, 2, '2018-10-24 01:41:03', '0000-00-00', '2018-10-24', 'TERMINADO'),
-	(3, 67, NULL, 2, '2018-10-24 00:00:00', '0000-00-00', '2018-10-24', 'TERMINADO');
+	(3, 67, NULL, 2, '2018-10-24 00:00:00', '0000-00-00', '2018-10-24', 'TERMINADO'),
+	(4, 67, 1, 2, '2018-10-27 00:00:00', '2018-10-27', '2018-10-27', 'ACTIVO');
 /*!40000 ALTER TABLE `prestamo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.prestar_equipo
@@ -390,6 +448,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `prestar_equipo`(
 
 
 
+,
+	IN `_id_solicitud_adecuacion` INT
 )
 BEGIN
 DECLARE sancionado VARCHAR(20);
@@ -409,6 +469,7 @@ estado_equipo = 'PRESTADO'
 WHERE id_equipo = _id_equipo;
 INSERT INTO prestamo SET
 id_equipo = _id_equipo,
+id_solicitud_adecuacion = _id_solicitud_adecuacion,
 id_cliente = _id_cliente,
 fecha_solicitud = _fecha_solicitud,
 fecha_devolucion = _fecha_devolucion,
@@ -426,13 +487,12 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   PRIMARY KEY (`id_sancion`),
   KEY `fk_sancion_cliente1_idx` (`id_cliente`),
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.sancion: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.sancion: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `descripcion`, `fecha_inicio`, `fecha_fin`) VALUES
-	(7, 2, 'USUARIO', '2018-10-22 00:00:00', '2018-10-23 00:00:00'),
-	(8, 5, 'USUARIO', '2018-10-22 00:00:00', '2018-12-11 00:00:00');
+	(7, 2, 'USUARIO', '2018-10-22 00:00:00', '2018-10-23 00:00:00');
 /*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion
@@ -451,12 +511,15 @@ CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
   KEY `FK_solicitud_adecuacion_cliente` (`id_cliente`),
   CONSTRAINT `FK_solicitud_adecuacion_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`),
   CONSTRAINT `fk_solicitud_adecuacion_laboratorio1` FOREIGN KEY (`id_laboratorio`) REFERENCES `laboratorio` (`id_laboratorio`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.solicitud_adecuacion: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.solicitud_adecuacion: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `solicitud_adecuacion` DISABLE KEYS */;
 INSERT IGNORE INTO `solicitud_adecuacion` (`id_solicitud_adecuacion`, `id_laboratorio`, `id_cliente`, `fecha_solicitud`, `fecha_adecuacion`, `hora_ingreso_sala`, `hora_salida_sala`, `puestos_trabajo`, `estado_solicitud_adecuacion`) VALUES
-	(1, 1, 2, '2018-10-26 23:55:19', '2018-10-26', '23:55:21', '23:55:22', '2', 'ACTIVO');
+	(1, 1, 2, '2018-10-26 23:55:19', '2018-10-26', '23:55:21', '23:55:22', '2', 'ACTIVO'),
+	(11, 3, 5, '2018-10-28 02:54:26', '2018-01-01', '01:00:00', '01:00:00', '3', 'ACTIVO'),
+	(12, 3, 5, '2018-10-28 02:55:10', '2018-01-02', '01:00:00', '02:30:00', '4', 'ACTIVO'),
+	(14, 3, 5, '2018-10-28 03:15:00', '2018-01-02', '03:00:00', '03:00:00', '3', 'ACTIVO');
 /*!40000 ALTER TABLE `solicitud_adecuacion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion_equipo
@@ -466,15 +529,15 @@ CREATE TABLE IF NOT EXISTS `solicitud_adecuacion_equipo` (
   `cantidad` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   KEY `FK_solicitud_adecuacion_equipo_solicitud_adecuacion` (`id_solicitud_adecuacion`),
   KEY `FK_solicitud_adecuacion_equipo_tipo_equipo` (`id_tipo_equipo`),
-  CONSTRAINT `FK_solicitud_adecuacion_equipo_solicitud_adecuacion` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON UPDATE NO ACTION,
-  CONSTRAINT `FK_solicitud_adecuacion_equipo_tipo_equipo` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`)
+  CONSTRAINT `FK_solicitud_adecuacion_equipo_solicitud_adecuacion` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_solicitud_adecuacion_equipo_tipo_equipo` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.solicitud_adecuacion_equipo: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `solicitud_adecuacion_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `solicitud_adecuacion_equipo` (`id_solicitud_adecuacion`, `id_tipo_equipo`, `cantidad`) VALUES
-	(1, 7, '2'),
-	(1, 8, '3');
+	(1, 8, '3'),
+	(1, 7, '1');
 /*!40000 ALTER TABLE `solicitud_adecuacion_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.terminar_prestamo
@@ -531,6 +594,33 @@ WHERE id_equipo = _id_equipo;
 IF _estado = 'DE_BAJA' THEN
 	UPDATE tipo_equipo set
 	total = total-1;
+END IF;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento silub.update_equipo_solicitud
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipo_solicitud`(
+	IN `_id_tipo_equipo` INT,
+	IN `_id_solicitud_adecuacion` INT,
+	IN `_cantidad` VARCHAR(50)
+)
+BEGIN
+IF _cantidad <= '0' THEN
+	DELETE FROM solicitud_adecuacion_equipo 
+	WHERE id_tipo_equipo = _id_tipo_equipo
+	AND id_solicitud_adecuacion = _id_solicitud_adecuacion;
+ELSE
+	IF IF((select count(*) from solicitud_adecuacion_equipo s where s.id_solicitud_adecuacion = _id_solicitud_adecuacion and s.id_tipo_equipo = _id_tipo_equipo)=0,1,0)   THEN
+		INSERT INTO solicitud_adecuacion_equipo SET
+		id_tipo_equipo = _id_tipo_equipo,
+		id_solicitud_adecuacion = _id_solicitud_adecuacion,
+		cantidad = _cantidad;
+	ELSE
+		UPDATE solicitud_adecuacion_equipo SET cantidad = _cantidad 
+		WHERE id_tipo_equipo = _id_tipo_equipo
+		AND id_solicitud_adecuacion = _id_solicitud_adecuacion;
+	END IF;
 END IF;
 END//
 DELIMITER ;
