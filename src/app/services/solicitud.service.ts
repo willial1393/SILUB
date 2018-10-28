@@ -18,19 +18,19 @@ export class SolicitudService {
         return this.http.get(this.urlGetSolicitudes, {headers: this.headers});
     }
 
-    getSolicitudEquipos(id_solicitud) {
-        return this.http.get(this.urlGetSolicitudes + 'equipos/' + id_solicitud, {headers: this.headers});
+    getDetalleSolicitud(id_solicitud) {
+        return this.http.get(this.urlGetSolicitudes + 'detalle/' + id_solicitud, {headers: this.headers});
     }
 
-    getSolicitudCodigo(codigo) {
-        return this.http.get(this.urlGetSolicitudes + codigo, {headers: this.headers});
+    postSolicitud(solicitud) {
+        return this.http.post(this.urlGetSolicitudes, solicitud, {headers: this.headers});
     }
 
-    postSolicitud(cliente) {
-        return this.http.post(this.urlGetSolicitudes, cliente, {headers: this.headers});
+    postDetalleSolicitud(detalle) {
+        return this.http.post(this.urlGetSolicitudes + 'detalle/', detalle, {headers: this.headers});
     }
 
-    putSolicitud(cliente) {
-        return this.http.put(this.urlGetSolicitudes, cliente, {headers: this.headers});
+    deleteSolicitud(solicitud) {
+        return this.http.post(this.urlGetSolicitudes + 'delete/', solicitud, {headers: this.headers});
     }
 }

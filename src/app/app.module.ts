@@ -23,7 +23,6 @@ import {SancionesComponent} from './components/sanciones/sanciones.component';
 import {KardexComponent} from './components/kardex/kardex.component';
 import {OperacionesComponent} from './components/operaciones/operaciones.component';
 import {TiposEquiposComponent} from './components/tipos-equipos/tipos-equipos.component';
-import {DialogoSolicitudEquiposComponent} from './components/dialogo-solicitud-equipos/dialogo-solicitud-equipos.component';
 
 const appRutes: Routes = [
     {path: '', component: LoginComponent},
@@ -57,8 +56,7 @@ const appRutes: Routes = [
         SancionesComponent,
         KardexComponent,
         OperacionesComponent,
-        TiposEquiposComponent,
-        DialogoSolicitudEquiposComponent
+        TiposEquiposComponent
     ],
     imports: [
         BrowserModule,

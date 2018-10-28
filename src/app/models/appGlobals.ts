@@ -5,6 +5,7 @@ import {DatePipe} from '@angular/common';
 
 @Injectable()
 export class AppGlobals {
+    id_solicitud;
     delvelopment = true;
     // token = '123456789';
     base_url = 'http://localhost/SILUB/api/public/';

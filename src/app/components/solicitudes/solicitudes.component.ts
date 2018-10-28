@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppGlobals} from '../../models/appGlobals';
-import {PrestamoService} from '../../services/prestamo.service';
 import {ClienteService} from '../../services/cliente.service';
 import {EquipoService} from '../../services/equipo.service';
 import swal from 'sweetalert2';
@@ -15,24 +14,22 @@ import {LaboratorioService} from '../../services/laboratorio.service';
 })
 export class SolicitudesComponent implements OnInit {
 
-    equipo: any;
     cliente: any;
-    prestamo: any;
-    prestamos: any;
     solicitudes: any;
     solicitud: any;
     laboratorios: any;
-    solicitudEquipo: any;
-    solicitudEquipos: any;
-    solicitudDescripcion: any;
+    detalleSolicitud: any;
+    equiposSolicitud: any;
+    tiposEquipos: any;
+    tipoEquipo: any;
+    equipoSolicitud: any;
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
-                private prestamoService: PrestamoService,
                 private clienteService: ClienteService,
-                private equipoService: EquipoService,
                 private solicitudService: SolicitudService,
-                private laboratorioService: LaboratorioService) {
+                private laboratorioService: LaboratorioService,
+                private equipoService: EquipoService) {
         this.updateTable();
     }
 
@@ -62,7 +59,7 @@ export class SolicitudesComponent implements OnInit {
             nombre: '',
             laboratorio: ''
         };
-        this.solicitudDescripcion = {
+        this.detalleSolicitud = {
             id_solicitud_adecuacion: '0',
             id_laboratorio: '',
             id_cliente: '',
@@ -79,22 +76,7 @@ export class SolicitudesComponent implements OnInit {
             nombre: '',
             laboratorio: ''
         };
-        this.equipo = {
-            id_equipo: '',
-            id_tipo_equipo: '',
-            id_estante: '',
-            serial: '',
-            descripcion: '',
-            fecha_registro: '',
-            estado_equipo: '',
-            tipo: '',
-            id_bodega: '',
-            armario: '',
-            estante: '',
-            estado: '',
-            descripcion_bodega: ''
-        };
-        this.solicitudEquipo = {
+        this.equipoSolicitud = {
             id_solicitud_adecuacion: '',
             id_tipo_equipo: '',
             cantidad: '',
@@ -116,81 +98,93 @@ export class SolicitudesComponent implements OnInit {
     }
 
     getCliente() {
-        this.clienteService.getClienteCodigo(this.prestamo.codigo).subscribe(res => {
+        this.clienteService.getClienteCodigo(this.solicitud.codigo).subscribe(res => {
             this.cliente = res['result'];
-            this.prestamo.id_cliente = this.cliente.id_cliente;
-            this.prestamo.tipo = this.cliente.tipo;
-            this.prestamo.estado_cliente = this.cliente.estado_cliente;
-            this.prestamo.correo_electronico = this.cliente.correo_electronico;
-            this.prestamo.nombre = this.cliente.nombre;
+            this.solicitud.id_cliente = this.cliente.id_cliente;
+            this.solicitud.tipo = this.cliente.tipo;
+            this.solicitud.estado_cliente = this.cliente.estado_cliente;
+            this.solicitud.correo_electronico = this.cliente.correo_electronico;
+            this.solicitud.nombre = this.cliente.nombre;
         });
     }
 
-    getEquipo() {
-        this.equipoService.getEquipoSerial(this.prestamo.serial).subscribe(res => {
-            this.equipo = res['result'];
-            this.prestamo.id_equipo = this.equipo.id_equipo;
-            this.prestamo.descripcion = this.equipo.descripcion;
-            this.prestamo.estado_equipo = this.equipo.estado;
-            this.prestamo.tipo_equipo = this.equipo.tipo;
-            this.prestamo.armario = this.equipo.armario;
-            this.prestamo.estante = this.equipo.estante;
-            this.prestamo.descripcion_bodega = this.equipo.descripcion_bodega;
+    verDetalleSolicitud(solicitud) {
+        this.detalleSolicitud = solicitud;
+        this.solicitudService.getDetalleSolicitud(solicitud.id_solicitud_adecuacion).subscribe(res => {
+            this.equiposSolicitud = res['result'];
         });
+        this.equipoService.getTipoEquipos().subscribe(res => {
+            this.tiposEquipos = res['result'];
+        });
+        this.tiposEquipos = {
+            id_tipo_equipo: '',
+            tipo: '',
+            total: ''
+        };
     }
 
-    verSolicitud(solicitud) {
-        this.solicitudService.getSolicitudEquipos(solicitud.id_solicitud_adecuacion).subscribe(res => {
-            this.solicitudEquipos = res['result'];
-        });
-        this.solicitudDescripcion = solicitud;
+    updateDetalle() {
+        for (const detalle of this.equiposSolicitud) {
+            this.solicitudService.postDetalleSolicitud(detalle).subscribe(res => {
+                if (!res['response']) {
+                    this.showValidation(res);
+                    return;
+                }
+            });
+        }
     }
 
-    openDialog() {
-        swal(
-            'dialog',
-            '',
-            'success'
-        );
+    addEquipoSolicitud() {
+        this.equipoSolicitud.cantidad = '1';
+        this.equipoSolicitud.id_solicitud_adecuacion = this.detalleSolicitud.id_solicitud_adecuacion;
+        this.solicitudService.postDetalleSolicitud(this.equipoSolicitud).subscribe(res => {
+            if (res['response']) {
+                this.solicitudService.getDetalleSolicitud(this.detalleSolicitud.id_solicitud_adecuacion).subscribe(res2 => {
+                    if (res2['response']) {
+                        this.equiposSolicitud = res2['result'];
+                    } else {
+                        this.showValidation(res2);
+                    }
+                });
+            } else {
+                this.showValidation(res);
+            }
+        });
     }
 
     eliminarSolicitud(solicitud) {
-        swal(
-            'OK',
-            '',
-            'success'
-        );
-    }
-
-    editarSolicitudEquipo(solicitudEquipo) {
-        swal(
-            'OK',
-            '',
-            'success'
-        );
-    }
-
-    eliminarSolicitudEquipo(solicitudEquipo) {
-        swal(
-            'OK',
-            '',
-            'success'
-        );
+        swal({
+            title: '¿Eliminar solicitud?',
+            text: '',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.value) {
+                this.solicitudService.deleteSolicitud(solicitud).subscribe(res => {
+                    if (res['response']) {
+                        swal(
+                            'OK',
+                            '',
+                            'success'
+                        );
+                        this.updateTable();
+                    } else {
+                        this.showValidation(res);
+                    }
+                });
+            }
+        });
     }
 
     guardar() {
-        if (!this.appGlobals.isValidDate(this.prestamo.fecha_prevista)) {
-            swal(
-                'Formato de fecha invalido',
-                '',
-                'error'
-            );
-            return;
-        }
-        this.prestamoService.postPrestamo(this.prestamo).subscribe(res => {
+        this.solicitudService.postSolicitud(this.solicitud).subscribe(res => {
             if (res['response']) {
                 swal(
-                    'OK',
+                    'Solicitud registrada',
                     '',
                     'success'
                 );
@@ -199,33 +193,6 @@ export class SolicitudesComponent implements OnInit {
                 this.showValidation(res);
             }
         });
-    }
-
-    terminarSolicitud(prestamo) {
-        if (prestamo.estado_prestamo === 'ACTIVO') {
-            swal({
-                title: '¿Terminar prestamo del equipo con serial ' + prestamo.serial + '?',
-                showCancelButton: true,
-                confirmButtonText: 'Aceptar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.value) {
-                    prestamo.fecha_devolucion = this.appGlobals.getCurrentDate();
-                    this.prestamoService.terminarPrestamo(prestamo).subscribe(res => {
-                        if (res['response']) {
-                            swal(
-                                'OK',
-                                '',
-                                'success'
-                            );
-                            this.updateTable();
-                        } else {
-                            this.showValidation(res);
-                        }
-                    });
-                }
-            });
-        }
     }
 
     showValidation(res) {
@@ -237,10 +204,18 @@ export class SolicitudesComponent implements OnInit {
             );
             return;
         }
-        if (res['message'].toString().indexOf('EQUIPO NO ACTIVO') >= 0) {
+        if (res['message'].toString().indexOf('CLIENTE NO ES DOCENTE') >= 0) {
             swal(
                 '',
-                'El equipo no esta disponible en este momento',
+                'El cliente no es un docente',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('LABORATORIO NO DISPONIBLE PARA LA FECHA') >= 0) {
+            swal(
+                '',
+                'El laboratorio no se encuentra disponible apra la fecha indicada',
                 'error'
             );
             return;

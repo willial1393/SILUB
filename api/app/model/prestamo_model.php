@@ -8,7 +8,6 @@ use App\Lib\Response;
 class PrestamosModel
 {
     private $db;
-    private $table = 'prestamo';
     private $response;
 
     public function __CONSTRUCT()
@@ -43,8 +42,9 @@ AND s.id_bodega = b.id_bodega");
         $fecha_solicitud = $data['fecha_solicitud'];
         $fecha_devolucion = $data['fecha_devolucion'];
         $fecha_prevista = $data['fecha_prevista'];
+        $id_solicitud_adecuacion = $data['id_solicitud_adecuacion'];
 
-        $query = "call prestar_equipo(:id_cliente, :id_equipo, :fecha_solicitud, :fecha_devolucion, :fecha_prevista)";
+        $query = "call prestar_equipo(:id_cliente, :id_equipo, :fecha_solicitud, :fecha_devolucion, :fecha_prevista, :id_solicitud_adecuacion)";
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_cliente", $id_cliente);
@@ -52,6 +52,7 @@ AND s.id_bodega = b.id_bodega");
             $stmt->bindParam("fecha_solicitud", $fecha_solicitud);
             $stmt->bindParam("fecha_devolucion", $fecha_devolucion);
             $stmt->bindParam("fecha_prevista", $fecha_prevista);
+            $stmt->bindParam("id_solicitud_adecuacion", $id_solicitud_adecuacion);
             $stmt->execute();
             $this->response->setResponse(true, 'Successfully Insertion');
             $this->response->result = "";

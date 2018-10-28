@@ -54,14 +54,12 @@
                                 <td>{{solicitud.estado_solicitud_adecuacion}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
-                                           width="25" height="25"
-                                           (click)="verSolicitud(solicitud)">
+                                           width="25" height="25" data-toggle="modal"
+                                           data-target="#modalEquiposSolicitud"
+                                           (click)="verDetalleSolicitud(solicitud)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
                                            width="25" height="25"
                                            (click)="eliminarSolicitud(solicitud)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/ok.png"
-                                           width="25" height="25"
-                                           (click)="terminarSolicitud(solicitud)">
                                 </td>
                             </tr>
                             </tbody>
@@ -73,49 +71,59 @@
                 <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
                     <div class="usuarios-bodega">
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Fecha solicitud
-                            </label>
-                            <input name="fecha_solicitud" [(ngModel)]="solicitud.fecha_solicitud" type="text"
+                            <label>Fecha solicitud </label>
+                            <input name="fecha_solicitud" [(ngModel)]="solicitud.fecha_solicitud"
+                                   type="text"
                                    class="form-control"
                                    readonly>
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Código cliente
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <input name="codigo" [(ngModel)]="solicitud.codigo" type="text" class="form-control">
+                            <label>Fecha de adecuación </label>
+                            <input name="fecha_adecuacion" [(ngModel)]="solicitud.fecha_adecuacion"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="Año/Mes/Día" required>
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Nombre cliente
+                            <label>Código cliente
+                                <span class="usuario-obligatorio">*</span>
                             </label>
+                            <input name="codigo" [(ngModel)]="solicitud.codigo"
+                                   type="text" class="form-control"
+                                   required (keyup)="getCliente()">
+                        </div>
+                        <div class="usuario-gestor-bodega form-group">
+                            <label>Nombre cliente </label>
                             <input name="nombre" [(ngModel)]="solicitud.nombre" type="text" class="form-control"
-                                   readonly>
+                                   readonly required>
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Laboratorio
+                            <label>Laboratorio
                                 <span class="usuario-obligatorio">*</span>
                             </label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                                <option *ngFor="let laboratorio of laboratorios">{{laboratorio.nombre}}
+                            <select name="id_laboratorio" class="form-control" id="exampleFormControlSelect1"
+                                    [(ngModel)]="solicitud.id_laboratorio" required>
+                                <option *ngFor="let laboratorio of laboratorios"
+                                        [ngValue]="laboratorio.id_laboratorio">{{laboratorio.nombre}}
                                 </option>
                             </select>
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Hora ingreso
+                            <label>Hora ingreso
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="hora_ingreso_sala" [(ngModel)]="solicitud.hora_ingreso_sala" type="text"
-                                   class="form-control">
+                                   class="form-control" required placeholder="hh:mm:ss">
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Hora salida
+                            <label>Hora salida
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="hora_salida_sala" [(ngModel)]="solicitud.hora_salida_sala" type="text"
-                                   class="form-control">
+                                   class="form-control" required placeholder="hh:mm:ss">
                         </div>
                         <div class="usuario-gestor-bodega form-group">
-                            <label for="usuario-bodega">Puestos de trabajo
+                            <label>Puestos de trabajo
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="puestos_trabajo" [(ngModel)]="solicitud.puestos_trabajo" id="equipo-cantidad"
@@ -130,103 +138,11 @@
                 </form>
             </div>
         </div>
-
-        <div class="row m-0 p-3 w-100">
-            <div class="usuarios-tabla col-md-8 p-0">
-                <div class="cont-tabla border border-secondary rounded mr-md-4 mr-xs-0">
-                    <div class="usuario-tabla-encabezado ">
-                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
-                            <p class="pl-1">Detalle de la solicitud</p>
-                        </div>
-                    </div>
-                    <div class="usuario-tabla-des m-2">
-                        <div *ngIf="solicitudDescripcion.id_solicitud_adecuacion!=='0'; then thenBlock else elseBlock"></div>
-                        <ng-template #thenBlock>
-                            <div class="tabla-2-columnas-left">
-                                <b>Fecha solicitud: </b> {{solicitudDescripcion.fecha_solicitud}}
-                                <br>
-                                <b>Hora de ingreso: </b>{{solicitudDescripcion.hora_ingreso_sala}}
-                                <br>
-                                <b>Puestos de trabajo: </b> {{solicitudDescripcion.puestos_trabajo}}
-                            </div>
-                            <div class="tabla-2-columnas-right">
-                                <b>Fecha adecuación: </b> {{solicitudDescripcion.fecha_adecuacion}}
-                                <br>
-                                <b>Hora de salida: </b> {{solicitudDescripcion.hora_salida_sala}}
-                            </div>
-                        </ng-template>
-                        <ng-template #elseBlock>Seleccione la solicitud que desee en la tabla anterior</ng-template>
-
-                    </div>
-                    <div class="usuario-tabla-t">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">Tipo equipo</th>
-                                <th scope="col">Cantidad solicitud</th>
-                                <th scope="col">Disponibles</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let solicitudEquipo of solicitudEquipos">
-                                <td>{{solicitudEquipo.tipo}}</td>
-                                <td>{{solicitudEquipo.cantidad}}</td>
-                                <td>{{solicitudEquipo.total}}</td>
-                                <td>
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
-                                           width="25" height="25" data-toggle="modal"
-                                           data-target="#modalEquiposSolicitud">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
-                                           width="25" height="25"
-                                           (click)="editarSolicitudEquipo(solicitudEquipo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
-                                           width="25" height="25"
-                                           (click)="eliminarSolicitudEquipo(solicitudEquipo)">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="usuario border border-secondary col-md-4 rounded pb-3">
-                <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
-                    <div class="usuarios-gestor">
-                        <div class="usuario-gestor-estante form-group">
-                            <label>Serial equipo
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <input name="serial" [(ngModel)]="equipo.serial" type="text"
-                                   class="form-control" required>
-                        </div>
-                        <div class="usuario-gestor-estante form-group">
-                            <label>Tipo equipo
-                                <span class="usuario-obligatorio">*</span>
-                            </label>
-                            <input name="tipo_equipo" [(ngModel)]="equipo.tipo_equipo" id="usuario-bodega" type="text"
-                                   class="form-control" readonly>
-                        </div>
-                        <div class="usuario-gestor-nombre form-group">
-                            <label>Descripción equipo
-                            </label>
-                            <textarea name="descripcion" [(ngModel)]="equipo.descripcion" class="form-control" rows="5"
-                                      id="textarea" readonly></textarea>
-                        </div>
-                        <div class="usuario-boton">
-                            <button type="submit" class="btn btn-dark btn-guardar"> Agregar
-                                equipo
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
     </section>
 </div>
 
 <div class="modal fade" id="modalEquiposSolicitud">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Equipos de la solicitud</h4>
@@ -234,10 +150,70 @@
                 </button>
             </div>
             <div class="modal-body">
-                <app-dialogo-solicitud-equipos></app-dialogo-solicitud-equipos>
+                <div class="usuario-tabla-encabezado ">
+                    <form ngNativeValidate (submit)="addEquipoSolicitud()" class="form-inline" style="margin-top: 10px">
+                        <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
+                            <p class="pl-1">Detalle de la solicitud &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label>Tipo de equipo</label>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <select name="id_tipo_equipo" class="form-control" required
+                                    [(ngModel)]="equipoSolicitud.id_tipo_equipo">
+                                <option *ngFor="let tipo of tiposEquipos" [ngValue]="tipo.id_tipo_equipo">
+                                    {{tipo.tipo}}
+                                </option>
+                            </select>
+                        </div>
+                        <input type="submit" class="boton-accion" type=image src="../../../assets/imagenes/more.png"
+                               width="28" height="28">
+                    </form>
+                </div>
+
+                <div>
+                    <div *ngIf="detalleSolicitud.id_solicitud_adecuacion!=='0'; then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                        <div class="tabla-2-columnas-left">
+                            <b>Fecha solicitud: </b> {{detalleSolicitud.fecha_solicitud}}
+                            <br>
+                            <b>Hora de ingreso: </b>{{detalleSolicitud.hora_ingreso_sala}}
+                            <br>
+                            <b>Puestos de trabajo: </b> {{detalleSolicitud.puestos_trabajo}}
+                        </div>
+                        <div class="tabla-2-columnas-right">
+                            <b>Fecha adecuación: </b> {{detalleSolicitud.fecha_adecuacion}}
+                            <br>
+                            <b>Hora de salida: </b> {{detalleSolicitud.hora_salida_sala}}
+                        </div>
+                    </ng-template>
+                    <ng-template #elseBlock>Seleccione la solicitud que desee en la tabla anterior</ng-template>
+                </div>
+                <div class="usuario-tabla-t">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Tipo equipo</th>
+                            <th scope="col">Disponibles</th>
+                            <th scope="col">Cantidad solicitud</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let equipo of equiposSolicitud">
+                            <td>{{equipo.tipo}}</td>
+                            <td>{{equipo.total}}</td>
+                            <td>
+                                <input name="cantidad" [(ngModel)]="equipo.cantidad"
+                                       class="form-control" type="number" min="0" max="1000" step="1" required>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark btn-guardar" data-dismiss="modal">
+                <button type="button" class="btn btn-dark btn-guardar" data-dismiss="modal"
+                        (click)="updateDetalle()">
                     Aceptar
                 </button>
             </div>

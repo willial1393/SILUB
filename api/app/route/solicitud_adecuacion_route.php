@@ -23,6 +23,16 @@ $app->group('/solicitudes_adecuacion/', function () {
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
             );
     });
+    $this->get('detalle/{id}', function ($req, $res, $args) {
+        $um = new SolicitudAdecuacionModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode($um->getDetalle($args['id']), JSON_UNESCAPED_UNICODE)
+            );
+    });
+
     $this->get('equipos/{id}', function ($req, $res, $args) {
         $um = new SolicitudAdecuacionModel();
 
@@ -46,14 +56,28 @@ $app->group('/solicitudes_adecuacion/', function () {
                     , JSON_UNESCAPED_UNICODE)
             );
     });
-
-    $this->put('', function ($req, $res) {
+    $this->post('detalle/', function ($req, $res) {
         $um = new SolicitudAdecuacionModel();
+
         return $res
             ->getBody()
             ->write(
                 json_encode(
-                    $um->update(
+                    $um->updateDetalle(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
+
+    $this->post('delete/', function ($req, $res) {
+        $um = new SolicitudAdecuacionModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->deleteSolicitud(
                         $req->getParsedBody()
                     )
                     , JSON_UNESCAPED_UNICODE)
