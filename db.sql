@@ -5,6 +5,7 @@
 -- HeidiSQL Versión:             9.5.0.5196
 -- --------------------------------------------------------
 
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 -- Volcando datos para la tabla silub.cliente: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
-	(2, 'ESTUDIANTE', '123', 'ACTIVO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
+	(2, 'ESTUDIANTE', '123', 'SANCIONADO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
 	(5, 'DOCENTE', '1234', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA'),
 	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
@@ -141,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `equipo` (
 -- Volcando datos para la tabla silub.equipo: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'ACTIVO'),
+	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'MANTENIMIENTO'),
 	(74, 7, NULL, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO'),
 	(75, 7, 14, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
@@ -471,10 +472,12 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   PRIMARY KEY (`id_operacion`),
   KEY `fk_mantenimiento_equipo_idx` (`id_equipo`),
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.operacion: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
+INSERT IGNORE INTO `operacion` (`id_operacion`, `id_equipo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `tipo`) VALUES
+	(11, 73, 'qwe', '2018-10-29 02:30:54', '2018-01-01 00:00:00', 'MANTENIMIENTO');
 /*!40000 ALTER TABLE `operacion` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.prestamo
@@ -544,19 +547,41 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `sancion` (
   `id_sancion` int(11) NOT NULL AUTO_INCREMENT,
   `id_cliente` int(11) NOT NULL,
-  `descripcion` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
   `fecha_inicio` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `fecha_fin` datetime NOT NULL,
+  `fecha_fin` date NOT NULL,
   PRIMARY KEY (`id_sancion`),
   KEY `fk_sancion_cliente1_idx` (`id_cliente`),
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.sancion: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
-INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `descripcion`, `fecha_inicio`, `fecha_fin`) VALUES
-	(7, 2, 'USUARIO', '2018-10-22 00:00:00', '2018-10-23 00:00:00');
+INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
+	(10, 2, '2018-10-29 02:28:39', '2018-10-02');
 /*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
+
+-- Volcando estructura para procedimiento silub.sancionar_cliente
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sancionar_cliente`(
+	IN `_id_cliente` INT
+,
+	IN `_fecha_fin` DATE
+
+)
+BEGIN
+IF (select c.estado_cliente from cliente c where c.id_cliente = _id_cliente) = 'SANCIONADO' THEN
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'CLIENTE SANCIONADO';
+END IF;
+
+INSERT INTO sancion set
+id_cliente = _id_cliente,
+fecha_fin = _fecha_fin;
+
+UPDATE cliente set
+estado_cliente = 'SANCIONADO'
+WHERE id_cliente = _id_cliente;
+END//
+DELIMITER ;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion
 CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
