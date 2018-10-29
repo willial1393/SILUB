@@ -33,7 +33,7 @@ class UsuariosModel
     public function get($value)
     {
         try {
-            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id_usuario = ?");
+            $stm = $this->db->prepare("SELECT * FROM $this->table WHERE nombre_usuario = ?");
             $stm->execute(array($value));
 
             $this->response->setResponse(true);

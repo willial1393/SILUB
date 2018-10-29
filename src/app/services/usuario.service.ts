@@ -18,8 +18,8 @@ export class UsuarioService {
         return this.http.get(this.urlGetUsers, {headers: this.headers});
     }
 
-    getUsuarioCodigo(codigo) {
-        return this.http.get(this.urlGetUsers + codigo, {headers: this.headers});
+    getUsuarioByNombre(nombre) {
+        return this.http.get(this.urlGetUsers + nombre, {headers: this.headers});
     }
 
     postUsuario(usuario) {

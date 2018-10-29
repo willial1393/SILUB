@@ -9,9 +9,11 @@ import swal from 'sweetalert2';
 export class AppComponent {
     title = 'SILUB';
     login = '';
+    tipo = '';
 
     constructor() {
         this.login = sessionStorage.getItem('login');
+        this.tipo = sessionStorage.getItem('tipo');
     }
 
     cerrarSesion() {

@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {LoginService} from '../../services/login.service';
 import {AppGlobals} from '../../models/appGlobals';
+import {UsuarioService} from '../../services/usuario.service';
 
 @Component({
     selector: 'app-login',
@@ -11,11 +12,15 @@ import {AppGlobals} from '../../models/appGlobals';
 })
 export class LoginComponent implements OnInit {
 
-    usuario: any = {};
+    usuario: any = {
+        usuario: '',
+        clave: ''
+    };
 
     constructor(private route: Router,
                 private loginService: LoginService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private usuarioService: UsuarioService) {
 
     }
 
@@ -26,20 +31,26 @@ export class LoginComponent implements OnInit {
                 return;
             }
             if (res['result']) {
-                sessionStorage.setItem('login', this.usuario.usuario);
-                this.usuario.login = sessionStorage.getItem('login');
-                const toast = swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
+                this.usuarioService.getUsuarioByNombre(this.usuario.usuario).subscribe(res2 => {
+                    if (res2['response']) {
+                        sessionStorage.setItem('login', this.usuario.usuario);
+                        sessionStorage.setItem('tipo', res2['result'].tipo);
+                        const toast = swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                        toast({
+                            type: 'success',
+                            title: 'Bienvenido ' + this.usuario.usuario
+                        });
+                        this.route.navigate(['/home']);
+                        location.reload();
+                    } else {
+                        this.appGlobals.errorUPS(res2);
+                    }
                 });
-                toast({
-                    type: 'success',
-                    title: 'Bienvenido ' + this.usuario.usuario
-                });
-                this.route.navigate(['/home']);
-                location.reload();
             } else {
                 swal(
                     '',

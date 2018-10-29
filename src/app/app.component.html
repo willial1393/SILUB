@@ -12,9 +12,12 @@
                     Sistema
                 </a>
                 <ul aria-labelledby="dropdown1" class="dropdown-menu">
-                    <li class="dropdown-item" routerLink="/usuarios">
-                        <a> Usuarios </a>
-                    </li>
+                    <div *ngIf="tipo==='DEPARTAMENTO'; then thenBlockUsuarios"></div>
+                    <ng-template #thenBlockUsuarios>
+                        <li class="dropdown-item" routerLink="/usuarios">
+                            <a> Usuarios </a>
+                        </li>
+                    </ng-template>
                     <li class="dropdown-item" routerLink="/home">
                         <a> Configuración </a>
                     </li>
@@ -45,18 +48,24 @@
                     Gestión de equipos
                 </a>
                 <ul aria-labelledby="dropdown1" class="dropdown-menu">
-                    <li class="dropdown-item" routerLink="/equipos">
-                        <a> Equipos </a>
-                    </li>
+                    <div *ngIf="tipo==='LABORATORIO' || tipo==='DEPARTAMENTO'; then thenBlockEquipos"></div>
+                    <ng-template #thenBlockEquipos>
+                        <li class="dropdown-item" routerLink="/equipos">
+                            <a> Equipos </a>
+                        </li>
+                    </ng-template>
                     <li class="dropdown-item" routerLink="/prestamos">
                         <a> Prestamos </a>
                     </li>
                     <li class="dropdown-item" routerLink="/solicitudes">
                         <a> Solicitudes </a>
                     </li>
-                    <li class="dropdown-item" routerLink="/sanciones">
-                        <a> Sanciones </a>
-                    </li>
+                    <div *ngIf="tipo==='LABORATORIO' || tipo==='DEPARTAMENTO'; then thenBlockSanciones"></div>
+                    <ng-template #thenBlockSanciones>
+                        <li class="dropdown-item" routerLink="/sanciones">
+                            <a> Sanciones </a>
+                        </li>
+                    </ng-template>
                     <li class="dropdown-item" routerLink="/kardex">
                         <a> Kardex </a>
                     </li>
