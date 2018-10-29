@@ -5,6 +5,8 @@ import {EquipoService} from '../../services/equipo.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {BodegaService} from '../../services/bodega.service';
 import {KardexService} from '../../services/kardex.service';
+import {ArmarioService} from '../../services/armario.service';
+import {EstanteService} from '../../services/estante.service';
 
 @Component({
     selector: 'app-equipos',
@@ -20,14 +22,18 @@ export class EquiposComponent implements OnInit {
     tipo_equipo: any;
     isEdit: any = false;
     bodegas: any;
+    armarios: any;
     estantes: any;
+    equipoSelected: any;
 
     constructor(private route: Router,
                 private equipoService: EquipoService,
-                private  bodegaService: BodegaService,
-                private  kardexService: KardexService,
+                private bodegaService: BodegaService,
+                private armarioService: ArmarioService,
+                private estanteService: EstanteService,
+                private kardexService: KardexService,
                 private appGlobals: AppGlobals) {
-        this.updateTable();
+        this.updateEquipos();
     }
 
     nuevoTipoEquipo() {
@@ -44,23 +50,27 @@ export class EquiposComponent implements OnInit {
             if (result.value) {
                 this.equipoService.postTipoEquipo(this.tipo_equipo).subscribe(res => {
                     if (res['response']) {
-                        this.updateTable();
+                        this.updateEquipos();
                         swal(
                             'OK',
                             '',
                             'success'
                         );
                     } else {
-                        this.appGlobals.errorUPS(res);
+                        this.showValidation(res);
                     }
                 });
             }
         });
     }
 
-    updateTable() {
+    updateEquipos() {
         this.equipoService.getEquipos().subscribe(res => {
-            this.equipos = res['result'];
+            if (res['response']) {
+                this.equipos = res['result'];
+            } else {
+                this.showValidation(res);
+            }
         });
         this.equipoService.getTipoEquipos().subscribe(res => {
             this.tipo_equipos = res['result'];
@@ -74,19 +84,112 @@ export class EquiposComponent implements OnInit {
             descripcion: '',
             fecha_registro: this.appGlobals.getCurrentDate(),
             estado_equipo: 'INACTIVO',
-            cantidad: '1',
-            tipo: '0'
+            tipo: '',
+            total: '',
+            id_armario: '',
+            nombre: '',
+            nombre_estante: '',
+            id_bodega: '',
+            nombre_armario: '',
+            nombre_bodega: ''
         };
+
+        this.equipoSelected = {
+            id_equipo: '',
+            id_tipo_equipo: '',
+            id_estante: '',
+            serial: '',
+            descripcion: '',
+            fecha_registro: '',
+            estado_equipo: '',
+            tipo: '',
+            total: '',
+            id_armario: '',
+            nombre: '',
+            nombre_estante: '',
+            id_bodega: '',
+            nombre_armario: '',
+            nombre_bodega: ''
+        };
+
         this.kardex = {
             id_tipo_equipo: '',
             tipo: '',
             cantidad: '',
         };
+
         this.isEdit = false;
     }
 
-    getEstantes(bodega) {
-        this.bodegaService.getEstante();
+    updateBodegas(equipo) {
+        if (equipo !== null) {
+            this.equipoService.getEquipoID(equipo.id_equipo).subscribe(res => {
+                if (res['response']) {
+                    this.equipoSelected = res['result'];
+                    this.bodegaService.getBodegas().subscribe(res2 => {
+                        if (res2['response']) {
+                            this.bodegas = res2['result'];
+                            this.updateArmarios();
+                        } else {
+                            this.showValidation(res2);
+                        }
+                    });
+                } else {
+                    this.showValidation(res);
+                }
+            });
+        }
+    }
+
+    updateArmarios() {
+        this.bodegaService.getArmariosBodega(this.equipoSelected.id_bodega).subscribe(res => {
+            if (res['response']) {
+                this.armarios = res['result'];
+                this.updateEstantes();
+            } else {
+                this.showValidation(res);
+            }
+        });
+    }
+
+    updateEstantes() {
+        this.armarioService.getEstantesArmario(this.equipoSelected.id_armario).subscribe(res => {
+            if (res['response']) {
+                this.estantes = res['result'];
+            } else {
+                this.showValidation(res);
+            }
+        });
+    }
+
+    eliminarUbicacion() {
+        this.equipoService.deleteUbicacion(this.equipoSelected).subscribe(res => {
+            if (res['response']) {
+                swal(
+                    'Ubicación Eliminada!',
+                    '',
+                    'success'
+                );
+                this.updateEquipos();
+            } else {
+                this.showValidation(res);
+            }
+        });
+    }
+
+    guardarUbicacion() {
+        this.equipoService.putEquipo(this.equipoSelected).subscribe(res => {
+            if (res['response']) {
+                swal(
+                    'Ubicación registrada',
+                    '',
+                    'success'
+                );
+                this.updateEquipos();
+            } else {
+                this.showValidation(res);
+            }
+        });
     }
 
     ngOnInit() {
@@ -105,7 +208,7 @@ export class EquiposComponent implements OnInit {
             type: 'info',
             confirmButtonColor: '#999999'
         });
-        this.updateTable();
+        this.updateEquipos();
     }
 
     editarEquipo(equipo) {
@@ -134,7 +237,7 @@ export class EquiposComponent implements OnInit {
                                 '',
                                 'success'
                             );
-                            this.updateTable();
+                            this.updateEquipos();
                         } else {
                             this.appGlobals.errorUPS(res);
                         }
@@ -164,7 +267,7 @@ export class EquiposComponent implements OnInit {
                                 '',
                                 'success'
                             );
-                            this.updateTable();
+                            this.updateEquipos();
                         } else {
                             this.appGlobals.errorUPS(res);
                         }
@@ -183,7 +286,7 @@ export class EquiposComponent implements OnInit {
                         'Información del Equipo modificada',
                         'success'
                     );
-                    this.updateTable();
+                    this.updateEquipos();
                 } else {
                     this.showValidation(res);
                 }
@@ -196,7 +299,7 @@ export class EquiposComponent implements OnInit {
                         'Equipo registrado correctamente',
                         'success'
                     );
-                    this.updateTable();
+                    this.updateEquipos();
                 } else {
                     this.appGlobals.errorUPS(res);
                 }
@@ -225,7 +328,7 @@ export class EquiposComponent implements OnInit {
                             '',
                             'success'
                         ).then((x) => {
-                            this.updateTable();
+                            this.updateEquipos();
                         });
                     } else {
                         equipo.estado_equipo = 'INACTIVO';

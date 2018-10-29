@@ -50,20 +50,14 @@ WHERE s.id_cliente = c.id_cliente and id_sancion = ?");
     public function insert($data)
     {
 
-        $id_sancion = $data['id_sancion'];
         $id_cliente = $data['id_cliente'];
-        $descripcion = $data['descripcion'];
-        $fecha_inicio = $data['fecha_inicio'];
         $fecha_fin = $data['fecha_fin'];
 
-        $query = "INSERT INTO $this->table (id_sancion, id_cliente, descripcion, fecha_inicio, fecha_fin) VALUES (:id_sancion, :id_cliente, :descripcion, :fecha_inicio, :fecha_fin)";
+        $query = "call sancionar_cliente(:id_cliente, :fecha_fin)";
 
         try {
             $stmt = $this->db->prepare($query);
-            $stmt->bindParam("id_sancion", $id_sancion);
             $stmt->bindParam("id_cliente", $id_cliente);
-            $stmt->bindParam("descripcion", $descripcion);
-            $stmt->bindParam("fecha_inicio", $fecha_inicio);
             $stmt->bindParam("fecha_fin", $fecha_fin);
             $stmt->execute();
             $this->response->setResponse(true, 'Successfully Insertion');
@@ -96,16 +90,14 @@ WHERE s.id_cliente = c.id_cliente and id_sancion = ?");
     {
         $id_sancion = $data['id_sancion'];
         $id_cliente = $data['id_cliente'];
-        $descripcion = $data['descripcion'];
         $fecha_inicio = $data['fecha_inicio'];
         $fecha_fin = $data['fecha_fin'];
 
-        $query = "UPDATE $this->table SET id_sancion = :id_sancion, id_cliente = :id_cliente, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin WHERE id_sancion = :id_sancion";
+        $query = "UPDATE $this->table SET id_sancion = :id_sancion, id_cliente = :id_cliente, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin WHERE id_sancion = :id_sancion";
         try {
             $stmt = $this->db->prepare($query);
             $stmt->bindParam("id_sancion", $id_sancion);
             $stmt->bindParam("id_cliente", $id_cliente);
-            $stmt->bindParam("descripcion", $descripcion);
             $stmt->bindParam("fecha_inicio", $fecha_inicio);
             $stmt->bindParam("fecha_fin", $fecha_fin);
             $stmt->execute();

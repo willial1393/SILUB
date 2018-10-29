@@ -47,6 +47,19 @@ $app->group('/equipos/', function () {
                     , JSON_UNESCAPED_UNICODE)
             );
     });
+    $this->post('delete_ubicacion/', function ($req, $res) {
+        $um = new EquiposModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->deleteUbicacion(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
 
     $this->post('delete/', function ($req, $res) {
         $um = new EquiposModel();

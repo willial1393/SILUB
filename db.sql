@@ -24,13 +24,14 @@ CREATE TABLE IF NOT EXISTS `armario` (
   PRIMARY KEY (`id_armario`),
   KEY `FK_armario_bodega` (`id_bodega`),
   CONSTRAINT `FK_armario_bodega` FOREIGN KEY (`id_bodega`) REFERENCES `bodega` (`id_bodega`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.armario: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.armario: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `armario` DISABLE KEYS */;
 INSERT IGNORE INTO `armario` (`id_armario`, `id_bodega`, `nombre`) VALUES
-	(1, 6, 2),
-	(3, 10, 3);
+	(3, 10, 3),
+	(5, 6, 1),
+	(6, 6, 2);
 /*!40000 ALTER TABLE `armario` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.bodega
@@ -41,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `bodega` (
   UNIQUE KEY `descripcion_UNIQUE` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.bodega: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.bodega: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `bodega` DISABLE KEYS */;
 INSERT IGNORE INTO `bodega` (`id_bodega`, `nombre`) VALUES
 	(6, 'ELECTRÓNICA'),
@@ -135,12 +136,14 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   KEY `fk_equipo_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_equipo_estante1` FOREIGN KEY (`id_estante`) REFERENCES `estante` (`id_estante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=ujis;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(73, 7, 6, '123', '123', '2018-10-29 00:13:56', 'ACTIVO');
+	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'ACTIVO'),
+	(74, 7, NULL, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO'),
+	(75, 7, 14, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -151,14 +154,42 @@ CREATE TABLE IF NOT EXISTS `estante` (
   PRIMARY KEY (`id_estante`),
   KEY `FK_estante_armario` (`id_armario`),
   CONSTRAINT `FK_estante_armario` FOREIGN KEY (`id_armario`) REFERENCES `armario` (`id_armario`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.estante: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.estante: ~6 rows (aproximadamente)
 /*!40000 ALTER TABLE `estante` DISABLE KEYS */;
 INSERT IGNORE INTO `estante` (`id_estante`, `id_armario`, `nombre`) VALUES
 	(6, 3, '2'),
-	(9, 3, '3');
+	(11, 5, '1'),
+	(12, 5, '2'),
+	(13, 5, '3'),
+	(14, 6, '1'),
+	(15, 3, '3');
 /*!40000 ALTER TABLE `estante` ENABLE KEYS */;
+
+-- Volcando estructura para procedimiento silub.get_equipo
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_equipo`(
+	IN `_id_equipo` INT
+
+)
+BEGIN
+IF (SELECT e.id_estante FROM equipo e WHERE e.id_equipo = _id_equipo) IS NULL THEN 
+	SELECT e.*,t.tipo,t.total
+	FROM equipo e, tipo_equipo t
+	WHERE e.id_tipo_equipo = t.id_tipo_equipo
+	AND e.id_equipo = _id_equipo;
+ELSE
+	SELECT e.*,t.tipo,t.total,s.*,s.nombre as nombre_estante,a.*,a.nombre as nombre_armario,b.*,b.nombre as nombre_bodega
+	FROM equipo e, tipo_equipo t, estante s, armario a, bodega b
+	WHERE e.id_tipo_equipo = t.id_tipo_equipo
+	AND e.id_equipo = _id_equipo
+	AND e.id_estante = s.id_estante
+	AND s.id_armario = a.id_armario
+	AND a.id_bodega = b.id_bodega;
+END IF;
+END//
+DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.get_full_equipo
 DELIMITER //
@@ -167,26 +198,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `get_full_equipo`(
 
 
 
+
+
 )
 BEGIN
-DECLARE idestante INT;
-SELECT e.id_estante INTO idestante
-FROM equipo e
-WHERE e.serial = _serial;
-IF idestante IS NOT NULL THEN
-	SELECT e.*,t.tipo,s.*,b.descripcion as descripcion_bodega 
-	FROM equipo e, tipo_equipo t, estante s, bodega b 
-	WHERE e.id_tipo_equipo = t.id_tipo_equipo 
-	AND e.serial = _serial 
-	AND e.estado_equipo != 'ELIMINADO'
-	AND e.id_estante = s.id_estante
-	AND s.id_bodega = b.id_bodega;
-ELSE
-	SELECT e.*,t.tipo
+IF (SELECT e.id_estante FROM equipo e WHERE e.serial = _serial) IS NULL THEN 
+	SELECT e.*,t.tipo,t.total
 	FROM equipo e, tipo_equipo t
-	WHERE e.id_tipo_equipo = t.id_tipo_equipo 
-	AND e.serial = _serial 
-	AND e.estado_equipo != 'ELIMINADO';
+	WHERE e.id_tipo_equipo = t.id_tipo_equipo
+	AND e.serial = _serial;
+ELSE
+	SELECT e.*,t.tipo,t.total,s.*,s.nombre as nombre_estante,a.*,a.nombre as nombre_armario,b.*,b.nombre as nombre_bodega
+	FROM equipo e, tipo_equipo t, estante s, armario a, bodega b
+	WHERE e.id_tipo_equipo = t.id_tipo_equipo
+	AND e.serial = _serial
+	AND e.id_estante = s.id_estante
+	AND s.id_armario = a.id_armario
+	AND a.id_bodega = b.id_bodega;
 END IF;
 END//
 DELIMITER ;
@@ -404,14 +432,15 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
 INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
 	(33, 7, '2018-10-23 13:31:39', 'ENTRADA', 3, 3),
 	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2),
-	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3);
+	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3),
+	(36, 7, '2018-10-29 01:20:18', 'ENTRADA', 2, 4);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -442,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   PRIMARY KEY (`id_operacion`),
   KEY `fk_mantenimiento_equipo_idx` (`id_equipo`),
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
@@ -603,7 +632,7 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
 -- Volcando datos para la tabla silub.tipo_equipo: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(7, 'MULTÍMETRO', 2),
+	(7, 'MULTÍMETRO', 4),
 	(8, 'OSCILOSCOPIO', 3);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 

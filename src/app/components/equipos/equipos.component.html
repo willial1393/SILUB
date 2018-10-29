@@ -64,7 +64,8 @@
                                            (click)="editarEquipo(equipo)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/store.png"
                                            width="25"
-                                           height="25" data-toggle="modal" data-target="#exampleModal">
+                                           height="25" data-toggle="modal" data-target="#exampleModal"
+                                           (click)="updateBodegas(equipo)">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/down.png"
                                            width="25"
                                            height="25"
@@ -149,29 +150,33 @@
             </div>
             <div class="modal-body">
                 <label>Bodega<span class="equipo-obligatorio">*</span></label>
-                <select class="form-control" required>
-                    <option *ngFor="let bodega of bodegas">
-                        {{bodega.descripcion}}
+                <select name="id_bodega" [(ngModel)]="equipoSelected.id_bodega"
+                        class="form-control" required (click)="updateArmarios()">
+                    <option *ngFor="let bodega of bodegas" value="{{bodega.id_bodega}}">
+                        {{bodega.nombre}}
                     </option>
                 </select>
                 <label>Armario<span class="equipo-obligatorio">*</span></label>
-                <select name="tipo" [(ngModel)]="equipo.tipo"
-                        class="form-control" required>
-                    <option *ngFor="let tipo of tipo_equipos" value="{{tipo.tipo}}">
-                        {{tipo.tipo}}
+                <select name="id_armario" [(ngModel)]="equipoSelected.id_armario"
+                        class="form-control" required (click)="updateEstantes()">
+                    <option *ngFor="let armario of armarios" value="{{armario.id_armario}}">
+                        {{armario.nombre}}
                     </option>
                 </select>
                 <label>Estante<span class="equipo-obligatorio">*</span></label>
-                <select name="tipo" [(ngModel)]="equipo.tipo"
-                        class="form-control" required>
-                    <option *ngFor="let tipo of tipo_equipos" value="{{tipo.tipo}}">
-                        {{tipo.tipo}}
+                <select name="id_estante" [(ngModel)]="equipoSelected.id_estante" class="form-control" required>
+                    <option *ngFor="let estante of estantes" value="{{estante.id_estante}}">
+                        {{estante.nombre}}
                     </option>
                 </select>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Eliminar ubicación</button>
-                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="eliminarUbicacion()">
+                    Eliminar ubicación
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="guardarUbicacion()">
+                    Guardar
+                </button>
             </div>
         </div>
     </div>

@@ -112,10 +112,7 @@ export class ClientesComponent implements OnInit {
                 const date = Date.parse(dateInput);
                 if (!isNaN(date)) {
                     this.sancion = {
-                        id_sancion: '',
                         id_cliente: cliente.id_cliente,
-                        descripcion: 'USUARIO',
-                        fecha_inicio: this.appGlobals.getCurrentDate(),
                         fecha_fin: this.appGlobals.formatDate(date)
                     };
                     this.sancionService.postSancion(this.sancion).subscribe(res => {
@@ -129,11 +126,12 @@ export class ClientesComponent implements OnInit {
                                         'success'
                                     );
                                 } else {
-                                    this.appGlobals.errorUPS(res2);
+                                    cliente.estado_cliente = 'ACTIVO';
+                                    this.showValidation(res2);
                                 }
                             });
                         } else {
-                            this.appGlobals.errorUPS(res);
+                            this.showValidation(res);
                         }
                     });
                 } else {
@@ -192,6 +190,14 @@ export class ClientesComponent implements OnInit {
             swal(
                 '',
                 'Correo electronico ya se encuentra registrado',
+                'error'
+            );
+            return;
+        }
+        if (res['message'].toString().indexOf('CLIENTE SANCIONADO') >= 0) {
+            swal(
+                '',
+                'El cliente ya se encuentra sancionado',
                 'error'
             );
             return;

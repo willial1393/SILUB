@@ -39,7 +39,7 @@
                             <tr>
                                 <th scope="col">Codigo</th>
                                 <th scope="col">Nombre</th>
-                                <th scope="col">Estado</th>
+                                <th scope="col">Estado Sanción</th>
                                 <th scope="col">Fecha inicio</th>
                                 <th scope="col">Fecha fin</th>
                                 <th scope="col">Acciones</th>
@@ -49,7 +49,7 @@
                             <tr *ngFor="let sancion of sanciones">
                                 <td>{{sancion.codigo}}</td>
                                 <td>{{sancion.nombre}}</td>
-                                <td>{{sancion.estado}}</td>
+                                <td>{{sancion.estado==='ACTIVO'?'ACTIVA':sancion.estado}}</td>
                                 <td>{{sancion.fecha_inicio | date: 'yyyy/MM/dd'}}</td>
                                 <td>{{sancion.fecha_fin | date: 'yyyy/MM/dd'}}</td>
                                 <td>

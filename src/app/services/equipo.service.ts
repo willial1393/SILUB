@@ -23,6 +23,10 @@ export class EquipoService {
         return this.http.get(this.urlGetEquipos + 'serial/' + serial, {headers: this.headers});
     }
 
+    getEquipoID(id) {
+        return this.http.get(this.urlGetEquipos + id, {headers: this.headers});
+    }
+
 
     getTipoEquipos() {
         return this.http.get(this.urlGetTipoEquipos, {headers: this.headers});
@@ -38,6 +42,10 @@ export class EquipoService {
 
     deleteEquipo(equipo) {
         return this.http.post(this.urlGetEquipos + 'delete/', equipo, {headers: this.headers});
+    }
+
+    deleteUbicacion(equipo) {
+        return this.http.post(this.urlGetEquipos + 'delete_ubicacion/', equipo, {headers: this.headers});
     }
 
     darDeBajaEquipo(equipo) {

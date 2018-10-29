@@ -35,9 +35,16 @@ export class OperacionesComponent implements OnInit {
             id_estante: '',
             serial: '',
             descripcion: '',
-            fecha_registro: '',
-            estado_equipo: '',
-            tipo: ''
+            fecha_registro: this.appGlobals.getCurrentDate(),
+            estado_equipo: 'INACTIVO',
+            tipo: '',
+            total: '',
+            id_armario: '',
+            nombre: '',
+            nombre_estante: '',
+            id_bodega: '',
+            nombre_armario: '',
+            nombre_bodega: ''
         };
         this.operacion = {
             id_operacion: '',
@@ -60,8 +67,12 @@ export class OperacionesComponent implements OnInit {
 
     getEquipo() {
         this.equipoService.getEquipoSerial(this.operacion.serial).subscribe(res => {
-            this.equipo = res['result'];
-            this.operacion.id_equipo = this.equipo.id_equipo;
+            if (res['response']) {
+                this.equipo = res['result'];
+                this.operacion.id_equipo = this.equipo.id_equipo;
+            } else {
+                this.showValidation(res);
+            }
         });
     }
 
