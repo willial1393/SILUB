@@ -5,7 +5,6 @@
 -- HeidiSQL Versión:             9.5.0.5196
 -- --------------------------------------------------------
 
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -67,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
 	(2, 'ESTUDIANTE', '123', 'SANCIONADO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
-	(5, 'DOCENTE', '1234', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA'),
+	(5, 'DOCENTE', '1234', 'SANCIONADO', 'jhon@gmail.com', 'JHON VEGA'),
 	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 
@@ -552,12 +551,13 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   PRIMARY KEY (`id_sancion`),
   KEY `fk_sancion_cliente1_idx` (`id_cliente`),
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.sancion: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
-	(10, 2, '2018-10-29 02:28:39', '2018-10-02');
+	(10, 2, '2018-10-29 02:28:39', '2018-10-02'),
+	(11, 5, '2018-10-29 08:49:56', '2018-11-02');
 /*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.sancionar_cliente
@@ -717,7 +717,7 @@ DELIMITER ;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nombre_usuario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `clave` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `clave` text COLLATE utf8_unicode_ci NOT NULL,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `codigo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `estado` varchar(45) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'ACTIVO',
@@ -727,13 +727,14 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `nombre_usuario_UNIQUE` (`nombre_usuario`),
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.usuario: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `codigo`, `estado`, `correo_electronico`, `nombre_persona`) VALUES
 	(9, 'william', '123', 'LABORATORIO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA'),
-	(12, 'jhon', '123', 'LABORATORIO', '12344', 'INACTIVO', 'willial1393@gmail.com', 'LEYDINZOON');
+	(12, 'leydinzoon', '123', 'DEPARTAMENTO', '12344', 'ACTIVO', 'willial1393@gmail.com', 'LEYDINZOON'),
+	(14, 'jhon', '123', 'AUXILIAR', '123455', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub._login
@@ -741,6 +742,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `_login`(
 	IN `_usuario` VARCHAR(50),
 	IN `_clave` VARCHAR(50)
+
 
 )
 BEGIN
