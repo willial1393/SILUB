@@ -63,6 +63,36 @@ export class UsuariosComponent implements OnInit {
         this.usuario = usuario;
     }
 
+    inhabilitarUsuario(usuario) {
+        if (usuario.estado === 'ACTIVO') {
+            usuario.estado = 'INACTIVO';
+            this.usuarioService.putUsuario(usuario).subscribe(res => {
+                if (res['response']) {
+                    swal(
+                        'Usuario inhabilitado!',
+                        '',
+                        'success'
+                    );
+                } else {
+                    this.showValidation(res);
+                }
+            });
+        } else {
+            usuario.estado = 'ACTIVO';
+            this.usuarioService.putUsuario(usuario).subscribe(res => {
+                if (res['response']) {
+                    swal(
+                        'Usuario habilitado!',
+                        '',
+                        'success'
+                    );
+                } else {
+                    this.showValidation(res);
+                }
+            });
+        }
+    }
+
     eliminarUsuario(usuario) {
         swal(
             {
