@@ -1,22 +1,23 @@
 <?php
-use App\Model\EstantesModel;
+
+use App\Model\EstanteModel;
 
 $app->group('/estantes/', function () {
 
     $this->get('', function ($req, $res, $args) {
-        $um = new EstantesModel();
+        $um = new EstanteModel();
 
         $res->write(
             json_encode($um->getAll(), JSON_UNESCAPED_UNICODE)
         );
 
-        return $res;            
+        return $res;
     });
 
     $this->get('{id}', function ($req, $res, $args) {
-        $um = new EstantesModel();
+        $um = new EstanteModel();
 
-        return $res            
+        return $res
             ->getBody()
             ->write(
                 json_encode($um->get($args['id']), JSON_UNESCAPED_UNICODE)
@@ -24,9 +25,9 @@ $app->group('/estantes/', function () {
     });
 
     $this->post('', function ($req, $res) {
-        $um = new EstantesModel();
+        $um = new EstanteModel();
 
-        return $res           
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -37,10 +38,23 @@ $app->group('/estantes/', function () {
             );
     });
 
+    $this->post('delete/', function ($req, $res) {
+        $um = new EstanteModel();
+
+        return $res
+            ->getBody()
+            ->write(
+                json_encode(
+                    $um->delete(
+                        $req->getParsedBody()
+                    )
+                    , JSON_UNESCAPED_UNICODE)
+            );
+    });
 
     $this->put('', function ($req, $res) {
-        $um = new EstantesModel();
-        return $res            
+        $um = new EstanteModel();
+        return $res
             ->getBody()
             ->write(
                 json_encode(
@@ -49,5 +63,5 @@ $app->group('/estantes/', function () {
                     )
                     , JSON_UNESCAPED_UNICODE)
             );
-    });  
+    });
 });

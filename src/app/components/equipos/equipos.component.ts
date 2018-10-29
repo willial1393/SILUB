@@ -19,6 +19,8 @@ export class EquiposComponent implements OnInit {
     tipo_equipos: any;
     tipo_equipo: any;
     isEdit: any = false;
+    bodegas: any;
+    estantes: any;
 
     constructor(private route: Router,
                 private equipoService: EquipoService,
@@ -63,6 +65,7 @@ export class EquiposComponent implements OnInit {
         this.equipoService.getTipoEquipos().subscribe(res => {
             this.tipo_equipos = res['result'];
         });
+
         this.equipo = {
             id_equipo: '',
             id_tipo_equipo: '',
@@ -80,6 +83,10 @@ export class EquiposComponent implements OnInit {
             cantidad: '',
         };
         this.isEdit = false;
+    }
+
+    getEstantes(bodega) {
+        this.bodegaService.getEstante();
     }
 
     ngOnInit() {
@@ -105,66 +112,6 @@ export class EquiposComponent implements OnInit {
         this.isEdit = true;
         this.equipo = equipo;
         this.equipo.cantidad = 1;
-    }
-
-    estanteEquipo(equipo) {
-        swal.mixin({
-            input: 'text',
-            confirmButtonText: 'Next &rarr;',
-            showCancelButton: true,
-            progressSteps: ['1', '2', '3']
-        }).queue([
-            {
-                title: 'Bodega',
-                input: 'select',
-                inputOptions: {
-                    'LABORATORIOS DE FÍSICA': 'LABORATORIOS DE FÍSICA'
-                },
-                inputPlaceholder: '- Seleccionar -',
-                showCancelButton: true,
-                preConfirm: (res) => {
-                    console.log(res);
-                }
-            },
-            {
-                title: 'Armario',
-                input: 'select',
-                inputOptions: {
-                    '1': '1',
-                    '2': '2',
-                    '3': '3',
-                    '4': '4'
-                },
-                inputPlaceholder: '- Seleccionar -',
-                showCancelButton: true,
-                preConfirm: (res) => {
-                    console.log(res);
-                }
-            },
-            {
-                title: 'Estante',
-                input: 'select',
-                inputOptions: {
-                    '1': '1',
-                    '2': '2',
-                    '3': '3',
-                    '4': '4'
-                },
-                inputPlaceholder: '- Seleccionar -',
-                showCancelButton: true,
-                preConfirm: (res) => {
-                    console.log(res);
-                }
-            }
-        ]).then((result) => {
-            if (result.value) {
-                swal({
-                    title: 'OK',
-                    text: '',
-                    type: 'success'
-                });
-            }
-        });
     }
 
     eliminarEquipo(equipo) {
