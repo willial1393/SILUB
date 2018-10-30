@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `armario` (
   PRIMARY KEY (`id_armario`),
   KEY `FK_armario_bodega` (`id_bodega`),
   CONSTRAINT `FK_armario_bodega` FOREIGN KEY (`id_bodega`) REFERENCES `bodega` (`id_bodega`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.armario: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `armario` DISABLE KEYS */;
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `equipo` (
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
 	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'MANTENIMIENTO'),
-	(74, 7, NULL, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO'),
+	(74, 7, NULL, NULL, 'khi', '2018-10-29 01:20:18', 'DADO DE BAJA'),
 	(75, 7, 14, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
@@ -432,15 +432,16 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~5 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
 INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
 	(33, 7, '2018-10-23 13:31:39', 'ENTRADA', 3, 3),
 	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2),
 	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3),
-	(36, 7, '2018-10-29 01:20:18', 'ENTRADA', 2, 4);
+	(36, 7, '2018-10-29 01:20:18', 'ENTRADA', 2, 4),
+	(37, 7, '2018-10-29 18:49:52', 'SALIDA', 1, 3);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -496,7 +497,7 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_equipo1` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Volcando datos para la tabla silub.prestamo: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
@@ -542,6 +543,16 @@ fecha_prevista = _fecha_prevista;
 END//
 DELIMITER ;
 
+-- Volcando estructura para evento silub.revisar_sanciones_clientes
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-29 19:07:55' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
+UPDATE cliente, sancion
+SET cliente.estado_cliente = 'ACTIVO'
+WHERE cliente.id_cliente = sancion.id_cliente
+AND sancion.fecha_fin < CURDATE();
+END//
+DELIMITER ;
+
 -- Volcando estructura para tabla silub.sancion
 CREATE TABLE IF NOT EXISTS `sancion` (
   `id_sancion` int(11) NOT NULL AUTO_INCREMENT,
@@ -553,7 +564,7 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.sancion: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.sancion: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
 	(10, 2, '2018-10-29 02:28:39', '2018-10-02'),
@@ -654,10 +665,10 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.tipo_equipo: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.tipo_equipo: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(7, 'MULTÍMETRO', 4),
+	(7, 'MULTÍMETRO', 3),
 	(8, 'OSCILOSCOPIO', 3);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 
@@ -727,13 +738,13 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `nombre_usuario_UNIQUE` (`nombre_usuario`),
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla silub.usuario: ~3 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
 INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `codigo`, `estado`, `correo_electronico`, `nombre_persona`) VALUES
-	(9, 'william', '123', 'LABORATORIO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA'),
-	(12, 'leydinzoon', '123', 'DEPARTAMENTO', '12344', 'ACTIVO', 'willial1393@gmail.com', 'LEYDINZOON'),
+	(9, 'william', '123', 'DEPARTAMENTO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA'),
+	(12, 'leydinzoon', '123', 'LABORATORIO', '12344', 'ACTIVO', 'willial1393@gmail.com', 'LEYDINZOON'),
 	(14, 'jhon', '123', 'AUXILIAR', '123455', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
