@@ -26,7 +26,6 @@ div label span {
     background: #4D4D4D;
     border-color: #4D4D4D;
     font-size: 1.15rem;
-    width: 178px;
     height: 35px;
     margin-top: 10px;
     border-radius: 5px;
@@ -85,10 +84,14 @@ div label span {
 
 .btn-guardar {
     text-align: center;
-    width: 130px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .contenedor-imagen-lupa {
     border-left: 1px solid #6C757D;
+}
+
+.equipo-boton
+{
+    text-align: center;
 }

@@ -36,8 +36,8 @@ div label span
 .btn-guardar
 {
   font-size: 1.19rem;
-  width: 160px;
-  margin-top: 20px;
+  height: 35px;
+  margin-top: 10px;
 }
 
 .cont-tabla
@@ -59,6 +59,7 @@ div label span
   padding: 0px;
   margin: 0px;
   height: 40px;
+  text-align: center;
 }
 
 
@@ -101,5 +102,17 @@ div label span
   margin: 0px;
   padding: 0px 0px 0px 8px;
   float: left;
+}
 
+.btn-usuario {
+  color: white;
+  width: 130px;
+  background: #4D4D4D;
+  border-color: #4D4D4D;
+  font-size: 1.15rem;
+  border-radius: 5px;
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-decoration: none;
+  border: none;
 }
