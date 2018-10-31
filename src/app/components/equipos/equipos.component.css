@@ -26,22 +26,6 @@ div label span
   text-align: center;
 }
 
-.btn-usuario
-{
-  color: white;
-  background: #4D4D4D;
-  border-color: #4D4D4D;
-  font-size: 1.15rem;
-  width: 178px;
-  height: 35px;
-  margin-top: 10px;
-  border-radius: 5px;
-  font-family: "Open Sans", Helvetica, Arial, sans-serif;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  text-decoration: none;
-  border: none;
-}
-
 .cont-tabla
 {
   height: 100%;

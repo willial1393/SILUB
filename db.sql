@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.1.36-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         10.1.32-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win32
 -- HeidiSQL Versión:             9.5.0.5196
 -- --------------------------------------------------------
@@ -545,7 +545,7 @@ DELIMITER ;
 
 -- Volcando estructura para evento silub.revisar_sanciones_clientes
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-29 19:07:55' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
+CREATE DEFINER=`root`@`localhost` EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-31 08:24:45' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
 UPDATE cliente, sancion
 SET cliente.estado_cliente = 'ACTIVO'
 WHERE cliente.id_cliente = sancion.id_cliente

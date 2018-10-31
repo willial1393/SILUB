@@ -33,7 +33,7 @@ div label span
   text-align: center;
 }
 
-.btn
+.btn-guardar
 {
   font-size: 1.19rem;
   width: 160px;
@@ -47,4 +47,59 @@ div label span
 
 .boton-accion{
   margin-left: 0.2em;
+}
+
+.contenedor-imagen-lupa
+{
+  border-left: 1px solid #6C757D;
+}
+
+.usuario-tabla-encabezado-contenedor
+{
+  padding: 0px;
+  margin: 0px;
+  height: 40px;
+}
+
+
+.cont-tabla-search-input
+{
+  border: none;
+  background: none;
+}
+
+.cont-tabla-search-input:focus
+{
+  background: none;
+  border: none;
+
+}
+
+.cont-tabla-search
+{
+  float: right;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 5px;
+}
+
+.usuario-tabla-encabezado
+{
+  margin: 0px;
+  padding: 4px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+  border-color: #6C757D;
+  background: #f2f2f2;
+  overflow: hidden;
+}
+
+.encabezado
+{
+  font-size: 1.2rem;
+  width: 200px;
+  margin: 0px;
+  padding: 0px 0px 0px 8px;
+  float: left;
+
 }
