@@ -8,7 +8,7 @@ $app->group('/prestamos/', function () {
         $um = new PrestamosModel();
 
         $res->write(
-            json_encode($um->getAll(), JSON_UNESCAPED_UNICODE)
+            json_encode($um->get(), JSON_UNESCAPED_UNICODE)
         );
 
         return $res;

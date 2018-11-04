@@ -5,6 +5,7 @@ import {PrestamoService} from '../../services/prestamo.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {ClienteService} from '../../services/cliente.service';
 import {EquipoService} from '../../services/equipo.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
     selector: 'app-prestamos',
@@ -39,27 +40,27 @@ export class PrestamosComponent implements OnInit {
             fecha_registro: '',
             estado_equipo: '',
             id_prestamo: '',
-            id_solicitud_adecuacion: '',
+            id_solicitud_adecuacion: null,
             id_cliente: '',
             fecha_solicitud: this.appGlobals.getCurrentDate(),
             fecha_devolucion: '',
             fecha_prevista: '',
             estado_prestamo: '',
             tipo: '',
+            tipo_cliente: '',
             codigo: '',
             estado_cliente: '',
             correo_electronico: '',
             nombre: '',
+            nombre_cliente: '',
             tipo_equipo: '',
             total: '',
+            id_armario: '',
+            nombre_estante: '',
             id_bodega: '',
-            armario: '',
-            estante: '',
-            estado: '',
-            descripcion_estante: '',
-            estado_estante: '',
-            descripcion_bodega: '',
-            estado_bodega: ''
+            nombre_armario: '',
+            nombre_bodega: ''
+
         };
         this.cliente = {
             id_cliente: '',
@@ -78,11 +79,13 @@ export class PrestamosComponent implements OnInit {
             fecha_registro: '',
             estado_equipo: '',
             tipo: '',
+            total: '',
+            id_armario: '',
+            nombre: '',
+            nombre_estante: '',
             id_bodega: '',
-            armario: '',
-            estante: '',
-            estado: '',
-            descripcion_bodega: ''
+            nombre_armario: '',
+            nombre_bodega: ''
         };
     }
 
@@ -107,41 +110,73 @@ export class PrestamosComponent implements OnInit {
         this.equipoService.getEquipoSerial(this.prestamo.serial).subscribe(res => {
             this.equipo = res['result'];
             this.prestamo.id_equipo = this.equipo.id_equipo;
-            this.prestamo.descripcion = this.equipo.descripcion;
-            this.prestamo.estado_equipo = this.equipo.estado;
             this.prestamo.tipo_equipo = this.equipo.tipo;
-            this.prestamo.armario = this.equipo.armario;
-            this.prestamo.estante = this.equipo.estante;
-            this.prestamo.descripcion_bodega = this.equipo.descripcion_bodega;
+            this.prestamo.nombre_estante = this.equipo.nombre_estante;
+            this.prestamo.nombre_armario = this.equipo.nombre_armario;
+            this.prestamo.nombre_bodega = this.equipo.nombre_bodega;
         });
     }
 
     verPrestamo(prestamo) {
-        swal({
-            title: 'Cliente: ' + prestamo.nombre,
-            html: 'Rol:' + prestamo.tipo
-                + '<br>Código: ' + prestamo.codigo
-                + '<br>Correo: ' + prestamo.correo_electronico
-                + '<br>Estado cliente: ' + prestamo.estado_cliente
-                + '<br>fecha de solicitud: ' + prestamo.fecha_solicitud
-                + '<br>fecha de prevista: ' + prestamo.fecha_prevista
-                + '<br>fecha de devolución: ' + prestamo.fecha_devolucion
-                + '<br>Equipo: ' + prestamo.tipo_equipo
-                + '<br>Serial: ' + prestamo.serial
-                + '<br>Descripción equipo: ' + prestamo.descripcion
-                + '<br>Bodega: ' + prestamo.descripcion_bodega
-                + '<br>Armario: ' + prestamo.armario
-                + '<br>Estante: ' + prestamo.estante,
-            type: 'info',
-            confirmButtonColor: '#999999'
-        });
+        if (!isNullOrUndefined(prestamo.id_estante)) {
+            this.equipoService.getEquipoID(prestamo.id_equipo).subscribe(res => {
+                if (res['response']) {
+                    this.equipo = res['result'];
+                    swal({
+                        title: 'Cliente: ' + prestamo.nombre,
+                        html: 'Rol:' + prestamo.tipo_cliente
+                            + '<br>Código: ' + prestamo.codigo
+                            + '<br>Correo: ' + prestamo.correo_electronico
+                            + '<br>Estado cliente: ' + prestamo.estado_cliente
+                            + '<br>fecha de solicitud: ' + prestamo.fecha_solicitud
+                            + '<br>fecha de prevista: ' + prestamo.fecha_prevista
+                            + '<br>fecha de devolución: ' + prestamo.fecha_devolucion
+                            + '<br>Equipo: ' + prestamo.nombre
+                            + '<br>Serial: ' + prestamo.serial
+                            + '<br>Descripción equipo: ' + prestamo.descripcion
+                            + '<br>Bodega: ' + this.equipo.nombre_bodega
+                            + '<br>Armario: ' + this.equipo.nombre_armario
+                            + '<br>Estante: ' + this.equipo.nombre_estante,
+                        type: 'info',
+                        confirmButtonColor: '#999999'
+                    });
+                } else {
+                    this.showValidation(res);
+                }
+            });
+        } else {
+            swal({
+                title: 'Cliente: ' + prestamo.nombre,
+                html: 'Rol:' + prestamo.tipo_cliente
+                    + '<br>Código: ' + prestamo.codigo
+                    + '<br>Correo: ' + prestamo.correo_electronico
+                    + '<br>Estado cliente: ' + prestamo.estado_cliente
+                    + '<br>fecha de solicitud: ' + prestamo.fecha_solicitud.substr(0, prestamo.fecha_solicitud.length - 8)
+                    + '<br>fecha de prevista: ' + prestamo.fecha_prevista
+                    + '<br>fecha de devolución: ' + prestamo.fecha_devolucion
+                    + '<br>Equipo: ' + prestamo.nombre
+                    + '<br>Serial: ' + prestamo.serial
+                    + '<br>Descripción equipo: ' + prestamo.descripcion
+                    + '<br><b>El equipo no tiene un lugar asignado aún </b>',
+                type: 'info',
+                confirmButtonColor: '#999999'
+            });
+        }
     }
 
     guardar() {
-        if (!this.appGlobals.isValidDate(this.prestamo.fecha_prevista)) {
+        if (isNullOrUndefined(this.prestamo.nombre)) {
             swal(
-                'Formato de fecha invalido',
                 '',
+                'Verifique el código del cliente',
+                'error'
+            );
+            return;
+        }
+        if (isNullOrUndefined(this.prestamo.tipo_equipo)) {
+            swal(
+                '',
+                'Verifique el serial del equipo',
                 'error'
             );
             return;

@@ -16,16 +16,14 @@ class PrestamosModel
         $this->response = new Response();
     }
 
-    public function getAll()
+    public function get()
     {
         try {
-            $stm = $this->db->prepare("SELECT e.*,p.*,c.*,t.tipo as tipo_equipo,t.total,s.*,s.descripcion as descripcion_estante,s.estado as estado_estante,b.*,b.descripcion as descripcion_bodega, b.estado as estado_bodega
-FROM equipo e, prestamo p, cliente c, tipo_equipo t, estante s, bodega b
-WHERE p.id_equipo = e.id_equipo
+            $stm = $this->db->prepare("SELECT e.*,p.*,c.tipo as tipo_cliente, c.nombre as nombre_cliente,c.*,t.tipo as nombre
+FROM equipo e, prestamo p, cliente c, tipo_equipo t
+WHERE e.id_equipo = p.id_equipo 
 AND p.id_cliente = c.id_cliente
-AND t.id_tipo_equipo = e.id_tipo_equipo
-AND e.id_estante = s.id_estante
-AND s.id_bodega = b.id_bodega");
+AND t.id_tipo_equipo = e.id_tipo_equipo");
             $stm->execute();
             $this->response->setResponse(true);
             $this->response->result = $stm->fetchAll();

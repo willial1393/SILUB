@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.1.32-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         10.1.36-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win32
 -- HeidiSQL Versión:             9.5.0.5196
 -- --------------------------------------------------------
@@ -60,14 +60,15 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id_cliente`),
   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.cliente: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.cliente: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
 	(2, 'ESTUDIANTE', '123', 'SANCIONADO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
 	(5, 'DOCENTE', '1234', 'SANCIONADO', 'jhon@gmail.com', 'JHON VEGA'),
-	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON');
+	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON'),
+	(8, 'ESTUDIANTE', '12345', 'ACTIVO', 'nicolas@gmail.com', 'NICOLAS');
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.dar_baja_equipo
@@ -136,14 +137,15 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   KEY `fk_equipo_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_equipo_estante1` FOREIGN KEY (`id_estante`) REFERENCES `estante` (`id_estante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=ujis;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla silub.equipo: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
 	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'MANTENIMIENTO'),
-	(74, 7, NULL, NULL, 'khi', '2018-10-29 01:20:18', 'DADO DE BAJA'),
-	(75, 7, 14, NULL, 'khi', '2018-10-29 01:20:18', 'INACTIVO');
+	(74, 7, NULL, '1234', 'khi', '2018-10-29 01:20:18', 'DADO DE BAJA'),
+	(76, 8, 11, '1', 'dispositivo de medición', '2018-11-04 12:18:49', 'PRESTADO'),
+	(77, 8, NULL, '12', 'dispositivo de medición', '2018-11-04 12:18:49', 'PRESTADO');
 /*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.estante
@@ -432,16 +434,19 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   PRIMARY KEY (`id_kardex`),
   KEY `fk_kardex_nombre_equipo1_idx` (`id_tipo_equipo`),
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla silub.kardex: ~8 rows (aproximadamente)
 /*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
 INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
 	(33, 7, '2018-10-23 13:31:39', 'ENTRADA', 3, 3),
 	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2),
 	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3),
 	(36, 7, '2018-10-29 01:20:18', 'ENTRADA', 2, 4),
-	(37, 7, '2018-10-29 18:49:52', 'SALIDA', 1, 3);
+	(37, 7, '2018-10-29 18:49:52', 'SALIDA', 1, 3),
+	(38, 8, '2018-11-04 12:18:49', 'ENTRADA', 2, 5),
+	(39, 7, '2018-11-04 12:21:07', 'SALIDA', 1, 2),
+	(40, 7, '2018-11-04 12:21:41', 'SALIDA', 1, 1);
 /*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
 
 -- Volcando estructura para tabla silub.laboratorio
@@ -474,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.operacion: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
 INSERT IGNORE INTO `operacion` (`id_operacion`, `id_equipo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `tipo`) VALUES
 	(11, 73, 'qwe', '2018-10-29 02:30:54', '2018-01-01 00:00:00', 'MANTENIMIENTO');
@@ -497,10 +502,15 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_equipo1` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.prestamo: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla silub.prestamo: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
+INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
+	(4, 77, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'TERMINADO'),
+	(6, 77, NULL, 8, '2018-11-04 00:00:00', '2018-11-04', '2018-12-12', 'TERMINADO'),
+	(7, 76, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'ACTIVO'),
+	(10, 77, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'ACTIVO');
 /*!40000 ALTER TABLE `prestamo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.prestar_equipo
@@ -516,6 +526,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `prestar_equipo`(
 
 ,
 	IN `_id_solicitud_adecuacion` INT
+
 )
 BEGIN
 DECLARE sancionado VARCHAR(20);
@@ -530,9 +541,6 @@ IF (select IF(e.estado_equipo!='ACTIVO',1,0) from equipo e where e.id_equipo = _
 	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'EQUIPO NO ACTIVO';
 END IF;
 
-UPDATE equipo SET
-estado_equipo = 'PRESTADO'
-WHERE id_equipo = _id_equipo;
 INSERT INTO prestamo SET
 id_equipo = _id_equipo,
 id_solicitud_adecuacion = _id_solicitud_adecuacion,
@@ -540,6 +548,10 @@ id_cliente = _id_cliente,
 fecha_solicitud = _fecha_solicitud,
 fecha_devolucion = _fecha_devolucion,
 fecha_prevista = _fecha_prevista;
+
+UPDATE equipo SET
+estado_equipo = 'PRESTADO'
+WHERE id_equipo = _id_equipo;
 END//
 DELIMITER ;
 
@@ -645,13 +657,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `terminar_prestamo`(
 	IN `_id_equipo` INT
 ,
 	IN `_id_prestamo` INT
+
 )
 BEGIN
 UPDATE equipo SET
 estado_equipo = 'ACTIVO'
 WHERE id_equipo = _id_equipo;
 UPDATE prestamo SET
-estado_prestamo = 'TERMINADO'
+estado_prestamo = 'TERMINADO',
+fecha_devolucion = CURDATE()
 WHERE id_prestamo = _id_prestamo;
 END//
 DELIMITER ;
@@ -668,8 +682,8 @@ CREATE TABLE IF NOT EXISTS `tipo_equipo` (
 -- Volcando datos para la tabla silub.tipo_equipo: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
 INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(7, 'MULTÍMETRO', 3),
-	(8, 'OSCILOSCOPIO', 3);
+	(7, 'MULTÍMETRO', 1),
+	(8, 'OSCILOSCOPIO', 5);
 /*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento silub.update_equipo

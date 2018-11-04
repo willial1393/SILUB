@@ -117,7 +117,8 @@
                                         {{tipo.tipo}}
                                     </option>
                                 </select></ng-template>
-                                <input class="boton-accion input-group-addon mt-2 mb-1 ml-2" type=image src="../../../assets/imagenes/more.png" width="25"
+                                <input class="boton-accion input-group-addon mt-2 mb-1 ml-2" type=image
+                                       src="../../../assets/imagenes/more.png" width="25"
                                        height="25"
                                        (click)="nuevoTipoEquipo()">
                             </div>
@@ -175,13 +176,17 @@
                     </option>
                 </select>
             </div>
-            <div class="usuario-boton">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="eliminarUbicacion()">
-                    Eliminar ubicación
-                </button>
-                <button type="button" class="btn-guardar" data-dismiss="modal" (click)="guardarUbicacion()">
-                    Guardar
-                </button>
+            <div class="modal-footer">
+                <div class="equipo-boton">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="eliminarUbicacion()">
+                        Eliminar ubicación
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-dark btn-guardar" data-dismiss="modal"
+                            (click)="guardarUbicacion()">
+                        Guardar
+                    </button>
+                </div>
             </div>
         </div>
     </div>

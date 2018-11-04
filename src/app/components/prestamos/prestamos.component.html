@@ -35,8 +35,8 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th scope="col">Código</th>
-                                <th scope="col">Nombre</th>
+                                <th scope="col">Código Cliente</th>
+                                <th scope="col">Nombre Equipo</th>
                                 <th scope="col">Fecha Préstamo</th>
                                 <th scope="col">Fecha prevista de devolución</th>
                                 <th scope="col">Estado</th>
@@ -70,8 +70,7 @@
                 <form ngNativeValidate (submit)="guardar()" action="" class="form-equipo container-form">
                     <div class="equipos-gestor">
                         <div class="equipo-gestor-codigo form-group">
-                            <label>Fecha de prestamo <span
-                                    class="equipo-obligatorio">*</span></label>
+                            <label>Fecha de prestamo</label>
                             <input name="fecha_solicitud" [(ngModel)]="prestamo.fecha_solicitud"
                                    type="date" class="form-control" readonly="readonly">
                         </div>
@@ -79,7 +78,7 @@
                             <label>Fecha de devolución<span
                                     class="equipo-obligatorio">*</span></label>
                             <input name="fecha_prevista" [(ngModel)]="prestamo.fecha_prevista"
-                                   type="date" class="form-control" required placeholder="Año/Mes/Día">
+                                   type="date" class="form-control" required>
                         </div>
                         <div class="equipo-gestor-correo form-group">
                             <label>Código cliente<span class="equipo-obligatorio">*</span></label>
@@ -91,7 +90,7 @@
                             <label>Nombre cliente<span
                                     class="equipo-obligatorio">*</span></label>
                             <input name="nombre" [(ngModel)]="prestamo.nombre"
-                                   type="text" class="form-control" readonly="readonly">
+                                   type="text" class="form-control" disabled required>
                         </div>
                         <div class="equipo-gestor-correo form-group">
                             <label>Serial equipo<span class="equipo-obligatorio">*</span></label>
@@ -102,24 +101,21 @@
                             <label>Tipo de equipo<span
                                     class="equipo-obligatorio">*</span></label>
                             <input name="tipo_equipo" [(ngModel)]="prestamo.tipo_equipo"
+                                   type="text" class="form-control" readonly="readonly" required>
+                        </div>
+                        <div class="equipo-gestor-codigo form-group">
+                            <label>Bodega</label>
+                            <input name="descripcion_bodega" [(ngModel)]="prestamo.nombre_bodega"
                                    type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
-                            <label>Bodega<span
-                                    class="equipo-obligatorio">*</span></label>
-                            <input name="descripcion_bodega" [(ngModel)]="prestamo.descripcion_bodega"
+                            <label>Armario</label>
+                            <input name="armario" [(ngModel)]="prestamo.nombre_armario"
                                    type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
-                            <label>Armario<span
-                                    class="equipo-obligatorio">*</span></label>
-                            <input name="armario" [(ngModel)]="prestamo.armario"
-                                   type="text" class="form-control" readonly="readonly">
-                        </div>
-                        <div class="equipo-gestor-codigo form-group">
-                            <label>Estante<span
-                                    class="equipo-obligatorio">*</span></label>
-                            <input name="estante" [(ngModel)]="prestamo.estante"
+                            <label>Estante</label>
+                            <input name="estante" [(ngModel)]="prestamo.nombre_estante"
                                    type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="equipo-boton">
