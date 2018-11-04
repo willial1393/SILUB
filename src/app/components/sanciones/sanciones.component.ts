@@ -15,6 +15,8 @@ export class SancionesComponent implements OnInit {
     cliente: any;
     sancion: any;
     sanciones: any;
+    sancionesAll: any;
+    search = '';
 
     constructor(private route: Router,
                 private sancionService: SancionService,
@@ -23,10 +25,7 @@ export class SancionesComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.sancionService.getSanciones().subscribe(res => {
-            this.sanciones = res['result'];
-        });
+    clearForm() {
         this.cliente = {
             id_cliente: '',
             tipo: '',
@@ -45,6 +44,25 @@ export class SancionesComponent implements OnInit {
             nombre: '',
             estado: ''
         };
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.sanciones = this.sancionesAll.filter(
+            x => x.codigo.indexOf(this.search) >= 0
+                || x.nombre.indexOf(this.search) >= 0
+                || x.estado.indexOf(this.search) >= 0
+                || x.fecha_inicio.indexOf(this.search) >= 0
+                || x.fecha_fin.indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.sancionService.getSanciones().subscribe(res => {
+            this.sancionesAll = res['result'];
+            this.sanciones = this.sancionesAll;
+        });
     }
 
     ngOnInit() {
