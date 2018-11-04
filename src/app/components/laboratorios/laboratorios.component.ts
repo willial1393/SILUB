@@ -12,8 +12,10 @@ import {AppGlobals} from '../../models/appGlobals';
 export class LaboratoriosComponent implements OnInit {
 
     laboratorios: any;
+    laboratoriosAll: any;
     laboratorio: any = {id_laboratorio: '', descripcion: '', nombre: '', estado_laboratorio: 'ACTIVO'};
     isEdit: any = false;
+    search = '';
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
@@ -21,10 +23,7 @@ export class LaboratoriosComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.laboratorioService.getLaboratorios().subscribe(res => {
-            this.laboratorios = res['result'];
-        });
+    clearForm() {
         this.laboratorio = {
             id_laboratorio: '',
             descripcion: '',
@@ -32,6 +31,22 @@ export class LaboratoriosComponent implements OnInit {
             estado_laboratorio: 'ACTIVO'
         };
         this.isEdit = false;
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.laboratorios = this.laboratoriosAll.filter(
+            x => x.nombre.indexOf(this.search) >= 0
+                || x.descripcion.toUpperCase().indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.laboratorioService.getLaboratorios().subscribe(res => {
+            this.laboratoriosAll = res['result'];
+            this.laboratorios = this.laboratoriosAll;
+        });
     }
 
     ngOnInit() {
