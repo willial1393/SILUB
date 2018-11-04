@@ -13,8 +13,10 @@ export class UsuariosComponent implements OnInit {
 
     result: any;
     usuarios: any;
+    usuariosAll: any;
     usuario: any;
     isEdit: any = false;
+    search = '';
 
     constructor(private route: Router,
                 private usuarioService: UsuarioService,
@@ -22,10 +24,7 @@ export class UsuariosComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.usuarioService.getUsuarios().subscribe(res => {
-            this.usuarios = res['result'];
-        });
+    clearForm() {
         this.usuario = {
             id_usuario: '',
             nombre_usuario: '',
@@ -36,6 +35,24 @@ export class UsuariosComponent implements OnInit {
             correo_electronico: '',
             nombre_persona: ''
         };
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.usuarios = this.usuariosAll.filter(
+            u => u.codigo.indexOf(this.search) >= 0
+                || u.nombre_persona.indexOf(this.search) >= 0
+                || u.estado.indexOf(this.search) >= 0);
+        this.isEdit = false;
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.usuarioService.getUsuarios().subscribe(res => {
+            this.usuarios = res['result'];
+            this.usuariosAll = this.usuarios;
+        });
         this.isEdit = false;
     }
 

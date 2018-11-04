@@ -17,7 +17,8 @@
                             </div>
                         </div>
                         <div class="cont-tabla-search border border-secondary d-flex align-items-center">
-                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
+                                   name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
                                 <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
@@ -26,18 +27,19 @@
                     </div>
                     <div class="usuario-tabla-des m-2">
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda explicabo, velit earum
-                            dicta
-                            perspiciatis obcaecati minus ut ratione, repellendus architecto accusantium debitis, tempora
-                            odit deserunt
-                            iste, vel. Architecto, aliquam, itaque.
+                            Los usuarios son las personas con acceso al manejo del sistema y dependiendo de su rol
+                            podran realizar
+                            determinadas acciones. En la barra superior el boton superior podra imprimir la información
+                            detallada
+                            en la siguiente tabla y podra realizar busquedas escribiendo el código, nombre o estado del
+                            usuario.
                         </p>
                     </div>
                     <div class="usuario-tabla-t">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th scope="col">Codigo</th>
+                                <th scope="col">Código</th>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col">Rol</th>
@@ -49,7 +51,10 @@
                                 <td>{{usuario.codigo}}</td>
                                 <td>{{usuario.nombre_persona}}</td>
                                 <td>{{usuario.estado}}</td>
-                                <td>{{usuario.tipo}}</td>
+                                <td>{{usuario.tipo === 'DEPARTAMENTO'?'JEFE DEP FIS':
+                                    usuario.tipo === 'LABORATORIO'?'JEFE LAB':
+                                    usuario.tipo === 'AUXILIAR'?'AUX LAB':'- error -'}}
+                                </td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
@@ -74,7 +79,7 @@
                 <form ngNativeValidate (submit)="guardar()" action="" class="form-usuario container-form">
                     <div class="usuarios-gestor">
                         <div class="usuario-gestor-codigo form-group">
-                            <label for="usuario-codigo1">Codigo <span class="usuario-obligatorio">*</span></label>
+                            <label for="usuario-codigo1">Código <span class="usuario-obligatorio">*</span></label>
                             <input name="codigo" [(ngModel)]="usuario.codigo" id="usuario-codigo1" type="text"
                                    class="form-control" required
                                    pattern="[0-9]+">
@@ -86,7 +91,7 @@
                                    pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+">
                         </div>
                         <div class="usuario-gestor-correo form-group">
-                            <label for="usuario-correo">Correo electronico<span
+                            <label for="usuario-correo">Correo electrónico<span
                                     class="usuario-obligatorio">*</span></label>
                             <input name="correo_electronico" [(ngModel)]="usuario.correo_electronico"
                                    id="usuario-correo" type="email" class="form-control" required>
@@ -119,7 +124,9 @@
                                    class="form-control" required>
                         </div>
                         <div class="usuario-boton">
-                            <button type="submit" class="btn btn-primary btn-dark bg-dark btn-guardar btn-usuario">Guardar</button>
+                            <button type="submit" class="btn btn-primary btn-dark bg-dark btn-guardar btn-usuario">
+                                Guardar
+                            </button>
                         </div>
                     </div>
                 </form>
