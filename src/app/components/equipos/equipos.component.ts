@@ -16,6 +16,7 @@ import {EstanteService} from '../../services/estante.service';
 export class EquiposComponent implements OnInit {
 
     equipos: any;
+    equiposAll: any;
     equipo: any;
     kardex: any;
     tipo_equipos: any;
@@ -25,6 +26,7 @@ export class EquiposComponent implements OnInit {
     armarios: any;
     estantes: any;
     equipoSelected: any;
+    search = '';
 
     constructor(private route: Router,
                 private equipoService: EquipoService,
@@ -64,18 +66,7 @@ export class EquiposComponent implements OnInit {
         });
     }
 
-    updateEquipos() {
-        this.equipoService.getEquipos().subscribe(res => {
-            if (res['response']) {
-                this.equipos = res['result'];
-            } else {
-                this.showValidation(res);
-            }
-        });
-        this.equipoService.getTipoEquipos().subscribe(res => {
-            this.tipo_equipos = res['result'];
-        });
-
+    clearForm() {
         this.equipo = {
             id_equipo: '',
             id_tipo_equipo: '',
@@ -93,7 +84,6 @@ export class EquiposComponent implements OnInit {
             nombre_armario: '',
             nombre_bodega: ''
         };
-
         this.equipoSelected = {
             id_equipo: '',
             id_tipo_equipo: '',
@@ -111,17 +101,40 @@ export class EquiposComponent implements OnInit {
             nombre_armario: '',
             nombre_bodega: ''
         };
-
         this.kardex = {
             id_tipo_equipo: '',
             tipo: '',
             cantidad: '',
         };
-
         this.isEdit = false;
     }
 
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.equipos = this.equiposAll.filter(
+            x => (x.serial === null ? '' : x.serial).indexOf(this.search) >= 0
+                || x.tipo.indexOf(this.search) >= 0
+                || x.estado_equipo.indexOf(this.search) >= 0);
+    }
+
+    updateEquipos() {
+        this.clearForm();
+        this.equipoService.getEquipos().subscribe(res => {
+            if (res['response']) {
+                this.equiposAll = res['result'];
+                this.equipos = this.equiposAll;
+            } else {
+                this.showValidation(res);
+            }
+        });
+        this.equipoService.getTipoEquipos().subscribe(res => {
+            this.tipo_equipos = res['result'];
+        });
+    }
+
     updateBodegas(equipo) {
+        this.clearForm();
         if (equipo !== null) {
             this.equipoService.getEquipoID(equipo.id_equipo).subscribe(res => {
                 if (res['response']) {
