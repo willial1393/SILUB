@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {HttpHeaders} from '@angular/common/http';
 import swal from 'sweetalert2';
 import {DatePipe} from '@angular/common';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AppGlobals {
-    delvelopment = true;
-    base_url = 'http://localhost/SILUB/api/public/';
+    base_url = environment.apiEndPoint;
     headers = new HttpHeaders({
         'Content-Type': 'application/json',
     });
@@ -25,16 +25,16 @@ export class AppGlobals {
     }
 
     errorUPS(res) {
-        if (this.delvelopment) {
+        if (environment.production) {
             swal(
                 '¡Ups!',
-                res['message'],
+                'Algo salió mal de nuestro lado',
                 'error'
             );
         } else {
             swal(
                 '¡Ups!',
-                'Algo salió mal de nuestro lado',
+                res['message'],
                 'error'
             );
         }
