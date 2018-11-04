@@ -6,6 +6,7 @@ import {EquipoService} from '../../services/equipo.service';
 import swal from 'sweetalert2';
 import {SolicitudService} from '../../services/solicitud.service';
 import {LaboratorioService} from '../../services/laboratorio.service';
+import {isNullOrUndefined} from 'util';
 
 @Component({
     selector: 'app-solicitudes',
@@ -16,6 +17,7 @@ export class SolicitudesComponent implements OnInit {
 
     cliente: any;
     solicitudes: any;
+    solicitudesAll: any;
     solicitud: any;
     laboratorios: any;
     detalleSolicitud: any;
@@ -23,6 +25,7 @@ export class SolicitudesComponent implements OnInit {
     tiposEquipos: any;
     tipoEquipo: any;
     equipoSolicitud: any;
+    search = '';
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
@@ -33,7 +36,7 @@ export class SolicitudesComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
+    clearForm() {
         this.cliente = {
             id_cliente: '',
             tipo: '',
@@ -83,8 +86,24 @@ export class SolicitudesComponent implements OnInit {
             tipo: '',
             total: ''
         };
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.solicitudes = this.solicitudesAll.filter(
+            x => x.codigo.indexOf(this.search) >= 0
+                || x.nombre.indexOf(this.search) >= 0
+                || x.laboratorio.indexOf(this.search) >= 0
+                || x.fecha_adecuacion.indexOf(this.search) >= 0
+                || x.estado_solicitud_adecuacion.indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
         this.solicitudService.getSolicitudes().subscribe(res => {
-            this.solicitudes = res['result'];
+            this.solicitudesAll = res['result'];
+            this.solicitudes = this.solicitudesAll;
         });
         this.laboratorioService.getLaboratorios().subscribe(res => {
             this.laboratorios = res['result'];
@@ -181,6 +200,14 @@ export class SolicitudesComponent implements OnInit {
     }
 
     guardar() {
+        if (isNullOrUndefined(this.solicitud.nombre)) {
+            swal(
+                '',
+                'Verifique el código del cliente',
+                'error'
+            );
+            return;
+        }
         if (!this.appGlobals.isValidDate(this.solicitud.fecha_adecuacion)) {
             swal(
                 '',
