@@ -18,6 +18,8 @@ export class PrestamosComponent implements OnInit {
     cliente: any;
     prestamo: any;
     prestamos: any;
+    prestamosAll: any;
+    search = '';
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
@@ -27,10 +29,7 @@ export class PrestamosComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.prestamoService.getPrestamos().subscribe(res => {
-            this.prestamos = res['result'];
-        });
+    clearForm() {
         this.prestamo = {
             id_equipo: '',
             id_tipo_equipo: '',
@@ -87,6 +86,25 @@ export class PrestamosComponent implements OnInit {
             nombre_armario: '',
             nombre_bodega: ''
         };
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.prestamos = this.prestamosAll.filter(
+            x => x.codigo.indexOf(this.search) >= 0
+                || x.nombre.indexOf(this.search) >= 0
+                || x.fecha_solicitud.indexOf(this.search) >= 0
+                || x.fecha_prevista.indexOf(this.search) >= 0
+                || x.estado_prestamo.indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.prestamoService.getPrestamos().subscribe(res => {
+            this.prestamosAll = res['result'];
+            this.prestamos = this.prestamosAll;
+        });
     }
 
     ngOnInit() {
