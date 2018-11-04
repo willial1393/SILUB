@@ -7,7 +7,8 @@
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
                             <p class=" pl-1 m-0">Usuarios</p>
                             <div class="ml-3 ">
-                                <button type="submit" class="btn btn-dark d-flex align-text-center btn-usuario">
+                                <button type="submit" class="btn btn-dark d-flex align-text-center btn-usuario"
+                                        (click)="imprimir()">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
                                          src="../../../assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
@@ -35,7 +36,7 @@
                             usuario.
                         </p>
                     </div>
-                    <div class="usuario-tabla-t">
+                    <div class="usuario-tabla-t" id="tabla-imprimir">
                         <table class="table table-striped">
                             <thead>
                             <tr>
