@@ -35,25 +35,24 @@ export class UsuariosComponent implements OnInit {
             correo_electronico: '',
             nombre_persona: ''
         };
+        this.isEdit = false;
     }
 
     updateFilter() {
         this.clearForm();
         this.search = this.search.toUpperCase();
         this.usuarios = this.usuariosAll.filter(
-            u => u.codigo.indexOf(this.search) >= 0
-                || u.nombre_persona.indexOf(this.search) >= 0
-                || u.estado.indexOf(this.search) >= 0);
-        this.isEdit = false;
+            x => x.codigo.indexOf(this.search) >= 0
+                || x.nombre_persona.indexOf(this.search) >= 0
+                || x.estado.indexOf(this.search) >= 0);
     }
 
     updateTable() {
         this.clearForm();
         this.usuarioService.getUsuarios().subscribe(res => {
-            this.usuarios = res['result'];
-            this.usuariosAll = this.usuarios;
+            this.usuariosAll = res['result'];
+            this.usuarios = this.usuariosAll;
         });
-        this.isEdit = false;
     }
 
     ngOnInit() {

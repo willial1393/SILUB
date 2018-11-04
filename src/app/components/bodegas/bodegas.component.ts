@@ -16,6 +16,7 @@ export class BodegasComponent implements OnInit {
     bodega: any;
     bodegaSelected: any;
     bodegas: any;
+    bodegasAll: any;
     armario: any;
     armarioSelected: any;
     armarios: any;
@@ -23,6 +24,7 @@ export class BodegasComponent implements OnInit {
     estantes: any;
     isEditBodega: any = false;
     isEditArmario: any = false;
+    search = '';
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
@@ -38,10 +40,7 @@ export class BodegasComponent implements OnInit {
         }
     }
 
-    updateBodegas() {
-        this.bodegaService.getBodegas().subscribe(res => {
-            this.bodegas = res['result'];
-        });
+    clearForm() {
         this.bodega = {
             id_bodega: '',
             nombre: ''
@@ -66,6 +65,21 @@ export class BodegasComponent implements OnInit {
             nombre: ''
         };
         this.isEditBodega = false;
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.bodegas = this.bodegasAll.filter(
+            x => x.nombre.indexOf(this.search) >= 0);
+    }
+
+    updateBodegas() {
+        this.clearForm();
+        this.bodegaService.getBodegas().subscribe(res => {
+            this.bodegasAll = res['result'];
+            this.bodegas = this.bodegasAll;
+        });
     }
 
     updateArmarios(bodega) {

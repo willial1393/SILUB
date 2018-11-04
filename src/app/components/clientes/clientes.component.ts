@@ -13,9 +13,11 @@ import {SancionService} from '../../services/sancion.service';
 export class ClientesComponent implements OnInit {
 
     clientes: any;
+    clientesAll: any;
     cliente: any;
     sancion: any;
     isEdit: any = false;
+    search = '';
 
     constructor(private route: Router,
                 private clienteService: ClienteService,
@@ -24,10 +26,7 @@ export class ClientesComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.clienteService.getClientes().subscribe(res => {
-            this.clientes = res['result'];
-        });
+    clearForm() {
         this.cliente = {
             id_cliente: '',
             tipo: '',
@@ -37,6 +36,24 @@ export class ClientesComponent implements OnInit {
             nombre: ''
         };
         this.isEdit = false;
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.clientes = this.clientesAll.filter(
+            x => x.codigo.indexOf(this.search) >= 0
+                || x.nombre.indexOf(this.search) >= 0
+                || x.estado_cliente.indexOf(this.search) >= 0
+                || x.tipo.indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.clienteService.getClientes().subscribe(res => {
+            this.clientesAll = res['result'];
+            this.clientes = this.clientesAll;
+        });
     }
 
     ngOnInit() {
