@@ -225,16 +225,25 @@ export class EquiposComponent implements OnInit {
     }
 
     editarEquipo(equipo) {
-        this.isEdit = true;
-        this.equipo = equipo;
-        this.equipo.cantidad = 1;
+        if (equipo.estado_equipo !== 'DADO DE BAJA') {
+            this.isEdit = true;
+            this.equipo = equipo;
+            this.equipo.cantidad = 1;
+        } else {
+            swal(
+                '',
+                'No se puede editar un equipo que esta dado de baja',
+                'error'
+            );
+        }
     }
 
     eliminarEquipo(equipo) {
         swal(
             {
                 title: '¿Desea eliminar el equipo?',
-                text: 'No se podrá recuperar la información de este Equipo',
+                text: 'No se podrá recuperar la información de este Equipo' +
+                    ' ni los prestamos y operaciones relacionadas a este',
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -321,36 +330,44 @@ export class EquiposComponent implements OnInit {
     }
 
     setSerialEquipo(equipo) {
-        swal({
-            title: 'Serial del equipo',
-            input: 'text',
-            inputValue: equipo.serial !== null ? equipo.serial : '',
-            showCancelButton: true,
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-            preConfirm: (res) => {
-                equipo.serial = res.toString().toUpperCase();
-            }
-        }).then((result) => {
-            if (result.value) {
-                equipo.estado_equipo = 'ACTIVO';
-                this.equipoService.putEquipo(equipo).subscribe(res => {
-                    if (res['response']) {
-                        swal(
-                            'OK',
-                            '',
-                            'success'
-                        ).then((x) => {
-                            this.updateEquipos();
-                        });
-                    } else {
-                        equipo.estado_equipo = 'INACTIVO';
-                        equipo.serial = null;
-                        this.showValidation(res);
-                    }
-                });
-            }
-        });
+        if (equipo.estado_equipo !== 'DADO DE BAJA') {
+            swal({
+                title: 'Serial del equipo',
+                input: 'text',
+                inputValue: equipo.serial !== null ? equipo.serial : '',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: (res) => {
+                    equipo.serial = res.toString().toUpperCase();
+                }
+            }).then((result) => {
+                if (result.value) {
+                    equipo.estado_equipo = 'ACTIVO';
+                    this.equipoService.putEquipo(equipo).subscribe(res => {
+                        if (res['response']) {
+                            swal(
+                                'OK',
+                                '',
+                                'success'
+                            ).then((x) => {
+                                this.updateEquipos();
+                            });
+                        } else {
+                            equipo.estado_equipo = 'INACTIVO';
+                            equipo.serial = null;
+                            this.showValidation(res);
+                        }
+                    });
+                }
+            });
+        } else {
+            swal(
+                '',
+                'No se puede editar un equipo que esta dado de baja',
+                'error'
+            );
+        }
     }
 
     showValidation(res) {
