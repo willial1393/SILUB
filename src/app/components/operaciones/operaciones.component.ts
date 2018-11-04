@@ -14,9 +14,11 @@ export class OperacionesComponent implements OnInit {
 
     result: any;
     operaciones: any;
+    operacionesAll: any;
     operacion: any;
     equipo: any;
     isEdit: any = false;
+    search = '';
 
     constructor(private route: Router,
                 private operacionService: OperacionService,
@@ -25,10 +27,7 @@ export class OperacionesComponent implements OnInit {
         this.updateTable();
     }
 
-    updateTable() {
-        this.operacionService.getOperaciones().subscribe(res => {
-            this.operaciones = res['result'];
-        });
+    clearForm() {
         this.equipo = {
             id_equipo: '',
             id_tipo_equipo: '',
@@ -57,6 +56,26 @@ export class OperacionesComponent implements OnInit {
             equipo: ''
         };
         this.isEdit = false;
+    }
+
+    updateFilter() {
+        this.clearForm();
+        this.search = this.search.toUpperCase();
+        this.operaciones = this.operacionesAll.filter(
+            x => x.serial.indexOf(this.search) >= 0
+                || x.equipo.indexOf(this.search) >= 0
+                || x.fecha_inicio.indexOf(this.search) >= 0
+                || x.fecha_fin.indexOf(this.search) >= 0
+                || x.tipo.indexOf(this.search) >= 0);
+    }
+
+    updateTable() {
+        this.clearForm();
+        this.operacionService.getOperaciones().subscribe(res => {
+            this.operacionesAll = res['result'];
+            this.operaciones = this.operacionesAll;
+        });
+
     }
 
     ngOnInit() {

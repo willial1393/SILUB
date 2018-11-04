@@ -17,7 +17,8 @@
                             </div>
                         </div>
                         <div class="cont-tabla-search border border-secondary d-flex align-items-center">
-                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
+                                   name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
                                 <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
@@ -49,8 +50,8 @@
                             <tr *ngFor="let operacion of operaciones">
                                 <td>{{operacion.serial}}</td>
                                 <td>{{operacion.equipo}}</td>
-                                <td>{{operacion.fecha_inicio}}</td>
-                                <td>{{operacion.fecha_fin}}</td>
+                                <td>{{operacion.fecha_inicio | date:'yyyy-MM-dd'}}</td>
+                                <td>{{operacion.fecha_fin | date:'yyyy-MM-dd'}}</td>
                                 <td>{{operacion.tipo}}</td>
                                 <td>
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
