@@ -12,11 +12,13 @@ import swal from 'sweetalert2';
 export class KardexComponent implements OnInit {
 
     kardex: any;
+    kardexAll: any;
     filtro: any = {
         nombre: '',
         fecha_inicio: '',
         fecha_fin: ''
     };
+    search = '';
 
     constructor(private route: Router,
                 private kardexService: KardexService,
@@ -30,10 +32,21 @@ export class KardexComponent implements OnInit {
         }
     }
 
+    updateFilter() {
+        this.search = this.search.toUpperCase();
+        this.kardex = this.kardexAll.filter(
+            x => x.fecha.indexOf(this.search) >= 0
+                || x.equipo.indexOf(this.search) >= 0
+                || x.tipo.indexOf(this.search) >= 0
+                || x.cantidad.indexOf(this.search) >= 0
+                || x.total.indexOf(this.search) >= 0);
+    }
+
     updateTable() {
         this.kardexService.getKardex().subscribe(res => {
             if (res['response']) {
-                this.kardex = res['result'];
+                this.kardexAll = res['result'];
+                this.kardex = this.kardexAll;
             } else {
                 swal(
                     'Error',

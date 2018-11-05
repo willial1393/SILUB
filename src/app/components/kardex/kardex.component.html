@@ -17,7 +17,8 @@
                             </div>
                         </div>
                         <div class="cont-tabla-search border border-secondary d-flex align-items-center">
-                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar...">
+                            <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
+                                   name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
                                 <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
@@ -46,7 +47,7 @@
                             </thead>
                             <tbody>
                             <tr *ngFor="let k of kardex">
-                                <td>{{k.fecha}}</td>
+                                <td>{{k.fecha | date:'yyyy-MM-dd'}}</td>
                                 <td>{{k.equipo}}</td>
                                 <td>{{k.tipo}}</td>
                                 <td>{{k.cantidad}}</td>
