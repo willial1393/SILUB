@@ -39,7 +39,8 @@ export class AppComponent {
         swal({
             title: 'SILUB',
             html: 'Plataforma creada para la gestion y operación de los equipos de laboratorio de la Universidad de Boyacá' +
-                ' <br><br> <i>Desarrollado por William Vega y Leydinzoon Arenas</i>',
+                ' <br><br> <b><i>Desarrollado por William Vega y Leydinzoon Arenas</i></b>' +
+                ' <br><br> <i>wavega@uniboyaca.edu.co, larenas@uniboyaca.edu.co</i>',
             type: 'info',
             confirmButtonColor: '#999999',
             confirmButtonText: 'Aceptar',
