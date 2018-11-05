@@ -29,8 +29,8 @@
                     Información básica
                 </a>
                 <ul aria-labelledby="dropdown1" class="dropdown-menu">
-                    <div *ngIf="tipo==='LABORATORIO' || tipo==='DEPARTAMENTO'; then thenBlockEquipos"></div>
-                    <ng-template #thenBlockEquipos>
+                    <div *ngIf="tipo==='LABORATORIO' || tipo==='DEPARTAMENTO'; then thenBlockTipoEquipos"></div>
+                    <ng-template #thenBlockTipoEquipos>
                         <li class="dropdown-item" routerLink="/tipos_equipos">
                             <a> Tipos de equipos </a>
                         </li>

@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
 -- Volcando datos para la tabla silub.cliente: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
 INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
-	(2, 'ESTUDIANTE', '123', 'SANCIONADO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
+	(2, 'ESTUDIANTE', '123', 'ACTIVO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
 	(5, 'DOCENTE', '1234', 'SANCIONADO', 'jhon@gmail.com', 'JHON VEGA'),
 	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON'),
 	(8, 'ESTUDIANTE', '12345', 'ACTIVO', 'nicolas@gmail.com', 'NICOLAS');
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.prestamo: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.prestamo: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
 INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
 	(4, 77, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'TERMINADO'),
@@ -579,7 +579,6 @@ CREATE TABLE IF NOT EXISTS `sancion` (
 -- Volcando datos para la tabla silub.sancion: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
-	(10, 2, '2018-10-29 02:28:39', '2018-10-02'),
 	(11, 5, '2018-10-29 08:49:56', '2018-11-02');
 /*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
 
@@ -774,6 +773,17 @@ BEGIN
 SELECT * FROM usuario u WHERE u.nombre_usuario = _usuario AND u.clave = _clave AND u.estado = 'ACTIVO';
 END//
 DELIMITER ;
+
+-- Volcando estructura para disparador silub.sancion_before_delete
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `sancion_before_delete` AFTER DELETE ON `sancion` FOR EACH ROW BEGIN
+UPDATE cliente  SET
+estado_cliente = 'ACTIVO'
+WHERE id_cliente = OLD.id_sancion;
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

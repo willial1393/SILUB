@@ -34,6 +34,10 @@ export class BodegasComponent implements OnInit {
         this.updateBodegas();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     ngOnInit() {
         if (sessionStorage.getItem('login') === null) {
             this.route.navigate(['/login']);

@@ -7,7 +7,8 @@
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
                             <p class="pl-1 m-0">Mantenimientos y reparaciones</p>
                             <div class="ml-3 ">
-                                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                                <button (click)="imprimir()" type="submit"
+                                        class="no-print btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
                                          src="../../../assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
@@ -16,7 +17,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+                        <div class="no-print cont-tabla-search border border-secondary d-flex align-items-center">
                             <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
                                    name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
@@ -43,7 +44,7 @@
                                 <th scope="col">Fecha inicio</th>
                                 <th scope="col">Fecha fin</th>
                                 <th scope="col">Tipo</th>
-                                <th scope="col">Acciones</th>
+                                <th class="no-print" scope="col">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -53,7 +54,7 @@
                                 <td>{{operacion.fecha_inicio | date:'yyyy-MM-dd'}}</td>
                                 <td>{{operacion.fecha_fin | date:'yyyy-MM-dd'}}</td>
                                 <td>{{operacion.tipo}}</td>
-                                <td>
+                                <td class="no-print">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25" height="25"
                                            (click)="verOperacion(operacion)">
@@ -70,7 +71,7 @@
                     </div>
                 </div>
             </div>
-            <div class="usuario border border-secondary col-md-4 rounded pb-3">
+            <div class="no-print usuario border border-secondary col-md-4 rounded pb-3">
                 <form ngNativeValidate action="" class="form-usuario container-form" (submit)="guardar()">
                     <div class="usuarios-gestor">
                         <div class="usuario-gestor-codigo form-group">

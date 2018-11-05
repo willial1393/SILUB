@@ -38,6 +38,10 @@ export class EquiposComponent implements OnInit {
         this.updateEquipos();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     nuevoTipoEquipo() {
         swal({
             title: 'Nuevo tipo de equipo',

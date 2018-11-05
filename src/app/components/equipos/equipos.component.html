@@ -7,7 +7,8 @@
                         <div class="usuario-tabla-encabezado-contenedor d-flex align-items-center float-left row">
                             <p class="pl-1 m-0">Equipos</p>
                             <div class="ml-3 ">
-                                <button type="submit" class=" btn btn-dark btn-guardar d-flex align-text-center">
+                                <button (click)="imprimir()" type="submit"
+                                        class="no-print btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
                                          src="../../../assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
@@ -16,7 +17,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="cont-tabla-search border border-secondary d-flex align-items-center">
+                        <div class="no-print cont-tabla-search border border-secondary d-flex align-items-center">
                             <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
                                    name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
@@ -39,7 +40,7 @@
                                 <th scope="col">Serial</th>
                                 <th scope="col">Tipo de equipo</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col">Acciones</th>
+                                <th class="no-print" scope="col">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,7 +57,7 @@
                                 </ng-template>
                                 <td>{{equipo.tipo}}</td>
                                 <td>{{equipo.estado_equipo}}</td>
-                                <td>
+                                <td class="no-print">
                                     <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
                                            width="25"
                                            height="25"
@@ -84,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="equipo border border-secondary col-md-4 rounded pb-3">
+            <div class="equipo border border-secondary col-md-4 rounded pb-3 no-print">
                 <form ngNativeValidate (submit)="guardar()" action="" class="form-equipo container-form">
                     <div class="equipos-gestor">
                         <div class="equipo-gestor-codigo form-group">

@@ -26,6 +26,10 @@ export class KardexComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     ngOnInit() {
         if (sessionStorage.getItem('login') === null) {
             this.route.navigate(['/login']);

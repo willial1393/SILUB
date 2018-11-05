@@ -27,6 +27,10 @@ export class OperacionesComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     clearForm() {
         this.equipo = {
             id_equipo: '',

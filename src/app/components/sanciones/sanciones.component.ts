@@ -25,6 +25,10 @@ export class SancionesComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     clearForm() {
         this.cliente = {
             id_cliente: '',

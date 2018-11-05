@@ -21,6 +21,10 @@ export class TiposEquiposComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     updateTable() {
         this.equipoService.getTipoEquipos().subscribe(res => {
             this.tiposEquipos = res['result'];

@@ -92,3 +92,9 @@ div label span
 {
   border-left: 1px solid #6C757D;
 }
+
+@media print {
+  .no-print, .no-print * {
+    display: none !important;
+  }
+}

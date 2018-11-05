@@ -25,11 +25,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     imprimir() {
-        const contenido = document.getElementById('tabla-imprimir').innerHTML;
-        const contenidoOriginal = document.body.innerHTML;
-        document.body.innerHTML = contenido;
         window.print();
-        document.body.innerHTML = contenidoOriginal;
     }
 
     clearForm() {

@@ -23,6 +23,10 @@ export class LaboratoriosComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     clearForm() {
         this.laboratorio = {
             id_laboratorio: '',

@@ -29,6 +29,10 @@ export class PrestamosComponent implements OnInit {
         this.updateTable();
     }
 
+    imprimir() {
+        window.print();
+    }
+
     clearForm() {
         this.prestamo = {
             id_equipo: '',
