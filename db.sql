@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.1.36-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         10.1.32-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win32
 -- HeidiSQL Versión:             9.5.0.5196
 -- --------------------------------------------------------
@@ -576,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.sancion: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla silub.sancion: ~0 rows (aproximadamente)
 /*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
 INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
 	(11, 5, '2018-10-29 08:49:56', '2018-11-02');
@@ -774,13 +774,13 @@ SELECT * FROM usuario u WHERE u.nombre_usuario = _usuario AND u.clave = _clave A
 END//
 DELIMITER ;
 
--- Volcando estructura para disparador silub.sancion_before_delete
+-- Volcando estructura para disparador silub.sancion_after_delete
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
 DELIMITER //
-CREATE TRIGGER `sancion_before_delete` AFTER DELETE ON `sancion` FOR EACH ROW BEGIN
+CREATE TRIGGER `sancion_after_delete` AFTER DELETE ON `sancion` FOR EACH ROW BEGIN
 UPDATE cliente  SET
 estado_cliente = 'ACTIVO'
-WHERE id_cliente = OLD.id_sancion;
+WHERE id_cliente = OLD.id_cliente;
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;

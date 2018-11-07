@@ -36,11 +36,16 @@
   border-radius: 5px;
 }
 
+.lb-img
+{
+  margin: 0px 0px 0px 5px;
+  height: 100%;
+}
+
 .img-correo, .img-key
 {
   width: 30px;
-  float: left;
-  text-align: center;
+  padding-bottom: 1%;
 }
 
 #usuario, #contrasena
@@ -51,8 +56,7 @@
   color:black;
   font-size: 1rem;
   width: 79%;
-  float: left;
-  margin: 7px 3px;
+  display: inline;
 }
 
 .login-conexion-login
@@ -60,15 +64,6 @@
   margin-top: 15px;
   margin-bottom: 10px;
   text-align: center;
-}
-
-.login-group-row
-{
-  margin: 10px 0px;
-}
-
-.login-conainer-check{
-  margin: 0px 4px;
 }
 
 .login-group-check-row
@@ -106,5 +101,11 @@
 .login-boton-row:focus
 {
   outline: none;
+}
+
+.login-usuario-row, .login-contrasena-row
+{
+  text-align: center;
+  padding: 1%;
 }
 

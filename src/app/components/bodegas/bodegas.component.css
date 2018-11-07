@@ -66,7 +66,7 @@
 {
   background: none;
   border: none;
-
+  outline: 0px;
 }
 
 .usuario-tabla-encabezado-contenedor
@@ -79,6 +79,10 @@
 .contenedor-imagen-lupa
 {
   border-left: 1px solid #6C757D;
+}
+.contenedor-imagen-lupa:hover
+{
+  cursor: pointer;
 }
 
 @media print {

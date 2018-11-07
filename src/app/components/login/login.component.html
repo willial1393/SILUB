@@ -6,18 +6,18 @@
     <div class="login-formulario ">
       <form ngNativeValidate (submit)="login()">
         <div class="login-usuario-row">
-          <label for="Usuario">
-            <img class="img-correo" src="assets/imagenes/email.png" alt="Correo electronico" height="30">
-          </label>
           <input name="correo" [(ngModel)]="usuario.usuario" id="usuario" type="text" placeholder="Correo electronico"
                  required>
+          <label for="Usuario" class="lb-img">
+            <img class="img-correo" src="assets/imagenes/email.png" alt="Correo electronico" height="30">
+          </label>
         </div>
         <div id="login-key-row" class="login-contrasena-row">
-          <label for="contrasena">
-            <img class="img-key" src="assets/imagenes/key.png" alt="Contraseña" height="30">
-          </label>
           <input name="pass" [(ngModel)]="usuario.clave" id="contrasena" type="password" placeholder="Contraseña"
                  required>
+          <label for="contrasena" class="lb-img">
+            <img class="img-key" src="assets/imagenes/key.png" alt="Contraseña" height="30">
+          </label>
         </div>
         <div class="login-conexion-login">
           <button type="submit" class="login-boton-row">Ingresar</button>

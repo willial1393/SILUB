@@ -45,6 +45,11 @@ div label span {
     border-left: 1px solid #6C757D;
 }
 
+.contenedor-imagen-lupa:hover
+{
+    cursor: pointer;
+}
+
 .usuario-tabla-encabezado-contenedor {
     padding: 0px;
     margin: 0px;
@@ -60,6 +65,7 @@ div label span {
 .cont-tabla-search-input:focus {
     background: none;
     border: none;
+    outline: 0px;
 
 }
 

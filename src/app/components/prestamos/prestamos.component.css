@@ -73,7 +73,7 @@ div label span {
 .cont-tabla-search-input:focus {
     background: none;
     border: none;
-
+    outline: 0px;
 }
 
 .usuario-tabla-encabezado-contenedor {
@@ -89,6 +89,11 @@ div label span {
 
 .contenedor-imagen-lupa {
     border-left: 1px solid #6C757D;
+}
+
+.contenedor-imagen-lupa:hover
+{
+    cursor: pointer;
 }
 
 .equipo-boton

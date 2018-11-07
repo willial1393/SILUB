@@ -158,4 +158,6 @@ WHERE e.id_tipo_equipo = t.id_tipo_equipo");
         }
         return $this->response;
     }
+
+
 }
