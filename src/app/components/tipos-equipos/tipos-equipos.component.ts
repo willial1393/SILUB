@@ -110,7 +110,7 @@ export class TiposEquiposComponent implements OnInit {
     }
 
     showValidation(res) {
-        if (res['message'].toString().indexOf('tipo_UNIQUE') >= 0) {
+        if (res['message'].toString().indexOf('nombre_UNIQUE') >= 0) {
             swal(
                 '',
                 'Tipo de equipo ya se encuentra registrado',
