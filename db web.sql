@@ -11,11 +11,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Volcando estructura de base de datos para silub
-DROP DATABASE IF EXISTS `silub`;
-CREATE DATABASE IF NOT EXISTS `silub` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */;
-USE `silub`;
+USE `wilveg89_silub`;
 
 -- Volcando estructura para tabla silub.armario
 DROP TABLE IF EXISTS `armario`;
@@ -77,8 +73,8 @@ INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, 
 
 -- Volcando estructura para procedimiento silub.dar_baja_equipo
 DROP PROCEDURE IF EXISTS `dar_baja_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `dar_baja_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `dar_baja_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo` INT
 
@@ -95,13 +91,13 @@ SELECT tipo INTO v_tipo FROM tipo_equipo WHERE id_tipo_equipo = _id_tipo;
 UPDATE equipo SET estado_equipo = 'DADO DE BAJA' WHERE id_equipo = _id_equipo;
 UPDATE tipo_equipo SET total = total-1 WHERE id_tipo_equipo = _id_tipo;
 call insert_kardex(v_tipo, 'SALIDA', '1');
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.delete_equipo
 DROP PROCEDURE IF EXISTS `delete_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `delete_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo` INT
 )
@@ -111,13 +107,13 @@ SELECT tipo INTO v_tipo FROM tipo_equipo WHERE id_tipo_equipo = _id_tipo;
 UPDATE tipo_equipo SET total = total-1 WHERE id_tipo_equipo = _id_tipo;
 DELETE FROM equipo WHERE id_equipo = _id_equipo;
 call insert_kardex(v_tipo, 'SALIDA', '1');
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.delete_operacion
 DROP PROCEDURE IF EXISTS `delete_operacion`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `delete_operacion`(
+DELIMITER ;;
+CREATE  PROCEDURE `delete_operacion`(
 	IN `_id_equipo` INT,
 	IN `_id_operacion` INT
 )
@@ -126,7 +122,7 @@ DELETE FROM operacion WHERE id_operacion = _id_operacion;
 UPDATE equipo SET
 estado_equipo = 'ACTIVO'
 WHERE id_equipo = _id_equipo;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.equipo
@@ -180,8 +176,8 @@ INSERT IGNORE INTO `estante` (`id_estante`, `id_armario`, `nombre`) VALUES
 
 -- Volcando estructura para procedimiento silub.get_equipo
 DROP PROCEDURE IF EXISTS `get_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `get_equipo`(
 	IN `_id_equipo` INT
 
 )
@@ -200,13 +196,13 @@ ELSE
 	AND s.id_armario = a.id_armario
 	AND a.id_bodega = b.id_bodega;
 END IF;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.get_full_equipo
 DROP PROCEDURE IF EXISTS `get_full_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `get_full_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `get_full_equipo`(
 	IN `_serial` INT
 
 
@@ -229,13 +225,13 @@ ELSE
 	AND s.id_armario = a.id_armario
 	AND a.id_bodega = b.id_bodega;
 END IF;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_armario
 DROP PROCEDURE IF EXISTS `insert_armario`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_armario`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_armario`(
 	IN `_id_bodega` INT,
 	IN `_nombre` VARCHAR(50)
 )
@@ -247,13 +243,13 @@ END IF;
 INSERT INTO armario SET
 nombre = _nombre,
 id_bodega = _id_bodega;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_equipo
 DROP PROCEDURE IF EXISTS `insert_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_equipo`(
 	IN `_descripcion` VARCHAR(50),
 	IN `_tipo` VARCHAR(50)
 
@@ -284,13 +280,13 @@ INSERT INTO equipo set
 id_tipo_equipo = v_id_tipo_equipo,
 descripcion = _descripcion,
 estado_equipo = 'INACTIVO';
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_estante
 DROP PROCEDURE IF EXISTS `insert_estante`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_estante`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_estante`(
 	IN `_id_armario` INT,
 	IN `_nombre` VARCHAR(50)
 
@@ -303,13 +299,13 @@ END IF;
 INSERT INTO estante SET
 nombre = _nombre,
 id_armario = _id_armario;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_kardex
 DROP PROCEDURE IF EXISTS `insert_kardex`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_kardex`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_kardex`(
 	IN `_id_tipo_equipo` VARCHAR(50),
 	IN `_tipo` VARCHAR(50),
 	IN `_cantidad` VARCHAR(50)
@@ -327,13 +323,13 @@ id_tipo_equipo = v_id_tipo_equipo,
 tipo = _tipo,
 cantidad = _cantidad,
 total = v_total;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_operacion
 DROP PROCEDURE IF EXISTS `insert_operacion`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_operacion`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_operacion`(
 	IN `_id_equipo` INT,
 	IN `_descripcion` VARCHAR(50),
 	IN `_fecha_fin` VARCHAR(50),
@@ -358,13 +354,13 @@ tipo = _tipo;
 UPDATE equipo SET
 estado_equipo = _tipo
 WHERE id_equipo = _id_equipo;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_solicitud_adecuacion
 DROP PROCEDURE IF EXISTS `insert_solicitud_adecuacion`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_solicitud_adecuacion`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_solicitud_adecuacion`(
 	IN `_id_laboratorio` INT,
 	IN `_id_cliente` INT,
 	IN `_fecha_adecuacion` DATE,
@@ -416,13 +412,13 @@ fecha_adecuacion = _fecha_adecuacion,
 hora_ingreso_sala = _hora_ingreso_sala,
 hora_salida_sala = _hora_salida_sala,
 puestos_trabajo = _puestos_trabajo;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.insert_varios_equipos
 DROP PROCEDURE IF EXISTS `insert_varios_equipos`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_varios_equipos`(
+DELIMITER ;;
+CREATE  PROCEDURE `insert_varios_equipos`(
 	IN `_cantidad` VARCHAR(50),
 	IN `_descripcion` VARCHAR(50),
 	IN `_tipo` VARCHAR(50)
@@ -438,7 +434,7 @@ IF a= _cantidad THEN
 END IF;
 END LOOP simple_loop;
 call insert_kardex(_tipo, 'ENTRADA', _cantidad);
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.kardex
@@ -537,8 +533,8 @@ INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuac
 
 -- Volcando estructura para procedimiento silub.prestar_equipo
 DROP PROCEDURE IF EXISTS `prestar_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `prestar_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `prestar_equipo`(
 	IN `_id_cliente` INT,
 	IN `_id_equipo` INT,
 	IN `_fecha_solicitud` DATE,
@@ -575,18 +571,18 @@ fecha_prevista = _fecha_prevista;
 UPDATE equipo SET
 estado_equipo = 'PRESTADO'
 WHERE id_equipo = _id_equipo;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para evento silub.revisar_sanciones_clientes
 DROP EVENT IF EXISTS `revisar_sanciones_clientes`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-31 08:24:45' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
+DELIMITER ;;
+CREATE  EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-31 08:24:45' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
 UPDATE cliente, sancion
 SET cliente.estado_cliente = 'ACTIVO'
 WHERE cliente.id_cliente = sancion.id_cliente
 AND sancion.fecha_fin < CURDATE();
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.sancion
@@ -609,8 +605,8 @@ INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha
 
 -- Volcando estructura para procedimiento silub.sancionar_cliente
 DROP PROCEDURE IF EXISTS `sancionar_cliente`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sancionar_cliente`(
+DELIMITER ;;
+CREATE  PROCEDURE `sancionar_cliente`(
 	IN `_id_cliente` INT
 ,
 	IN `_fecha_fin` DATE
@@ -628,7 +624,7 @@ fecha_fin = _fecha_fin;
 UPDATE cliente set
 estado_cliente = 'SANCIONADO'
 WHERE id_cliente = _id_cliente;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion
@@ -680,8 +676,8 @@ INSERT IGNORE INTO `solicitud_adecuacion_equipo` (`id_solicitud_adecuacion`, `id
 
 -- Volcando estructura para procedimiento silub.terminar_prestamo
 DROP PROCEDURE IF EXISTS `terminar_prestamo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `terminar_prestamo`(
+DELIMITER ;;
+CREATE  PROCEDURE `terminar_prestamo`(
 	IN `_id_equipo` INT
 ,
 	IN `_id_prestamo` INT
@@ -695,7 +691,7 @@ UPDATE prestamo SET
 estado_prestamo = 'TERMINADO',
 fecha_devolucion = CURDATE()
 WHERE id_prestamo = _id_prestamo;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.tipo_equipo
@@ -717,8 +713,8 @@ INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
 
 -- Volcando estructura para procedimiento silub.update_equipo
 DROP PROCEDURE IF EXISTS `update_equipo`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipo`(
+DELIMITER ;;
+CREATE  PROCEDURE `update_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo_equipo` INT,
 	IN `_id_estante` INT,
@@ -738,13 +734,13 @@ IF _estado = 'DE_BAJA' THEN
 	UPDATE tipo_equipo set
 	total = total-1;
 END IF;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para procedimiento silub.update_equipo_solicitud
 DROP PROCEDURE IF EXISTS `update_equipo_solicitud`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `update_equipo_solicitud`(
+DELIMITER ;;
+CREATE  PROCEDURE `update_equipo_solicitud`(
 	IN `_id_tipo_equipo` INT,
 	IN `_id_solicitud_adecuacion` INT,
 	IN `_cantidad` VARCHAR(50)
@@ -766,7 +762,7 @@ ELSE
 		AND id_solicitud_adecuacion = _id_solicitud_adecuacion;
 	END IF;
 END IF;
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.usuario
@@ -796,8 +792,8 @@ INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `
 
 -- Volcando estructura para procedimiento silub._login
 DROP PROCEDURE IF EXISTS `_login`;
-DELIMITER //
-CREATE DEFINER=`root`@`localhost` PROCEDURE `_login`(
+DELIMITER ;;
+CREATE  PROCEDURE `_login`(
 	IN `_usuario` VARCHAR(50),
 	IN `_clave` VARCHAR(50)
 
@@ -805,18 +801,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `_login`(
 )
 BEGIN
 SELECT * FROM usuario u WHERE u.nombre_usuario = _usuario AND u.clave = _clave AND u.estado = 'ACTIVO';
-END//
+END;;
 DELIMITER ;
 
 -- Volcando estructura para disparador silub.sancion_after_delete
 DROP TRIGGER IF EXISTS `sancion_after_delete`;
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-DELIMITER //
+DELIMITER ;;
 CREATE TRIGGER `sancion_after_delete` AFTER DELETE ON `sancion` FOR EACH ROW BEGIN
 UPDATE cliente  SET
 estado_cliente = 'ACTIVO'
 WHERE id_cliente = OLD.id_cliente;
-END//
+END;;
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
