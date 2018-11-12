@@ -6,23 +6,23 @@
     </button>
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item dropdown">
-                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
-                   id="dropdown1">
-                    Sistema
-                </a>
-                <ul aria-labelledby="dropdown1" class="dropdown-menu">
-                    <div *ngIf="tipo==='DEPARTAMENTO'; then thenBlockUsuarios"></div>
-                    <ng-template #thenBlockUsuarios>
+            <div *ngIf="tipo==='DEPARTAMENTO'; then thenBlockUsuarios"></div>
+            <ng-template #thenBlockUsuarios>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                       data-toggle="dropdown"
+                       id="dropdown1">
+                        Sistema
+                    </a>
+                    <ul aria-labelledby="dropdown1" class="dropdown-menu">
+
                         <li class="dropdown-item" routerLink="/usuarios">
                             <a> Usuarios </a>
                         </li>
-                    </ng-template>
-                    <li class="dropdown-item" routerLink="/home">
-                        <a> Configuración </a>
-                    </li>
-                </ul>
-            </li>
+
+                    </ul>
+                </li>
+            </ng-template>
             <li class="nav-item dropdown">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
                    id="dropdown2">
