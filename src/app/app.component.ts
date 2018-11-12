@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import swal from 'sweetalert2';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent {
     login = '';
     tipo = '';
 
-    constructor() {
+    constructor(private route: Router) {
         this.login = sessionStorage.getItem('login');
         this.tipo = sessionStorage.getItem('tipo');
     }
@@ -29,6 +30,7 @@ export class AppComponent {
             }).then((result) => {
                 if (result.value) {
                     sessionStorage.clear();
+                    this.route.navigate(['/']);
                     location.reload();
                 }
             }

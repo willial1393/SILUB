@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
                             type: 'success',
                             title: 'Bienvenido ' + this.usuario.usuario
                         });
-                        this.route.navigate(['/home']);
+                        this.route.navigate(['/']);
                         location.reload();
                     } else {
                         this.appGlobals.errorUPS(res2);
