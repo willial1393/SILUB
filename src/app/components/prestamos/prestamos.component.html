@@ -85,7 +85,7 @@
                         <div class="equipo-gestor-correo form-group">
                             <label>Código cliente<span class="equipo-obligatorio">*</span></label>
                             <input name="codigo" [(ngModel)]="prestamo.codigo" pattern="[0-9]+"
-                                   type="text" required
+                                   type="text" required minlength="3" maxlength="8"
                                    class="form-control" (keyup)="getCliente()">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
@@ -97,7 +97,8 @@
                         <div class="equipo-gestor-correo form-group">
                             <label>Serial equipo<span class="equipo-obligatorio">*</span></label>
                             <input name="serial" [(ngModel)]="prestamo.serial" type="text"
-                                   class="form-control" (keyup)="getEquipo()" required pattern="[0-9]+">
+                                   class="form-control" (keyup)="getEquipo()" required pattern="[0-9]+"
+                                   minlength="3" maxlength="8">
                         </div>
                         <div class="equipo-gestor-codigo form-group">
                             <label>Tipo de equipo<span

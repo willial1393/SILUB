@@ -71,7 +71,7 @@
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="nombre" [(ngModel)]="bodega.nombre" type="text" class="form-control"
-                                   required>
+                                   required minlength="3">
                         </div>
                         <div class="usuario-boton">
                             <button type="submit" class="btn btn-dark btn-guardar">Guardar Bodega</button>
@@ -137,11 +137,11 @@
                             </select>
                         </div>
                         <div class="usuario-gestor-estante form-group">
-                            <label>Nombre armario
+                            <label>Nombre de armario
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="nombre" [(ngModel)]="armario.nombre" type="text"
-                                   class="form-control" required>
+                                   class="form-control" required minlength="3">
                         </div>
                         <div class="usuario-boton">
                             <button type="submit" class="btn btn-dark btn-guardar">Guardar Armario</button>
@@ -167,11 +167,11 @@
             <div class="modal-body">
                 <form ngNativeValidate (submit)="addEstante()" action="" class="container-form">
                     <div class="usuario-gestor-estante form-group">
-                        <label>Nombre estante
+                        <label>Nombre de estante
                             <span class="usuario-obligatorio">*</span>
                         </label>
                         <input name="nombre" [(ngModel)]="estante.nombre" type="text"
-                               class="form-control" required>
+                               class="form-control" required minlength="3">
                     </div>
                     <input class="boton-accion" type=image src="../../../assets/imagenes/more.png"
                            width="25" height="25">

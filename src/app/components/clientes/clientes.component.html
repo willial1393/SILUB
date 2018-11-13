@@ -81,7 +81,7 @@
                             </label>
                             <input name="codigo" [(ngModel)]="cliente.codigo" id="usuario-codigo" type="text"
                                    class="form-codigo form-control" required
-                                   pattern="[0-9]+">
+                                   pattern="[0-9]+" minlength="3" maxlength="8">
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-nombre">nombre
@@ -90,7 +90,7 @@
                             <input name="nombre" [(ngModel)]="cliente.nombre" id="usuario-nombre"
                                    type="text"
                                    class="form-control" required
-                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+">
+                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+" minlength="3">
                         </div>
                         <div class="usuario-gestor-nombre form-group">
                             <label for="usuario-correo">Correo electronico

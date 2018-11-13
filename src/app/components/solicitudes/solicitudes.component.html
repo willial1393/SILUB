@@ -92,7 +92,7 @@
                             </label>
                             <input name="codigo" [(ngModel)]="solicitud.codigo"
                                    type="text" class="form-control"
-                                   pattern="[0-9]+"
+                                   pattern="[0-9]+" minlength="3" maxlength="8"
                                    required (keyup)="getCliente()">
                         </div>
                         <div class="usuario-gestor-bodega form-group">

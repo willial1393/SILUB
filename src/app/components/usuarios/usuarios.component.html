@@ -83,13 +83,13 @@
                             <label for="usuario-codigo1">Código <span class="usuario-obligatorio">*</span></label>
                             <input name="codigo" [(ngModel)]="usuario.codigo" id="usuario-codigo1" type="text"
                                    class="form-control" required
-                                   pattern="[0-9]+">
+                                   pattern="[0-9]+" maxlength="8" minlength="3">
                         </div>
                         <div class="usuario-gestor-nombre form-group">
                             <label for="usuario-nombre">Nombre <span class="usuario-obligatorio">*</span></label>
                             <input name="nombre_persona" [(ngModel)]="usuario.nombre_persona" id="usuario-nombre"
                                    type="text" class="form-control" required
-                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+">
+                                   pattern="[A-Za-zñÑáéíóúÁÉÍÓÚñ ]+" minlength="3">
                         </div>
                         <div class="usuario-gestor-correo form-group">
                             <label for="usuario-correo">Correo electrónico<span

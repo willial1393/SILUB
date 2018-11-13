@@ -204,6 +204,24 @@ export class SolicitudesComponent implements OnInit {
     }
 
     guardar() {
+        if (this.solicitud.fecha_solicitud > this.solicitud.fecha_adecuacion) {
+            swal(
+                '',
+                'Fecha de solicitud es mayor a la de adecuación',
+                'error'
+            );
+            return;
+        }
+
+        if (this.solicitud.hora_ingreso_sala > this.solicitud.hora_salida_sala) {
+            swal(
+                '',
+                'Hora de ingreso es mayor a la hora de salida',
+                'error'
+            );
+            return;
+        }
+
         if (isNullOrUndefined(this.solicitud.nombre)) {
             swal(
                 '',

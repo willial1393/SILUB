@@ -187,6 +187,14 @@ export class PrestamosComponent implements OnInit {
     }
 
     guardar() {
+        if (this.prestamo.fecha_solicitud > this.prestamo.fecha_prevista) {
+            swal(
+                '',
+                'La fecha de devolución no es mayor a la de solicitud',
+                'error'
+            );
+            return;
+        }
         if (isNullOrUndefined(this.prestamo.nombre)) {
             swal(
                 '',

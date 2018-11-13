@@ -92,7 +92,7 @@
                                 <span class="usuario-obligatorio">*</span>
                             </label>
                             <input name="serial" [(ngModel)]="operacion.serial" id="usuario-nombre"
-                                   type="text"
+                                   type="text" minlength="3" maxlength="8"
                                    class="form-control" required (keyup)="getEquipo()"
                                    pattern="[0-9]+">
                         </div>

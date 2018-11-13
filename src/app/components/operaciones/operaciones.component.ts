@@ -133,6 +133,14 @@ export class OperacionesComponent implements OnInit {
     }
 
     guardar() {
+        if (this.operacion.fecha_inicio > this.operacion.fecha_fin) {
+            swal(
+                '',
+                'Fecha de inicio es mayor a la de fin',
+                'error'
+            );
+            return;
+        }
         if (!this.appGlobals.isValidDate(this.operacion.fecha_fin)) {
             swal(
                 '',
