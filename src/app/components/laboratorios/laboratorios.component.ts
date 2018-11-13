@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {LaboratorioService} from '../../services/laboratorio.service';
 import {AppGlobals} from '../../models/appGlobals';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-laboratorios',
@@ -19,7 +20,8 @@ export class LaboratoriosComponent implements OnInit {
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
-                private laboratorioService: LaboratorioService) {
+                private laboratorioService: LaboratorioService,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -47,9 +49,11 @@ export class LaboratoriosComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.laboratorioService.getLaboratorios().subscribe(res => {
             this.laboratoriosAll = res['result'];
             this.laboratorios = this.laboratoriosAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -87,6 +91,7 @@ export class LaboratoriosComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     laboratorio.estado_laboratorio = 'ELIMINADO';
                     this.laboratorioService.putLaboratorio(laboratorio).subscribe(res => {
                         if (res['response']) {
@@ -97,7 +102,7 @@ export class LaboratoriosComponent implements OnInit {
                             );
                             this.updateTable();
                         } else {
-                            this.appGlobals.errorUPS(res);
+                            this.showValidation(res);
                         }
                     });
                 }
@@ -108,6 +113,7 @@ export class LaboratoriosComponent implements OnInit {
     guardar() {
         this.laboratorio.nombre = this.laboratorio.nombre.toUpperCase();
         if (this.isEdit) {
+            this.app.showLoading();
             this.laboratorioService.putLaboratorio(this.laboratorio).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -121,6 +127,7 @@ export class LaboratoriosComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.laboratorioService.postLaboratorio(this.laboratorio).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -137,6 +144,7 @@ export class LaboratoriosComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('nombre_UNIQUE') >= 0) {
             swal(
                 '',

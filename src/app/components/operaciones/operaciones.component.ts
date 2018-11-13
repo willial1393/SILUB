@@ -4,6 +4,7 @@ import {AppGlobals} from '../../models/appGlobals';
 import swal from 'sweetalert2';
 import {OperacionService} from '../../services/operacion.service';
 import {EquipoService} from '../../services/equipo.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-operaciones',
@@ -23,7 +24,8 @@ export class OperacionesComponent implements OnInit {
     constructor(private route: Router,
                 private operacionService: OperacionService,
                 private equipoService: EquipoService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -75,9 +77,11 @@ export class OperacionesComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.operacionService.getOperaciones().subscribe(res => {
             this.operacionesAll = res['result'];
             this.operaciones = this.operacionesAll;
+            this.app.hidenLoading();
         });
 
     }
@@ -89,10 +93,12 @@ export class OperacionesComponent implements OnInit {
     }
 
     getEquipo() {
+        this.app.showLoading();
         this.equipoService.getEquipoSerial(this.operacion.serial).subscribe(res => {
             if (res['response']) {
                 this.equipo = res['result'];
                 this.operacion.id_equipo = this.equipo.id_equipo;
+                this.app.hidenLoading();
             } else {
                 this.showValidation(res);
             }
@@ -118,6 +124,7 @@ export class OperacionesComponent implements OnInit {
     }
 
     eliminarOperacion(operacion) {
+        this.app.showLoading();
         this.operacionService.deleteOperacion(operacion).subscribe(res => {
             if (res['response']) {
                 swal(
@@ -150,6 +157,7 @@ export class OperacionesComponent implements OnInit {
             return;
         }
         if (this.isEdit) {
+            this.app.showLoading();
             this.operacionService.putOperacion(this.operacion).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -163,6 +171,7 @@ export class OperacionesComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.operacionService.postOperacion(this.operacion).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -179,6 +188,7 @@ export class OperacionesComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('EQUIPO NO ACTIVO') >= 0) {
             swal(
                 '',

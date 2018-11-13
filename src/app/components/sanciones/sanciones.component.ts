@@ -4,6 +4,7 @@ import {AppGlobals} from '../../models/appGlobals';
 import swal from 'sweetalert2';
 import {ClienteService} from '../../services/cliente.service';
 import {SancionService} from '../../services/sancion.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-sanciones',
@@ -21,7 +22,8 @@ export class SancionesComponent implements OnInit {
     constructor(private route: Router,
                 private sancionService: SancionService,
                 private clienteService: ClienteService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -63,9 +65,11 @@ export class SancionesComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.sancionService.getSanciones().subscribe(res => {
             this.sancionesAll = res['result'];
             this.sanciones = this.sancionesAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -96,8 +100,10 @@ export class SancionesComponent implements OnInit {
     }
 
     eliminarSancion(sancion) {
+        this.app.showLoading();
         this.clienteService.getClienteCodigo(sancion.codigo).subscribe(res => {
             this.cliente = res['result'];
+            this.app.hidenLoading();
             swal(
                 {
                     title: '¿Desea eliminar la sanción?',
@@ -110,6 +116,7 @@ export class SancionesComponent implements OnInit {
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
+                        this.app.showLoading();
                         this.sancionService.deleteSancion(sancion).subscribe(res2 => {
                             if (res2['response']) {
                                 this.cliente.estado_cliente = 'ACTIVO';
@@ -122,10 +129,12 @@ export class SancionesComponent implements OnInit {
                                         );
                                         this.updateTable();
                                     } else {
+                                        this.app.hidenLoading();
                                         this.appGlobals.errorUPS(res);
                                     }
                                 });
                             } else {
+                                this.app.hidenLoading();
                                 this.appGlobals.errorUPS(res);
                             }
                         });
@@ -138,6 +147,7 @@ export class SancionesComponent implements OnInit {
     guardar() {
         if (this.appGlobals.isValidDate(this.sancion.fecha_fin)
             && this.appGlobals.isValidDate(this.sancion.fecha_inicio)) {
+            this.app.showLoading();
             this.sancionService.putSancion(this.sancion).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -147,6 +157,7 @@ export class SancionesComponent implements OnInit {
                     );
                     this.updateTable();
                 } else {
+                    this.app.hidenLoading();
                     this.appGlobals.errorUPS(res);
                 }
             });

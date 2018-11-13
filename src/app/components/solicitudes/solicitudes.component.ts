@@ -7,6 +7,7 @@ import swal from 'sweetalert2';
 import {SolicitudService} from '../../services/solicitud.service';
 import {LaboratorioService} from '../../services/laboratorio.service';
 import {isNullOrUndefined} from 'util';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-solicitudes',
@@ -32,7 +33,8 @@ export class SolicitudesComponent implements OnInit {
                 private clienteService: ClienteService,
                 private solicitudService: SolicitudService,
                 private laboratorioService: LaboratorioService,
-                private equipoService: EquipoService) {
+                private equipoService: EquipoService,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -105,9 +107,11 @@ export class SolicitudesComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.solicitudService.getSolicitudes().subscribe(res => {
             this.solicitudesAll = res['result'];
             this.solicitudes = this.solicitudesAll;
+            this.app.hidenLoading();
         });
         this.laboratorioService.getLaboratorios().subscribe(res => {
             this.laboratorios = res['result'];
@@ -121,6 +125,7 @@ export class SolicitudesComponent implements OnInit {
     }
 
     getCliente() {
+        this.app.showLoading();
         this.clienteService.getClienteCodigo(this.solicitud.codigo).subscribe(res => {
             this.cliente = res['result'];
             this.solicitud.id_cliente = this.cliente.id_cliente;
@@ -128,6 +133,7 @@ export class SolicitudesComponent implements OnInit {
             this.solicitud.estado_cliente = this.cliente.estado_cliente;
             this.solicitud.correo_electronico = this.cliente.correo_electronico;
             this.solicitud.nombre = this.cliente.nombre;
+            this.app.hidenLoading();
         });
     }
 
@@ -136,8 +142,10 @@ export class SolicitudesComponent implements OnInit {
         this.solicitudService.getDetalleSolicitud(solicitud.id_solicitud_adecuacion).subscribe(res => {
             this.equiposSolicitud = res['result'];
         });
+        this.app.showLoading();
         this.equipoService.getTipoEquipos().subscribe(res => {
             this.tiposEquipos = res['result'];
+            this.app.hidenLoading();
         });
         this.tiposEquipos = {
             id_tipo_equipo: '',
@@ -148,6 +156,7 @@ export class SolicitudesComponent implements OnInit {
 
     updateDetalle() {
         for (const detalle of this.equiposSolicitud) {
+            this.app.showLoading();
             this.solicitudService.postDetalleSolicitud(detalle).subscribe(res => {
                 if (!res['response']) {
                     this.showValidation(res);
@@ -160,11 +169,13 @@ export class SolicitudesComponent implements OnInit {
     addEquipoSolicitud() {
         this.equipoSolicitud.cantidad = '1';
         this.equipoSolicitud.id_solicitud_adecuacion = this.detalleSolicitud.id_solicitud_adecuacion;
+        this.app.showLoading();
         this.solicitudService.postDetalleSolicitud(this.equipoSolicitud).subscribe(res => {
             if (res['response']) {
                 this.solicitudService.getDetalleSolicitud(this.detalleSolicitud.id_solicitud_adecuacion).subscribe(res2 => {
                     if (res2['response']) {
                         this.equiposSolicitud = res2['result'];
+                        this.app.hidenLoading();
                     } else {
                         this.showValidation(res2);
                     }
@@ -187,6 +198,7 @@ export class SolicitudesComponent implements OnInit {
             cancelButtonText: 'Cancelar',
         }).then((result) => {
             if (result.value) {
+                this.app.showLoading();
                 this.solicitudService.deleteSolicitud(solicitud).subscribe(res => {
                     if (res['response']) {
                         swal(
@@ -238,6 +250,7 @@ export class SolicitudesComponent implements OnInit {
             );
             return;
         }
+        this.app.showLoading();
         this.solicitudService.postSolicitud(this.solicitud).subscribe(res => {
             if (res['response']) {
                 swal(
@@ -253,6 +266,7 @@ export class SolicitudesComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('SANCIONADO') >= 0) {
             swal(
                 '',

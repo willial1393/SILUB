@@ -5,6 +5,7 @@ import {BodegaService} from '../../services/bodega.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {ArmarioService} from '../../services/armario.service';
 import {EstanteService} from '../../services/estante.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-bodegas',
@@ -30,7 +31,8 @@ export class BodegasComponent implements OnInit {
                 private appGlobals: AppGlobals,
                 private bodegaService: BodegaService,
                 private armarioService: ArmarioService,
-                private estanteService: EstanteService) {
+                private estanteService: EstanteService,
+                private app: AppComponent) {
         this.updateBodegas();
     }
 
@@ -79,10 +81,12 @@ export class BodegasComponent implements OnInit {
     }
 
     updateBodegas() {
+        this.app.showLoading();
         this.clearForm();
         this.bodegaService.getBodegas().subscribe(res => {
             this.bodegasAll = res['result'];
             this.bodegas = this.bodegasAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -91,12 +95,14 @@ export class BodegasComponent implements OnInit {
             this.bodegaSelected = bodega;
         }
 
+        this.app.showLoading();
         this.bodegaService.getArmariosBodega(this.bodegaSelected.id_bodega).subscribe(res => {
             if (res['response']) {
                 this.armarios = res['result'];
             } else {
                 this.showValidation(res);
             }
+            this.app.hidenLoading();
         });
 
         this.armario = {
@@ -111,8 +117,10 @@ export class BodegasComponent implements OnInit {
         if (armario !== null) {
             this.armarioSelected = armario;
         }
+        this.app.showLoading();
         this.armarioService.getEstantesArmario(this.armarioSelected.id_armario).subscribe(res => {
             this.estantes = res['result'];
+            this.app.hidenLoading();
         });
         this.estante = {
             id_estante: '',
@@ -139,6 +147,7 @@ export class BodegasComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.bodegaService.deleteBodega(bodega).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -150,6 +159,7 @@ export class BodegasComponent implements OnInit {
                         } else {
                             this.showValidation(res);
                         }
+                        this.app.hidenLoading();
                     });
                 }
             }

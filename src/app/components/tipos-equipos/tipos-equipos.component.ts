@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {AppGlobals} from '../../models/appGlobals';
 import swal from 'sweetalert2';
 import {EquipoService} from '../../services/equipo.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-tipos-equipos',
@@ -17,7 +18,8 @@ export class TiposEquiposComponent implements OnInit {
 
     constructor(private route: Router,
                 private appGlobals: AppGlobals,
-                private equipoService: EquipoService) {
+                private equipoService: EquipoService,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -26,8 +28,10 @@ export class TiposEquiposComponent implements OnInit {
     }
 
     updateTable() {
+        this.app.showLoading();
         this.equipoService.getTipoEquipos().subscribe(res => {
             this.tiposEquipos = res['result'];
+            this.app.hidenLoading();
         });
         this.tipoEquipo = {
             id_tipo_equipo: '',
@@ -61,6 +65,7 @@ export class TiposEquiposComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.equipoService.deleteTipoEquipo(tipoEquipo).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -81,6 +86,7 @@ export class TiposEquiposComponent implements OnInit {
     guardar() {
         this.tipoEquipo.tipo = this.tipoEquipo.tipo.toUpperCase();
         if (this.isEdit) {
+            this.app.showLoading();
             this.equipoService.putTipoEquipo(this.tipoEquipo).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -94,6 +100,7 @@ export class TiposEquiposComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.equipoService.postTipoEquipo(this.tipoEquipo).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -110,6 +117,7 @@ export class TiposEquiposComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('nombre_UNIQUE') >= 0) {
             swal(
                 '',

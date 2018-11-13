@@ -7,6 +7,7 @@ import {BodegaService} from '../../services/bodega.service';
 import {KardexService} from '../../services/kardex.service';
 import {ArmarioService} from '../../services/armario.service';
 import {EstanteService} from '../../services/estante.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-equipos',
@@ -34,7 +35,8 @@ export class EquiposComponent implements OnInit {
                 private armarioService: ArmarioService,
                 private estanteService: EstanteService,
                 private kardexService: KardexService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private app: AppComponent) {
         this.updateEquipos();
     }
 
@@ -54,6 +56,7 @@ export class EquiposComponent implements OnInit {
             }
         }).then((result) => {
             if (result.value) {
+                this.app.showLoading();
                 this.equipoService.postTipoEquipo(this.tipo_equipo).subscribe(res => {
                     if (res['response']) {
                         this.updateEquipos();
@@ -62,6 +65,7 @@ export class EquiposComponent implements OnInit {
                             '',
                             'success'
                         );
+                        this.app.hidenLoading();
                     } else {
                         this.showValidation(res);
                     }
@@ -124,10 +128,12 @@ export class EquiposComponent implements OnInit {
 
     updateEquipos() {
         this.clearForm();
+        this.app.showLoading();
         this.equipoService.getEquipos().subscribe(res => {
             if (res['response']) {
                 this.equiposAll = res['result'];
                 this.equipos = this.equiposAll;
+                this.app.hidenLoading();
             } else {
                 this.showValidation(res);
             }
@@ -140,6 +146,7 @@ export class EquiposComponent implements OnInit {
     updateBodegas(equipo) {
         this.clearForm();
         if (equipo !== null) {
+            this.app.showLoading();
             this.equipoService.getEquipoID(equipo.id_equipo).subscribe(res => {
                 if (res['response']) {
                     this.equipoSelected = res['result'];
@@ -159,6 +166,7 @@ export class EquiposComponent implements OnInit {
     }
 
     updateArmarios() {
+        this.app.showLoading();
         this.bodegaService.getArmariosBodega(this.equipoSelected.id_bodega).subscribe(res => {
             if (res['response']) {
                 this.armarios = res['result'];
@@ -170,9 +178,11 @@ export class EquiposComponent implements OnInit {
     }
 
     updateEstantes() {
+        this.app.showLoading();
         this.armarioService.getEstantesArmario(this.equipoSelected.id_armario).subscribe(res => {
             if (res['response']) {
                 this.estantes = res['result'];
+                this.app.hidenLoading();
             } else {
                 this.showValidation(res);
             }
@@ -180,6 +190,7 @@ export class EquiposComponent implements OnInit {
     }
 
     eliminarUbicacion() {
+        this.app.showLoading();
         this.equipoService.deleteUbicacion(this.equipoSelected).subscribe(res => {
             if (res['response']) {
                 swal(
@@ -195,6 +206,7 @@ export class EquiposComponent implements OnInit {
     }
 
     guardarUbicacion() {
+        this.app.showLoading();
         this.equipoService.putEquipo(this.equipoSelected).subscribe(res => {
             if (res['response']) {
                 swal(
@@ -256,6 +268,7 @@ export class EquiposComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.equipoService.deleteEquipo(equipo).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -265,7 +278,7 @@ export class EquiposComponent implements OnInit {
                             );
                             this.updateEquipos();
                         } else {
-                            this.appGlobals.errorUPS(res);
+                            this.showValidation(res);
                         }
                     });
                 }
@@ -286,6 +299,7 @@ export class EquiposComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.equipoService.darDeBajaEquipo(equipo).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -295,7 +309,7 @@ export class EquiposComponent implements OnInit {
                             );
                             this.updateEquipos();
                         } else {
-                            this.appGlobals.errorUPS(res);
+                            this.showValidation(res);
                         }
                     });
                 }
@@ -305,6 +319,7 @@ export class EquiposComponent implements OnInit {
 
     guardar() {
         if (this.isEdit) {
+            this.app.showLoading();
             this.equipoService.putEquipo(this.equipo).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -318,6 +333,7 @@ export class EquiposComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.equipoService.postEquipo(this.equipo).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -327,7 +343,7 @@ export class EquiposComponent implements OnInit {
                     );
                     this.updateEquipos();
                 } else {
-                    this.appGlobals.errorUPS(res);
+                    this.showValidation(res);
                 }
             });
         }
@@ -348,6 +364,7 @@ export class EquiposComponent implements OnInit {
             }).then((result) => {
                 if (result.value) {
                     equipo.estado_equipo = 'ACTIVO';
+                    this.app.showLoading();
                     this.equipoService.putEquipo(equipo).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -375,6 +392,7 @@ export class EquiposComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('tipo_UNIQUE') >= 0) {
             swal(
                 '',

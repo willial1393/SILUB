@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import swal from 'sweetalert2';
 import {UsuarioService} from '../../services/usuario.service';
 import {AppGlobals} from '../../models/appGlobals';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-usuarios',
@@ -20,7 +21,8 @@ export class UsuariosComponent implements OnInit {
 
     constructor(private route: Router,
                 private usuarioService: UsuarioService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -53,9 +55,11 @@ export class UsuariosComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.usuarioService.getUsuarios().subscribe(res => {
             this.usuariosAll = res['result'];
             this.usuarios = this.usuariosAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -86,6 +90,7 @@ export class UsuariosComponent implements OnInit {
     inhabilitarUsuario(usuario) {
         if (usuario.estado === 'ACTIVO') {
             usuario.estado = 'INACTIVO';
+            this.app.showLoading();
             this.usuarioService.putUsuario(usuario).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -93,12 +98,14 @@ export class UsuariosComponent implements OnInit {
                         '',
                         'success'
                     );
+                    this.app.hidenLoading();
                 } else {
                     this.showValidation(res);
                 }
             });
         } else {
             usuario.estado = 'ACTIVO';
+            this.app.showLoading();
             this.usuarioService.putUsuario(usuario).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -106,6 +113,7 @@ export class UsuariosComponent implements OnInit {
                         '',
                         'success'
                     );
+                    this.app.hidenLoading();
                 } else {
                     this.showValidation(res);
                 }
@@ -126,6 +134,7 @@ export class UsuariosComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.usuarioService.deleteUsuario(usuario).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -135,7 +144,7 @@ export class UsuariosComponent implements OnInit {
                             );
                             this.updateTable();
                         } else {
-                            this.appGlobals.errorUPS(res);
+                            this.showValidation(res);
                         }
                     });
                 }
@@ -147,6 +156,7 @@ export class UsuariosComponent implements OnInit {
         this.usuario.nombre_persona = this.usuario.nombre_persona.toUpperCase();
         this.usuario.correo_electronico = this.usuario.correo_electronico.toLowerCase();
         if (this.isEdit) {
+            this.app.showLoading();
             this.usuarioService.putUsuario(this.usuario).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -160,6 +170,7 @@ export class UsuariosComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.usuarioService.postUsuario(this.usuario).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -176,6 +187,7 @@ export class UsuariosComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('codigo_UNIQUE') >= 0) {
             swal(
                 '',

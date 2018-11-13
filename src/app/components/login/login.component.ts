@@ -30,13 +30,14 @@ export class LoginComponent implements OnInit {
         this.app.showLoading();
         this.loginService.login(this.usuario).subscribe(res => {
             if (!res['response']) {
-                this.app.hideLoading();
+                this.app.hidenLoading();
                 this.appGlobals.errorUPS(res);
                 return;
             }
             if (res['result']) {
                 this.usuarioService.getUsuarioByNombre(this.usuario.usuario).subscribe(res2 => {
                     if (res2['response']) {
+                        this.app.hidenLoading();
                         sessionStorage.setItem('login', this.usuario.usuario);
                         sessionStorage.setItem('tipo', res2['result'].tipo);
                         const toast = swal.mixin({
@@ -52,17 +53,19 @@ export class LoginComponent implements OnInit {
                         this.route.navigate(['/']);
                         location.reload();
                     } else {
+                        this.app.hidenLoading();
                         this.appGlobals.errorUPS(res2);
                     }
                 });
             } else {
+                this.app.hidenLoading();
                 swal(
                     '',
                     'usuario o contraseña incorrecta',
                     'error'
                 );
             }
-            this.app.hideLoading();
+
         });
     }
 

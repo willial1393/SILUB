@@ -6,6 +6,7 @@ import {AppGlobals} from '../../models/appGlobals';
 import {ClienteService} from '../../services/cliente.service';
 import {EquipoService} from '../../services/equipo.service';
 import {isNullOrUndefined} from 'util';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-prestamos',
@@ -25,7 +26,8 @@ export class PrestamosComponent implements OnInit {
                 private appGlobals: AppGlobals,
                 private prestamoService: PrestamoService,
                 private clienteService: ClienteService,
-                private equipoService: EquipoService) {
+                private equipoService: EquipoService,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -105,9 +107,11 @@ export class PrestamosComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.prestamoService.getPrestamos().subscribe(res => {
             this.prestamosAll = res['result'];
             this.prestamos = this.prestamosAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -118,6 +122,7 @@ export class PrestamosComponent implements OnInit {
     }
 
     getCliente() {
+        this.app.showLoading();
         this.clienteService.getClienteCodigo(this.prestamo.codigo).subscribe(res => {
             this.cliente = res['result'];
             this.prestamo.id_cliente = this.cliente.id_cliente;
@@ -125,10 +130,12 @@ export class PrestamosComponent implements OnInit {
             this.prestamo.estado_cliente = this.cliente.estado_cliente;
             this.prestamo.correo_electronico = this.cliente.correo_electronico;
             this.prestamo.nombre = this.cliente.nombre;
+            this.app.hidenLoading();
         });
     }
 
     getEquipo() {
+        this.app.showLoading();
         this.equipoService.getEquipoSerial(this.prestamo.serial).subscribe(res => {
             this.equipo = res['result'];
             this.prestamo.id_equipo = this.equipo.id_equipo;
@@ -136,11 +143,13 @@ export class PrestamosComponent implements OnInit {
             this.prestamo.nombre_estante = this.equipo.nombre_estante;
             this.prestamo.nombre_armario = this.equipo.nombre_armario;
             this.prestamo.nombre_bodega = this.equipo.nombre_bodega;
+            this.app.hidenLoading();
         });
     }
 
     verPrestamo(prestamo) {
         if (!isNullOrUndefined(prestamo.id_estante)) {
+            this.app.showLoading();
             this.equipoService.getEquipoID(prestamo.id_equipo).subscribe(res => {
                 if (res['response']) {
                     this.equipo = res['result'];
@@ -162,6 +171,7 @@ export class PrestamosComponent implements OnInit {
                         type: 'info',
                         confirmButtonColor: '#999999'
                     });
+                    this.app.hidenLoading();
                 } else {
                     this.showValidation(res);
                 }
@@ -211,6 +221,7 @@ export class PrestamosComponent implements OnInit {
             );
             return;
         }
+        this.app.showLoading();
         this.prestamoService.postPrestamo(this.prestamo).subscribe(res => {
             if (res['response']) {
                 swal(
@@ -234,6 +245,7 @@ export class PrestamosComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     prestamo.fecha_devolucion = this.appGlobals.getCurrentDate();
                     this.prestamoService.terminarPrestamo(prestamo).subscribe(res => {
                         if (res['response']) {
@@ -253,6 +265,7 @@ export class PrestamosComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('SANCIONADO') >= 0) {
             swal(
                 '',

@@ -4,6 +4,7 @@ import swal from 'sweetalert2';
 import {ClienteService} from '../../services/cliente.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {SancionService} from '../../services/sancion.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-clientes',
@@ -22,7 +23,8 @@ export class ClientesComponent implements OnInit {
     constructor(private route: Router,
                 private clienteService: ClienteService,
                 private sancionService: SancionService,
-                private appGlobals: AppGlobals) {
+                private appGlobals: AppGlobals,
+                private app: AppComponent) {
         this.updateTable();
     }
 
@@ -54,9 +56,11 @@ export class ClientesComponent implements OnInit {
 
     updateTable() {
         this.clearForm();
+        this.app.showLoading();
         this.clienteService.getClientes().subscribe(res => {
             this.clientesAll = res['result'];
             this.clientes = this.clientesAll;
+            this.app.hidenLoading();
         });
     }
 
@@ -97,6 +101,7 @@ export class ClientesComponent implements OnInit {
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
+                    this.app.showLoading();
                     this.clienteService.deleteCliente(cliente).subscribe(res => {
                         if (res['response']) {
                             swal(
@@ -108,6 +113,7 @@ export class ClientesComponent implements OnInit {
                         } else {
                             this.appGlobals.errorUPS(res);
                         }
+                        this.app.hidenLoading();
                     });
                 }
             }
@@ -136,11 +142,13 @@ export class ClientesComponent implements OnInit {
                         id_cliente: cliente.id_cliente,
                         fecha_fin: this.appGlobals.formatDate(date)
                     };
+                    this.app.showLoading();
                     this.sancionService.postSancion(this.sancion).subscribe(res => {
                         if (res['response']) {
                             cliente.estado_cliente = 'SANCIONADO';
                             this.clienteService.putCliente(cliente).subscribe(res2 => {
                                 if (res2['response']) {
+                                    this.app.hidenLoading();
                                     swal(
                                         'OK',
                                         'Cliente sancionado',
@@ -170,6 +178,7 @@ export class ClientesComponent implements OnInit {
         this.cliente.nombre = this.cliente.nombre.toUpperCase();
         this.cliente.correo_electronico = this.cliente.correo_electronico.toLowerCase();
         if (this.isEdit) {
+            this.app.showLoading();
             this.clienteService.putCliente(this.cliente).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -183,6 +192,7 @@ export class ClientesComponent implements OnInit {
                 }
             });
         } else {
+            this.app.showLoading();
             this.clienteService.postCliente(this.cliente).subscribe(res => {
                 if (res['response']) {
                     swal(
@@ -199,6 +209,7 @@ export class ClientesComponent implements OnInit {
     }
 
     showValidation(res) {
+        this.app.hidenLoading();
         if (res['message'].toString().indexOf('codigo_UNIQUE') >= 0) {
             swal(
                 '',

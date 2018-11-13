@@ -55,7 +55,7 @@ export class AppComponent {
         this.loading = true;
     }
 
-    hideLoading() {
+    hidenLoading() {
         this.loading = false;
     }
 }
