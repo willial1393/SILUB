@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AppGlobals} from '../../models/appGlobals';
 import {KardexService} from '../../services/kardex.service';
-import swal from 'sweetalert2';
 
 @Component({
     selector: 'app-kardex',
@@ -13,17 +12,13 @@ export class KardexComponent implements OnInit {
 
     kardex: any;
     kardexAll: any;
-    filtro: any = {
-        nombre: '',
-        fecha_inicio: '',
-        fecha_fin: ''
-    };
+    filtro: any;
     search = '';
 
     constructor(private route: Router,
                 private kardexService: KardexService,
                 private appGlobals: AppGlobals) {
-        this.updateTable();
+        this.cleanFilterDate();
     }
 
     imprimir() {
@@ -36,6 +31,15 @@ export class KardexComponent implements OnInit {
         }
     }
 
+    cleanFilterDate() {
+        this.filtro = {
+            nombre: '',
+            fecha_inicio: '',
+            fecha_fin: ''
+        };
+        this.updateTable();
+    }
+
     updateFilter() {
         this.search = this.search.toUpperCase();
         this.kardex = this.kardexAll.filter(
@@ -46,17 +50,22 @@ export class KardexComponent implements OnInit {
                 || x.total.indexOf(this.search) >= 0);
     }
 
+    updateFilterDate() {
+        this.search = this.search.toUpperCase();
+        console.log(this.filtro.nombre);
+        this.kardex = this.kardexAll.filter(
+            x => x.equipo.indexOf(this.filtro.nombre) >= 0
+                && x.fecha >= this.filtro.fecha_inicio
+                && x.fecha <= this.filtro.fecha_fin);
+    }
+
     updateTable() {
         this.kardexService.getKardex().subscribe(res => {
             if (res['response']) {
                 this.kardexAll = res['result'];
                 this.kardex = this.kardexAll;
             } else {
-                swal(
-                    'Error',
-                    'Verifique el formato de las fechas',
-                    'error'
-                );
+                this.appGlobals.errorUPS(res);
             }
         });
     }

@@ -11,6 +11,8 @@ export class AppComponent {
     title = 'SILUB';
     login = '';
     tipo = '';
+    stringTemplate = '<div class="loader"></div>';
+    loading = false;
 
     constructor(private route: Router) {
         this.login = sessionStorage.getItem('login');
@@ -47,5 +49,13 @@ export class AppComponent {
             confirmButtonColor: '#999999',
             confirmButtonText: 'Aceptar',
         });
+    }
+
+    showLoading() {
+        this.loading = true;
+    }
+
+    hideLoading() {
+        this.loading = false;
     }
 }

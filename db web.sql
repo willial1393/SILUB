@@ -1,20 +1,6 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Versión del servidor:         10.1.21-MariaDB - mariadb.org binary distribution
--- SO del servidor:              Win32
--- HeidiSQL Versión:             9.5.0.5196
--- --------------------------------------------------------
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-USE `wilveg89_silub`;
+USE `2875878_silub`;
 
 -- Volcando estructura para tabla silub.armario
-DROP TABLE IF EXISTS `armario`;
 CREATE TABLE IF NOT EXISTS `armario` (
   `id_armario` int(11) NOT NULL AUTO_INCREMENT,
   `id_bodega` int(11) NOT NULL,
@@ -24,16 +10,8 @@ CREATE TABLE IF NOT EXISTS `armario` (
   CONSTRAINT `FK_armario_bodega` FOREIGN KEY (`id_bodega`) REFERENCES `bodega` (`id_bodega`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.armario: ~3 rows (aproximadamente)
-/*!40000 ALTER TABLE `armario` DISABLE KEYS */;
-INSERT IGNORE INTO `armario` (`id_armario`, `id_bodega`, `nombre`) VALUES
-	(3, 10, 3),
-	(5, 6, 1),
-	(6, 6, 2);
-/*!40000 ALTER TABLE `armario` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.bodega
-DROP TABLE IF EXISTS `bodega`;
 CREATE TABLE IF NOT EXISTS `bodega` (
   `id_bodega` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -41,15 +19,8 @@ CREATE TABLE IF NOT EXISTS `bodega` (
   UNIQUE KEY `descripcion_UNIQUE` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.bodega: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `bodega` DISABLE KEYS */;
-INSERT IGNORE INTO `bodega` (`id_bodega`, `nombre`) VALUES
-	(6, 'ELECTRÓNICA'),
-	(10, 'FÍSICA');
-/*!40000 ALTER TABLE `bodega` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.cliente
-DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE IF NOT EXISTS `cliente` (
   `id_cliente` int(11) NOT NULL AUTO_INCREMENT,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
@@ -62,19 +33,11 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.cliente: ~4 rows (aproximadamente)
-/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT IGNORE INTO `cliente` (`id_cliente`, `tipo`, `codigo`, `estado_cliente`, `correo_electronico`, `nombre`) VALUES
-	(2, 'ESTUDIANTE', '123', 'ACTIVO', 'willial1393@gmail.com', 'WILLIAM VEGA'),
-	(5, 'DOCENTE', '1234', 'SANCIONADO', 'jhon@gmail.com', 'JHON VEGA'),
-	(7, 'ESTUDIANTE', '1235', 'ACTIVO', 'arenas@uniboyaca.edu.co', 'LEYDINZOON'),
-	(8, 'ESTUDIANTE', '12345', 'ACTIVO', 'nicolas@gmail.com', 'NICOLAS');
-/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.dar_baja_equipo
 DROP PROCEDURE IF EXISTS `dar_baja_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `dar_baja_equipo`(
+CREATE PROCEDURE `dar_baja_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo` INT
 
@@ -97,7 +60,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.delete_equipo
 DROP PROCEDURE IF EXISTS `delete_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `delete_equipo`(
+CREATE PROCEDURE `delete_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo` INT
 )
@@ -113,7 +76,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.delete_operacion
 DROP PROCEDURE IF EXISTS `delete_operacion`;
 DELIMITER ;;
-CREATE  PROCEDURE `delete_operacion`(
+CREATE PROCEDURE `delete_operacion`(
 	IN `_id_equipo` INT,
 	IN `_id_operacion` INT
 )
@@ -126,7 +89,6 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.equipo
-DROP TABLE IF EXISTS `equipo`;
 CREATE TABLE IF NOT EXISTS `equipo` (
   `id_equipo` int(11) NOT NULL AUTO_INCREMENT,
   `id_tipo_equipo` int(11) NOT NULL,
@@ -143,17 +105,8 @@ CREATE TABLE IF NOT EXISTS `equipo` (
   CONSTRAINT `fk_equipo_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=ujis;
 
--- Volcando datos para la tabla silub.equipo: ~4 rows (aproximadamente)
-/*!40000 ALTER TABLE `equipo` DISABLE KEYS */;
-INSERT IGNORE INTO `equipo` (`id_equipo`, `id_tipo_equipo`, `id_estante`, `serial`, `descripcion`, `fecha_registro`, `estado_equipo`) VALUES
-	(73, 7, 11, '123', '123', '2018-10-29 00:13:56', 'MANTENIMIENTO'),
-	(74, 7, NULL, '1234', 'khi', '2018-10-29 01:20:18', 'DADO DE BAJA'),
-	(76, 8, 11, '1', 'dispositivo de medición', '2018-11-04 12:18:49', 'PRESTADO'),
-	(77, 8, NULL, '12', 'dispositivo de medición', '2018-11-04 12:18:49', 'PRESTADO');
-/*!40000 ALTER TABLE `equipo` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.estante
-DROP TABLE IF EXISTS `estante`;
 CREATE TABLE IF NOT EXISTS `estante` (
   `id_estante` int(11) NOT NULL AUTO_INCREMENT,
   `id_armario` int(11) NOT NULL,
@@ -163,21 +116,11 @@ CREATE TABLE IF NOT EXISTS `estante` (
   CONSTRAINT `FK_estante_armario` FOREIGN KEY (`id_armario`) REFERENCES `armario` (`id_armario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.estante: ~6 rows (aproximadamente)
-/*!40000 ALTER TABLE `estante` DISABLE KEYS */;
-INSERT IGNORE INTO `estante` (`id_estante`, `id_armario`, `nombre`) VALUES
-	(6, 3, '2'),
-	(11, 5, '1'),
-	(12, 5, '2'),
-	(13, 5, '3'),
-	(14, 6, '1'),
-	(15, 3, '3');
-/*!40000 ALTER TABLE `estante` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.get_equipo
 DROP PROCEDURE IF EXISTS `get_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `get_equipo`(
+CREATE PROCEDURE `get_equipo`(
 	IN `_id_equipo` INT
 
 )
@@ -202,7 +145,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.get_full_equipo
 DROP PROCEDURE IF EXISTS `get_full_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `get_full_equipo`(
+CREATE PROCEDURE `get_full_equipo`(
 	IN `_serial` INT
 
 
@@ -231,7 +174,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_armario
 DROP PROCEDURE IF EXISTS `insert_armario`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_armario`(
+CREATE PROCEDURE `insert_armario`(
 	IN `_id_bodega` INT,
 	IN `_nombre` VARCHAR(50)
 )
@@ -249,7 +192,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_equipo
 DROP PROCEDURE IF EXISTS `insert_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_equipo`(
+CREATE PROCEDURE `insert_equipo`(
 	IN `_descripcion` VARCHAR(50),
 	IN `_tipo` VARCHAR(50)
 
@@ -286,7 +229,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_estante
 DROP PROCEDURE IF EXISTS `insert_estante`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_estante`(
+CREATE PROCEDURE `insert_estante`(
 	IN `_id_armario` INT,
 	IN `_nombre` VARCHAR(50)
 
@@ -305,7 +248,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_kardex
 DROP PROCEDURE IF EXISTS `insert_kardex`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_kardex`(
+CREATE PROCEDURE `insert_kardex`(
 	IN `_id_tipo_equipo` VARCHAR(50),
 	IN `_tipo` VARCHAR(50),
 	IN `_cantidad` VARCHAR(50)
@@ -329,7 +272,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_operacion
 DROP PROCEDURE IF EXISTS `insert_operacion`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_operacion`(
+CREATE PROCEDURE `insert_operacion`(
 	IN `_id_equipo` INT,
 	IN `_descripcion` VARCHAR(50),
 	IN `_fecha_fin` VARCHAR(50),
@@ -360,7 +303,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_solicitud_adecuacion
 DROP PROCEDURE IF EXISTS `insert_solicitud_adecuacion`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_solicitud_adecuacion`(
+CREATE PROCEDURE `insert_solicitud_adecuacion`(
 	IN `_id_laboratorio` INT,
 	IN `_id_cliente` INT,
 	IN `_fecha_adecuacion` DATE,
@@ -418,7 +361,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.insert_varios_equipos
 DROP PROCEDURE IF EXISTS `insert_varios_equipos`;
 DELIMITER ;;
-CREATE  PROCEDURE `insert_varios_equipos`(
+CREATE PROCEDURE `insert_varios_equipos`(
 	IN `_cantidad` VARCHAR(50),
 	IN `_descripcion` VARCHAR(50),
 	IN `_tipo` VARCHAR(50)
@@ -438,7 +381,6 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.kardex
-DROP TABLE IF EXISTS `kardex`;
 CREATE TABLE IF NOT EXISTS `kardex` (
   `id_kardex` int(11) NOT NULL AUTO_INCREMENT,
   `id_tipo_equipo` int(11) NOT NULL,
@@ -451,21 +393,8 @@ CREATE TABLE IF NOT EXISTS `kardex` (
   CONSTRAINT `fk_kardex_nombre_equipo1` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.kardex: ~8 rows (aproximadamente)
-/*!40000 ALTER TABLE `kardex` DISABLE KEYS */;
-INSERT IGNORE INTO `kardex` (`id_kardex`, `id_tipo_equipo`, `fecha`, `tipo`, `cantidad`, `total`) VALUES
-	(33, 7, '2018-10-23 13:31:39', 'ENTRADA', 3, 3),
-	(34, 7, '2018-10-23 13:31:48', 'SALIDA', 1, 2),
-	(35, 8, '2018-10-27 00:00:03', 'ENTRADA', 3, 3),
-	(36, 7, '2018-10-29 01:20:18', 'ENTRADA', 2, 4),
-	(37, 7, '2018-10-29 18:49:52', 'SALIDA', 1, 3),
-	(38, 8, '2018-11-04 12:18:49', 'ENTRADA', 2, 5),
-	(39, 7, '2018-11-04 12:21:07', 'SALIDA', 1, 2),
-	(40, 7, '2018-11-04 12:21:41', 'SALIDA', 1, 1);
-/*!40000 ALTER TABLE `kardex` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.laboratorio
-DROP TABLE IF EXISTS `laboratorio`;
 CREATE TABLE IF NOT EXISTS `laboratorio` (
   `id_laboratorio` int(11) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -475,15 +404,8 @@ CREATE TABLE IF NOT EXISTS `laboratorio` (
   UNIQUE KEY `nombre_UNIQUE` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.laboratorio: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `laboratorio` DISABLE KEYS */;
-INSERT IGNORE INTO `laboratorio` (`id_laboratorio`, `descripcion`, `nombre`, `estado_laboratorio`) VALUES
-	(1, 'Edificio 4', 'ELECTRÓNICA', 'ACTIVO'),
-	(3, 'Edificio 4', 'FISICA', 'ACTIVO');
-/*!40000 ALTER TABLE `laboratorio` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.operacion
-DROP TABLE IF EXISTS `operacion`;
 CREATE TABLE IF NOT EXISTS `operacion` (
   `id_operacion` int(11) NOT NULL AUTO_INCREMENT,
   `id_equipo` int(11) NOT NULL,
@@ -496,14 +418,8 @@ CREATE TABLE IF NOT EXISTS `operacion` (
   CONSTRAINT `fk_mantenimiento_equipo` FOREIGN KEY (`id_equipo`) REFERENCES `equipo` (`id_equipo`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.operacion: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `operacion` DISABLE KEYS */;
-INSERT IGNORE INTO `operacion` (`id_operacion`, `id_equipo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `tipo`) VALUES
-	(11, 73, 'qwe', '2018-10-29 02:30:54', '2018-01-01 00:00:00', 'MANTENIMIENTO');
-/*!40000 ALTER TABLE `operacion` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.prestamo
-DROP TABLE IF EXISTS `prestamo`;
 CREATE TABLE IF NOT EXISTS `prestamo` (
   `id_prestamo` int(11) NOT NULL AUTO_INCREMENT,
   `id_equipo` int(11) NOT NULL,
@@ -522,19 +438,11 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   CONSTRAINT `fk_prestamo_solicitud_adecuacion1` FOREIGN KEY (`id_solicitud_adecuacion`) REFERENCES `solicitud_adecuacion` (`id_solicitud_adecuacion`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.prestamo: ~4 rows (aproximadamente)
-/*!40000 ALTER TABLE `prestamo` DISABLE KEYS */;
-INSERT IGNORE INTO `prestamo` (`id_prestamo`, `id_equipo`, `id_solicitud_adecuacion`, `id_cliente`, `fecha_solicitud`, `fecha_devolucion`, `fecha_prevista`, `estado_prestamo`) VALUES
-	(4, 77, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'TERMINADO'),
-	(6, 77, NULL, 8, '2018-11-04 00:00:00', '2018-11-04', '2018-12-12', 'TERMINADO'),
-	(7, 76, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'ACTIVO'),
-	(10, 77, NULL, 8, '2018-11-04 00:00:00', '0000-00-00', '2018-12-12', 'ACTIVO');
-/*!40000 ALTER TABLE `prestamo` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.prestar_equipo
 DROP PROCEDURE IF EXISTS `prestar_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `prestar_equipo`(
+CREATE PROCEDURE `prestar_equipo`(
 	IN `_id_cliente` INT,
 	IN `_id_equipo` INT,
 	IN `_fecha_solicitud` DATE,
@@ -577,7 +485,7 @@ DELIMITER ;
 -- Volcando estructura para evento silub.revisar_sanciones_clientes
 DROP EVENT IF EXISTS `revisar_sanciones_clientes`;
 DELIMITER ;;
-CREATE  EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-31 08:24:45' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
+CREATE EVENT `revisar_sanciones_clientes` ON SCHEDULE EVERY 1 DAY STARTS '2018-10-31 08:24:45' ON COMPLETION NOT PRESERVE ENABLE COMMENT 'Revisa si la sanción del cliente ya se a cumplido y cambia el es' DO BEGIN
 UPDATE cliente, sancion
 SET cliente.estado_cliente = 'ACTIVO'
 WHERE cliente.id_cliente = sancion.id_cliente
@@ -586,7 +494,6 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.sancion
-DROP TABLE IF EXISTS `sancion`;
 CREATE TABLE IF NOT EXISTS `sancion` (
   `id_sancion` int(11) NOT NULL AUTO_INCREMENT,
   `id_cliente` int(11) NOT NULL,
@@ -597,16 +504,11 @@ CREATE TABLE IF NOT EXISTS `sancion` (
   CONSTRAINT `fk_sancion_cliente1` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.sancion: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `sancion` DISABLE KEYS */;
-INSERT IGNORE INTO `sancion` (`id_sancion`, `id_cliente`, `fecha_inicio`, `fecha_fin`) VALUES
-	(11, 5, '2018-10-29 08:49:56', '2018-11-02');
-/*!40000 ALTER TABLE `sancion` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.sancionar_cliente
 DROP PROCEDURE IF EXISTS `sancionar_cliente`;
 DELIMITER ;;
-CREATE  PROCEDURE `sancionar_cliente`(
+CREATE PROCEDURE `sancionar_cliente`(
 	IN `_id_cliente` INT
 ,
 	IN `_fecha_fin` DATE
@@ -628,7 +530,6 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.solicitud_adecuacion
-DROP TABLE IF EXISTS `solicitud_adecuacion`;
 CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
   `id_solicitud_adecuacion` int(11) NOT NULL AUTO_INCREMENT,
   `id_laboratorio` int(11) NOT NULL,
@@ -646,17 +547,8 @@ CREATE TABLE IF NOT EXISTS `solicitud_adecuacion` (
   CONSTRAINT `fk_solicitud_adecuacion_laboratorio1` FOREIGN KEY (`id_laboratorio`) REFERENCES `laboratorio` (`id_laboratorio`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.solicitud_adecuacion: ~4 rows (aproximadamente)
-/*!40000 ALTER TABLE `solicitud_adecuacion` DISABLE KEYS */;
-INSERT IGNORE INTO `solicitud_adecuacion` (`id_solicitud_adecuacion`, `id_laboratorio`, `id_cliente`, `fecha_solicitud`, `fecha_adecuacion`, `hora_ingreso_sala`, `hora_salida_sala`, `puestos_trabajo`, `estado_solicitud_adecuacion`) VALUES
-	(1, 1, 2, '2018-10-26 23:55:19', '2018-10-26', '23:55:21', '23:55:22', '2', 'ACTIVO'),
-	(11, 3, 5, '2018-10-28 02:54:26', '2018-01-01', '01:00:00', '01:00:00', '3', 'ACTIVO'),
-	(12, 3, 5, '2018-10-28 02:55:10', '2018-01-02', '01:00:00', '02:30:00', '4', 'ACTIVO'),
-	(14, 3, 5, '2018-10-28 03:15:00', '2018-01-02', '03:00:00', '03:00:00', '3', 'ACTIVO');
-/*!40000 ALTER TABLE `solicitud_adecuacion` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para tabla silub.solicitud_adecuacion_equipo
-DROP TABLE IF EXISTS `solicitud_adecuacion_equipo`;
 CREATE TABLE IF NOT EXISTS `solicitud_adecuacion_equipo` (
   `id_solicitud_adecuacion` int(11) DEFAULT NULL,
   `id_tipo_equipo` int(11) DEFAULT NULL,
@@ -667,17 +559,11 @@ CREATE TABLE IF NOT EXISTS `solicitud_adecuacion_equipo` (
   CONSTRAINT `FK_solicitud_adecuacion_equipo_tipo_equipo` FOREIGN KEY (`id_tipo_equipo`) REFERENCES `tipo_equipo` (`id_tipo_equipo`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.solicitud_adecuacion_equipo: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `solicitud_adecuacion_equipo` DISABLE KEYS */;
-INSERT IGNORE INTO `solicitud_adecuacion_equipo` (`id_solicitud_adecuacion`, `id_tipo_equipo`, `cantidad`) VALUES
-	(1, 8, '3'),
-	(1, 7, '1');
-/*!40000 ALTER TABLE `solicitud_adecuacion_equipo` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.terminar_prestamo
 DROP PROCEDURE IF EXISTS `terminar_prestamo`;
 DELIMITER ;;
-CREATE  PROCEDURE `terminar_prestamo`(
+CREATE PROCEDURE `terminar_prestamo`(
 	IN `_id_equipo` INT
 ,
 	IN `_id_prestamo` INT
@@ -695,26 +581,19 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.tipo_equipo
-DROP TABLE IF EXISTS `tipo_equipo`;
 CREATE TABLE IF NOT EXISTS `tipo_equipo` (
   `id_tipo_equipo` int(11) NOT NULL AUTO_INCREMENT,
   `tipo` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `total` int(11) NOT NULL,
   PRIMARY KEY (`id_tipo_equipo`),
   UNIQUE KEY `nombre_UNIQUE` (`tipo`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.tipo_equipo: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `tipo_equipo` DISABLE KEYS */;
-INSERT IGNORE INTO `tipo_equipo` (`id_tipo_equipo`, `tipo`, `total`) VALUES
-	(7, 'MULTÍMETRO', 1),
-	(8, 'OSCILOSCOPIO', 5);
-/*!40000 ALTER TABLE `tipo_equipo` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub.update_equipo
 DROP PROCEDURE IF EXISTS `update_equipo`;
 DELIMITER ;;
-CREATE  PROCEDURE `update_equipo`(
+CREATE PROCEDURE `update_equipo`(
 	IN `_id_equipo` INT,
 	IN `_id_tipo_equipo` INT,
 	IN `_id_estante` INT,
@@ -740,7 +619,7 @@ DELIMITER ;
 -- Volcando estructura para procedimiento silub.update_equipo_solicitud
 DROP PROCEDURE IF EXISTS `update_equipo_solicitud`;
 DELIMITER ;;
-CREATE  PROCEDURE `update_equipo_solicitud`(
+CREATE PROCEDURE `update_equipo_solicitud`(
 	IN `_id_tipo_equipo` INT,
 	IN `_id_solicitud_adecuacion` INT,
 	IN `_cantidad` VARCHAR(50)
@@ -766,7 +645,6 @@ END;;
 DELIMITER ;
 
 -- Volcando estructura para tabla silub.usuario
-DROP TABLE IF EXISTS `usuario`;
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
   `nombre_usuario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -782,18 +660,11 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   UNIQUE KEY `correo_electronico_UNIQUE` (`correo_electronico`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Volcando datos para la tabla silub.usuario: ~3 rows (aproximadamente)
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT IGNORE INTO `usuario` (`id_usuario`, `nombre_usuario`, `clave`, `tipo`, `codigo`, `estado`, `correo_electronico`, `nombre_persona`) VALUES
-	(9, 'william', '123', 'DEPARTAMENTO', '123', 'ACTIVO', 'wavega@uniboyaca.edu.co', 'WILLIAM VEGA'),
-	(12, 'leydinzoon', '123', 'LABORATORIO', '12344', 'ACTIVO', 'willial1393@gmail.com', 'LEYDINZOON'),
-	(14, 'jhon', '123', 'AUXILIAR', '123455', 'ACTIVO', 'jhon@gmail.com', 'JHON VEGA');
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-
+-- La exportación de datos fue deseleccionada.
 -- Volcando estructura para procedimiento silub._login
 DROP PROCEDURE IF EXISTS `_login`;
 DELIMITER ;;
-CREATE  PROCEDURE `_login`(
+CREATE PROCEDURE `_login`(
 	IN `_usuario` VARCHAR(50),
 	IN `_clave` VARCHAR(50)
 
@@ -816,6 +687,3 @@ END;;
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

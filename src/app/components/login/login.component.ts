@@ -4,6 +4,7 @@ import swal from 'sweetalert2';
 import {LoginService} from '../../services/login.service';
 import {AppGlobals} from '../../models/appGlobals';
 import {UsuarioService} from '../../services/usuario.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
     selector: 'app-login',
@@ -20,13 +21,16 @@ export class LoginComponent implements OnInit {
     constructor(private route: Router,
                 private loginService: LoginService,
                 private appGlobals: AppGlobals,
-                private usuarioService: UsuarioService) {
+                private usuarioService: UsuarioService,
+                private app: AppComponent) {
 
     }
 
     login() {
+        this.app.showLoading();
         this.loginService.login(this.usuario).subscribe(res => {
             if (!res['response']) {
+                this.app.hideLoading();
                 this.appGlobals.errorUPS(res);
                 return;
             }
@@ -58,6 +62,7 @@ export class LoginComponent implements OnInit {
                     'error'
                 );
             }
+            this.app.hideLoading();
         });
     }
 

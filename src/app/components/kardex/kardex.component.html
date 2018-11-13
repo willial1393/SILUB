@@ -78,8 +78,12 @@
                                    class="form-codigo form-control" placeholder="Año/Mes/Día">
                         </div>
                         <div class="no-print usuario-boton">
-                            <button type="submit" class="btn btn-dark btn-guardar " (click)="updateTable()">Aplicar
+                            <button type="submit" class="btn btn-dark btn-guardar " (click)="updateFilterDate()">Aplicar
                                 filtro
+                            </button>
+                            &nbsp;
+                            <button type="submit" class="btn btn-secondary" (click)="cleanFilterDate()">
+                                Cancelar
                             </button>
                         </div>
                     </div>
