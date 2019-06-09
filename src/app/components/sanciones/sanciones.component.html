@@ -10,7 +10,7 @@
                                 <button (click)="imprimir()" type="submit"
                                         class="no-print btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
-                                         src="../../../assets/imagenes/imprimir.png"
+                                         src="assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
                                          width="25">
                                     Imprimir
@@ -21,7 +21,7 @@
                             <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
                                    name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                                <img src="assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
                             </div>
                         </div>
@@ -55,13 +55,13 @@
                                 <td>{{sancion.fecha_inicio | date: 'yyyy/MM/dd'}}</td>
                                 <td>{{sancion.fecha_fin | date: 'yyyy/MM/dd'}}</td>
                                 <td class="no-print">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/eye.png"
                                            width="25" height="25"
                                            (click)="verSancion(sancion)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarSancion(sancion)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/trash.png"
                                            width="25" height="25"
                                            (click)="eliminarSancion(sancion)">
                                 </td>

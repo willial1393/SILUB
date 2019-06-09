@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiEndPoint: 'http://silub.dx.am/api/public/'
+    apiEndPoint: 'http://appsprod.tk/silub/api/public/'
 };

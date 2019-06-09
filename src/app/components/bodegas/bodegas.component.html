@@ -10,7 +10,7 @@
                                 <button (click)="imprimir()" type="submit"
                                         class="no-print btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
-                                         src="../../../assets/imagenes/imprimir.png"
+                                         src="assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
                                          width="25">
                                     Imprimir
@@ -21,7 +21,7 @@
                             <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
                                    name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                                <img src="assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
                             </div>
                         </div>
@@ -47,13 +47,13 @@
                             <tr *ngFor="let bodega of bodegas" (click)="updateArmarios(bodega)">
                                 <td>{{bodega.nombre}}</td>
                                 <td class="no-print">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/eye.png"
                                            width="25" height="25"
                                            (click)="updateArmarios(bodega)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarBodega(bodega)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/trash.png"
                                            width="25" height="25"
                                            (click)="eliminarBodega(bodega)">
                                 </td>
@@ -105,14 +105,14 @@
                             <tr *ngFor="let armario of armarios">
                                 <td>{{armario.nombre}}</td>
                                 <td>
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/eye.png"
                                            width="25" height="25"
                                            (click)="updateEstantes(armario)" data-toggle="modal"
                                            data-target="#exampleModalCenter">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/edit.png"
                                            width="25" height="25"
                                            (click)="editarArmario(armario)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/trash.png"
                                            width="25" height="25"
                                            (click)="eliminarArmario(armario)">
                                 </td>
@@ -173,7 +173,7 @@
                         <input name="nombre" [(ngModel)]="estante.nombre" type="text"
                                class="form-control" required minlength="3">
                     </div>
-                    <input class="boton-accion" type=image src="../../../assets/imagenes/more.png"
+                    <input class="boton-accion" type=image src="assets/imagenes/more.png"
                            width="25" height="25">
                 </form>
                 <div class="usuario-tabla-t">
@@ -188,7 +188,7 @@
                         <tr *ngFor="let estante of estantes">
                             <td>{{estante.nombre}}</td>
                             <td class="no-print">
-                                <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                <input class="boton-accion" type=image src="assets/imagenes/trash.png"
                                        width="25" height="25"
                                        (click)="eliminarEstante(estante)">
                             </td>

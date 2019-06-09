@@ -25,19 +25,19 @@ export class AppGlobals {
     }
 
     errorUPS(res) {
-        if (environment.production) {
-            swal(
-                '¡Ups!',
-                'Algo salió mal de nuestro lado',
-                'error'
-            );
-        } else {
+        // if (environment.production) {
+        //     swal(
+        //         '¡Ups!',
+        //         'Algo salió mal de nuestro lado',
+        //         'error'
+        //     );
+        // } else {
             swal(
                 '¡Ups!',
                 res['message'],
                 'error'
             );
-        }
+        // }
     }
 
 }

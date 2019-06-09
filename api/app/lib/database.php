@@ -9,9 +9,9 @@ class Database
     public static function StartUp()
     {
         $database = 'silub';
-        $host     = 'localhost';
+        $host = 'hidropomatic.cboroa5jmtiu.us-east-2.rds.amazonaws.com';
         $user     = 'root';
-        $password = '';
+        $password = 'root';
 
         $config = "mysql:host=" . $host . ";dbname=" . $database . ";charset=utf8mb4";
         $pdo    = new PDO($config, $user, $password);

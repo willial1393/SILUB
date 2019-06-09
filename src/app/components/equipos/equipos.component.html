@@ -10,7 +10,7 @@
                                 <button (click)="imprimir()" type="submit"
                                         class="no-print btn btn-dark btn-guardar d-flex align-text-center">
                                     <img class="tabla-encabezado-contenedor-imprimir mr-1"
-                                         src="../../../assets/imagenes/imprimir.png"
+                                         src="assets/imagenes/imprimir.png"
                                          alt="Icon imprimir"
                                          width="25">
                                     Imprimir
@@ -21,7 +21,7 @@
                             <input type="text" class="cont-tabla-search-input" placeholder="Buscar..."
                                    name="search" [(ngModel)]="search" (keyup)="updateFilter()">
                             <div class="w-100 h-100 m-0 p-0 d-flex align-items-center pl-1 contenedor-imagen-lupa">
-                                <img src="../../../assets/imagenes/search.png" alt="buscar usuario." width="23"
+                                <img src="assets/imagenes/search.png" alt="buscar usuario." width="23"
                                      class="cnt-tabla-search-img ">
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <tr *ngFor="let equipo of equipos">
                                 <div *ngIf="equipo.serial===null; else elseBlock">
                                     <td><input class="boton-accion" type=image
-                                               src="../../../assets/imagenes/more.png"
+                                               src="assets/imagenes/more.png"
                                                width="25"
                                                height="25"
                                                (click)="setSerialEquipo(equipo)"></td>
@@ -58,23 +58,23 @@
                                 <td>{{equipo.tipo}}</td>
                                 <td>{{equipo.estado_equipo}}</td>
                                 <td class="no-print">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/eye.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/eye.png"
                                            width="25"
                                            height="25"
                                            (click)="verEquipo(equipo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/edit.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/edit.png"
                                            width="25"
                                            height="25"
                                            (click)="editarEquipo(equipo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/store.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/store.png"
                                            width="25"
                                            height="25" data-toggle="modal" data-target="#exampleModal"
                                            (click)="updateBodegas(equipo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/down.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/down.png"
                                            width="25"
                                            height="25"
                                            (click)="darBajaEquipo(equipo)">
-                                    <input class="boton-accion" type=image src="../../../assets/imagenes/trash.png"
+                                    <input class="boton-accion" type=image src="assets/imagenes/trash.png"
                                            width="25"
                                            height="25"
                                            (click)="eliminarEquipo(equipo)">
@@ -119,7 +119,7 @@
                                     </option>
                                 </select></ng-template>
                                 <input class="boton-accion input-group-addon mt-2 mb-1 ml-2" type=image
-                                       src="../../../assets/imagenes/more.png" width="25"
+                                       src="assets/imagenes/more.png" width="25"
                                        height="25"
                                        (click)="nuevoTipoEquipo()">
                             </div>
